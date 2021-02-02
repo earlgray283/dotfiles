@@ -1,8 +1,10 @@
 set number
-set autoindent
+set smartindent
 set tabstop=4
 set shiftwidth=4
 set title
+set fileencodings=utf-8
+set clipboard+=unnamedplus
 
 call plug#begin('~/.vim/plugged')
 	Plug 'rust-lang/rust.vim'
@@ -13,6 +15,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'preservim/nerdtree'
 	Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 	Plug 'octol/vim-cpp-enhanced-highlight'
+	Plug 'vim-airline/vim-airline'
 call plug#end()
 
 syntax enable
@@ -31,3 +34,12 @@ set laststatus=2
 
 " ???
 let g:rustfmt_autosave = 1
+
+" Terminal
+"if has('vim_starting')
+"	split
+"	wincmd j
+"	resize 15
+" 	terminal
+" 	wincmd k
+" endif
