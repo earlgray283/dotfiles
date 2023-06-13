@@ -1,0 +1,14 @@
+JAVA_HOME=$(/usr/libexec/java_home -v 20)
+VOLTA_HOME="$HOME/.volta"
+
+path=(
+	$HOME/.cargo/bin(N-/)
+	$HOME/go/bin(N-/)
+	$VOLTA_HOME/bin(N-/)
+	$HOME/.rye/shims(N-/)
+	/opt/homebrew/opt/openjdk/bin(N-/)
+
+	/Applications/Alacritty.app/Contents/MacOS(N-/)
+	
+	$path
+)

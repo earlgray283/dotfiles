@@ -1,0 +1,51 @@
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(starship init zsh)"
+eval "$(direnv hook zsh)"
+
+# zinit installation
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# zsh plugins
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
+
+# zsh completion
+FPATH="/opt/homebrew/share/zsh/site-functions:${FPATH}"
+FPATH="${HOME}/.zfunc:${FPATH}"
+autoload -Uz compinit
+compinit
+
+# tmux autostart script
+if [[ ! -n $TMUX ]] && [[ $VSCODE_PID == "" ]]; then
+	ID="`tmux list-sessions`"
+    if [[ -z "$ID" ]]; then
+        tmux new-session
+    fi
+    ID="$ID\nCreate New Session"
+    ID="`echo $ID | fzf | cut -d: -f1`"
+    if [[ "$ID" = "Create New Session" ]]; then
+        tmux new-session
+    elif [[ -n "$ID" ]]; then
+        tmux attach-session -t "$ID"
+    else
+        :
+    fi
+fi
+
+# alias
+alias ls='exa --icons'
+alias cat='bat'
+alias fd='fd -I --no-ignore-vcs'
+alias g++='g++-13 -std=c++17 -g2 -O2 -Wall -Wextra -Wshadow -Wconversion -ftrapv'
+alias gcc='gcc-13 -std=c17 -g2 -O2 -Wall -Wextra -Wshadow -Wconversion -ftrapv'
+alias matumoto='echo "Hello, I am matumoto!"'
+alias mv='mv -v'
+#alias rm='rm -v'
+alias gitroot='cd `git rev-parse --show-superproject-working-tree --show-toplevel | head -1`'
+
