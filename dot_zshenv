@@ -9,6 +9,7 @@ path=(
 	/opt/homebrew/opt/openjdk/bin(N-/)
 
 	/Applications/Alacritty.app/Contents/MacOS(N-/)
+	$HOME/.orbstack/bin(N-/)
 	
 	$path
 )
