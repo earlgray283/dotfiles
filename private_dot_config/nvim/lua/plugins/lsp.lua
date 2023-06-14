@@ -52,4 +52,4 @@ cmp.setup.cmdline(':', {
 -- Set up language servers
 require("lspconfig").lua_ls.setup({})
 require("lspconfig").rust_analyzer.setup({})
-
+require("lspconfig").gopls.setup({})
