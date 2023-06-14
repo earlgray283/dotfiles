@@ -22,6 +22,11 @@ require("lazy").setup({
 	"mfussenegger/nvim-dap",          -- DAP
 	"jose-elias-alvarez/null-ls.nvim", -- linter, formatter
 	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate"
+	},
+
+	{
 		"hrsh7th/nvim-cmp",
 		dependencies = {
 			"hrsh7th/cmp-cmdline",
@@ -41,13 +46,19 @@ require("lazy").setup({
 	"nvim-tree/nvim-web-devicons", -- icon
 	"akinsho/bufferline.nvim",  -- tab
 	"nvim-lualine/lualine.nvim", -- encoding of the file, etc.
+	"rcarriga/nvim-notify",     -- notification
+	-- terminal
+	{
+		'akinsho/toggleterm.nvim',
+		version = "*",
+		config = true
+	},
 
 	-- theme
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 }
+	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+	"nordtheme/vim"
 })
 
-require("mason").setup()
-require("mason-lspconfig").setup()
 require("nvim-autopairs").setup()
 require("nvim-tree").setup()
 require("bufferline").setup({
@@ -64,55 +75,12 @@ require("bufferline").setup({
 })
 require('lualine').setup({
 	options = {
-		theme = "catppuccin"
+		-- theme = "catppuccin"
+		theme = "nord"
 	}
 })
+require("toggleterm").setup({})
+vim.notify = require("notify")
 
-require("lspconfig").lua_ls.setup({})
-require("lspconfig").rust_analyzer.setup({})
-
--- Set up nvim-cmp.
-local cmp = require("cmp")
-
-cmp.setup({
-	snippet = {
-		expand = function(args)
-			require('luasnip').lsp_expand(args.body)
-		end,
-	},
-	window = {
-		-- completion = cmp.config.window.bordered(),
-		-- documentation = cmp.config.window.bordered(),
-	},
-	mapping = cmp.mapping.preset.insert({
-		['<C-b>'] = cmp.mapping.scroll_docs(-4),
-		['<C-f>'] = cmp.mapping.scroll_docs(4),
-		['<C-Space>'] = cmp.mapping.complete(),
-		['<C-e>'] = cmp.mapping.abort(),
-		['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-	}),
-	sources = cmp.config.sources({
-		{ name = 'nvim_lsp' },
-		{ name = 'luasnip' },
-	}, {
-		{ name = 'buffer' },
-	})
-})
-
--- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline({ '/', '?' }, {
-	mapping = cmp.mapping.preset.cmdline(),
-	sources = {
-		{ name = 'buffer' }
-	}
-})
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-	mapping = cmp.mapping.preset.cmdline(),
-	sources = cmp.config.sources({
-		{ name = 'path' }
-	}, {
-		{ name = 'cmdline' }
-	})
-})
+-- load lsp
+require("plugins/lsp")
