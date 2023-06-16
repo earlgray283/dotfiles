@@ -5,6 +5,9 @@ require("mason-lspconfig").setup()
 -- Set up treesitter
 require("nvim-treesitter.configs").setup({
 	auto_install = true,
+	highlight = {
+		enable = true,
+	},
 })
 
 
@@ -50,6 +53,19 @@ cmp.setup.cmdline(':', {
 })
 
 -- Set up language servers
+util = require("lspconfig/util")
 require("lspconfig").lua_ls.setup({})
 require("lspconfig").rust_analyzer.setup({})
-require("lspconfig").gopls.setup({})
+require("lspconfig").gopls.setup({
+	cmd = { "gopls", "serve" },
+	filetypes = { "go", "gomod" },
+	root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+	settings = {
+		gopls = {
+			analyses = {
+				unusedparams = true,
+			},
+			staticcheck = true,
+		},
+	},
+})
