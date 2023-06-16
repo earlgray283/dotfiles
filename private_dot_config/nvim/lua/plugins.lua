@@ -15,7 +15,7 @@ require("lazy").setup({
 	-- code completion
 	{
 		"williamboman/mason.nvim",
-		build = ":MasonUpdate"        -- :MasonUpdate updates registry contents
+		build = ":MasonUpdate",       -- :MasonUpdate updates registry contents
 	},
 	"williamboman/mason-lspconfig.nvim", -- LSP
 	"neovim/nvim-lspconfig",          -- LSP
@@ -23,7 +23,7 @@ require("lazy").setup({
 	"jose-elias-alvarez/null-ls.nvim", -- linter, formatter
 	{
 		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate"
+		build = ":TSUpdate",
 	},
 
 	{
@@ -33,7 +33,7 @@ require("lazy").setup({
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-nvim-lsp",
-		}
+		},
 	},
 
 	-- misc
@@ -42,11 +42,10 @@ require("lazy").setup({
 	"L3MON4D3/LuaSnip",
 	"preservim/nerdcommenter",
 	{
-		'nvim-telescope/telescope.nvim',
-		tag = '0.1.1',
-		dependencies = { 'nvim-lua/plenary.nvim' }
+		"nvim-telescope/telescope.nvim",
+		tag = "0.1.1",
+		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-
 
 	-- appearance
 	"nvim-tree/nvim-tree.lua",  -- sidebar(explorer)
@@ -56,14 +55,14 @@ require("lazy").setup({
 	"rcarriga/nvim-notify",     -- notification
 	-- terminal
 	{
-		'akinsho/toggleterm.nvim',
+		"akinsho/toggleterm.nvim",
 		version = "*",
-		config = true
+		config = true,
 	},
 
 	-- theme
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-	"nordtheme/vim"
+	"nordtheme/vim",
 })
 
 require("nvim-autopairs").setup()
@@ -75,25 +74,25 @@ require("bufferline").setup({
 				filetype = "NvimTree",
 				text = "File Explorer",
 				highlight = "Directory",
-				separator = true
-			}
+				separator = true,
+			},
 		},
-	}
+	},
 })
-require('lualine').setup({
+require("lualine").setup({
 	options = {
 		-- theme = "catppuccin"
-		theme = "nord"
-	}
+		theme = "nord",
+	},
 })
 require("toggleterm").setup({})
 vim.notify = require("notify")
 
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+local builtin = require("telescope.builtin")
+vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
+vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
+vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
+vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
 
 -- load lsp
 require("plugins/lsp")
