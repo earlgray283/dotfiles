@@ -51,14 +51,20 @@ cmp.setup.cmdline(":", {
 	}),
 })
 
-null_ls = require("null-ls")
+local null_ls = require("null-ls")
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 null_ls.setup({
 	sources = {
+		null_ls.builtins.code_actions.gitsigns,
 		null_ls.builtins.formatting.yamlfmt,
 		null_ls.builtins.formatting.goimports,
 		null_ls.builtins.formatting.rustfmt,
 		null_ls.builtins.formatting.stylua,
+		null_ls.builtins.formatting.dprint,
+		null_ls.builtins.diagnostics.staticcheck,
+		null_ls.builtins.diagnostics.hadolint,
+		null_ls.builtins.diagnostics.golangci_lint,
+		null_ls.builtins.completion.luasnip,
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then
@@ -75,7 +81,7 @@ null_ls.setup({
 })
 
 -- Set up language servers
-util = require("lspconfig/util")
+local util = require("lspconfig/util")
 require("lspconfig").lua_ls.setup({})
 require("lspconfig").rust_analyzer.setup({})
 require("lspconfig").gopls.setup({
