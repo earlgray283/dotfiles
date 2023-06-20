@@ -1,5 +1,6 @@
 JAVA_HOME=$(/usr/libexec/java_home -v 20)
 VOLTA_HOME="$HOME/.volta"
+GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/application_default_credentials.json
 
 path=(
 	$HOME/.cargo/bin(N-/)
