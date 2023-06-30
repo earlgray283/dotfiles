@@ -11,6 +11,8 @@ path=(
 
 	/Applications/Alacritty.app/Contents/MacOS(N-/)
 	$HOME/.orbstack/bin(N-/)
+
+	/opt/homebrew/opt/make/libexec/gnubin(N-/)
 	
 	$path
 )
