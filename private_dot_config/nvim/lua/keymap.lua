@@ -37,3 +37,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.keymap.set("n", "<Esc>", "<Cmd>nohlsearch<CR>")
+vim.keymap.set("n", "ht", "<Cmd>ToggleTerm direction=horizontal<CR>")
+vim.keymap.set("n", "vt", "<Cmd>ToggleTerm direction=vertical<CR>")
+vim.keymap.set("n", "ft", "<Cmd>ToggleTerm direction=float<CR>")

@@ -14,4 +14,4 @@ vim.opt.termguicolors = true
 vim.opt.updatetime = 1000 -- fires CursorHold event in 1s.
 
 -- vim.cmd.colorscheme "catppuccin"
-vim.cmd.colorscheme("nord")
+vim.cmd.colorscheme("nordic")

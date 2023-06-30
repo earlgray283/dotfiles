@@ -1,8 +1,19 @@
 -- launch nvim-tree when open nvim
--- https://github.com/nvim-tree/nvim-tree.lua/wiki/Open-At-Startup
+-- https://github.com/nvim-tree/nvim-tree.lua/wiki/Open-At-Startup#open-for-files-and-no-name-buffers
 vim.api.nvim_create_autocmd("VimEnter", {
-	callback = function()
-		require("nvim-tree.api").tree.open()
+	callback = function(data)
+		-- buffer is a real file on the disk
+		local real_file = vim.fn.filereadable(data.file) == 1
+
+		-- buffer is a [No Name]
+		local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
+
+		if not real_file and not no_name then
+			return
+		end
+
+		-- open the tree, find the file but don't focus it
+		require("nvim-tree.api").tree.toggle({ focus = false, find_file = true })
 	end,
 })
 
@@ -14,9 +25,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	callback = function()
 		local layout = vim.api.nvim_call_function("winlayout", {})
 		if
-			layout[1] == "leaf"
-			and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(layout[2]), "filetype") == "NvimTree"
-			and layout[3] == nil
+		    layout[1] == "leaf"
+		    and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(layout[2]), "filetype") == "NvimTree"
+		    and layout[3] == nil
 		then
 			vim.cmd("confirm quit")
 		end

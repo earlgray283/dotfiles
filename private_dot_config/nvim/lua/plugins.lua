@@ -15,16 +15,12 @@ require("lazy").setup({
 	-- code completion
 	{
 		"williamboman/mason.nvim",
-		build = ":MasonUpdate",       -- :MasonUpdate updates registry contents
+		build = ":MasonUpdate", -- :MasonUpdate updates registry contents
 	},
 	"williamboman/mason-lspconfig.nvim", -- LSP
-	"neovim/nvim-lspconfig",          -- LSP
-	"mfussenegger/nvim-dap",          -- DAP
+	"neovim/nvim-lspconfig", -- LSP
+	"mfussenegger/nvim-dap", -- DAP
 	"jose-elias-alvarez/null-ls.nvim", -- linter, formatter
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-	},
 
 	{
 		"hrsh7th/nvim-cmp",
@@ -41,6 +37,7 @@ require("lazy").setup({
 	"windwp/nvim-autopairs",
 	"L3MON4D3/LuaSnip",
 	"preservim/nerdcommenter",
+	"lewis6991/gitsigns.nvim",
 	{
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.1",
@@ -48,11 +45,19 @@ require("lazy").setup({
 	},
 
 	-- appearance
-	"nvim-tree/nvim-tree.lua",  -- sidebar(explorer)
+	"nvim-tree/nvim-tree.lua", -- sidebar(explorer)
 	"nvim-tree/nvim-web-devicons", -- icon
-	"akinsho/bufferline.nvim",  -- tab
+	"akinsho/bufferline.nvim", -- tab
 	"nvim-lualine/lualine.nvim", -- encoding of the file, etc.
-	"rcarriga/nvim-notify",     -- notification
+	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	{
+		"folke/noice.nvim",
+		event = "VeryLazy",
+		opts = {},
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+		},
+	},
 	-- terminal
 	{
 		"akinsho/toggleterm.nvim",
@@ -61,38 +66,23 @@ require("lazy").setup({
 	},
 
 	-- theme
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-	"nordtheme/vim",
+	"shaunsingh/nord.nvim",
+	"rmehri01/onenord.nvim",
+	"AlexvZyl/nordic.nvim",
 })
 
+require("nvim-treesitter.configs").setup({
+	auto_install = true,
+	highlight = { enable = true },
+	indent = { enable = true },
+})
 require("nvim-autopairs").setup()
-require("nvim-tree").setup()
-require("bufferline").setup({
-	options = {
-		offsets = {
-			{
-				filetype = "NvimTree",
-				text = "File Explorer",
-				highlight = "Directory",
-				separator = true,
-			},
-		},
-	},
-})
-require("lualine").setup({
-	options = {
-		-- theme = "catppuccin"
-		theme = "nord",
-	},
-})
-require("toggleterm").setup({})
-vim.notify = require("notify")
 
-local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
-vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
-vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
-vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+-- require("gitsigns").setup()
 
--- load lsp
 require("plugins/lsp")
+require("plugins/appearance")
+require("plugins/null-ls")
+require("plugins/nvim-cmp")
+require("plugins/nvimtree")
+require("plugins/telescope")
