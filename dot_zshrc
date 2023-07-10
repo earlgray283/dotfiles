@@ -2,6 +2,9 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
 eval "$(direnv hook zsh)"
 
+# zsh history
+setopt HIST_IGNORE_ALL_DUPS
+
 # zinit installation
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
@@ -22,7 +25,6 @@ autoload -Uz compinit && compinit
 
 # zstyle
 zstyle ':completion:*' menu select
-setopt menu_complete
 
 # tmux autostart script
 if [[ ! -n $TMUX ]] && [[ $VSCODE_PID == "" ]]; then
