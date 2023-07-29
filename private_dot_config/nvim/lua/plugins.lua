@@ -15,11 +15,11 @@ require("lazy").setup({
 	-- code completion
 	{
 		"williamboman/mason.nvim",
-		build = ":MasonUpdate", -- :MasonUpdate updates registry contents
+		build = ":MasonUpdate",       -- :MasonUpdate updates registry contents
 	},
 	"williamboman/mason-lspconfig.nvim", -- LSP
-	"neovim/nvim-lspconfig", -- LSP
-	"mfussenegger/nvim-dap", -- DAP
+	"neovim/nvim-lspconfig",          -- LSP
+	"mfussenegger/nvim-dap",          -- DAP
 	"jose-elias-alvarez/null-ls.nvim", -- linter, formatter
 
 	{
@@ -45,9 +45,9 @@ require("lazy").setup({
 	},
 
 	-- appearance
-	"nvim-tree/nvim-tree.lua", -- sidebar(explorer)
+	"nvim-tree/nvim-tree.lua",  -- sidebar(explorer)
 	"nvim-tree/nvim-web-devicons", -- icon
-	"akinsho/bufferline.nvim", -- tab
+	"akinsho/bufferline.nvim",  -- tab
 	"nvim-lualine/lualine.nvim", -- encoding of the file, etc.
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	{
@@ -67,8 +67,7 @@ require("lazy").setup({
 
 	-- theme
 	"shaunsingh/nord.nvim",
-	"rmehri01/onenord.nvim",
-	"AlexvZyl/nordic.nvim",
+	-- "gbprod/nord.nvim",
 })
 
 require("nvim-treesitter.configs").setup({
@@ -85,4 +84,3 @@ require("plugins/appearance")
 require("plugins/null-ls")
 require("plugins/nvim-cmp")
 require("plugins/nvimtree")
-require("plugins/telescope")

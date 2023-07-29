@@ -14,6 +14,12 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 	return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
 
+vim.api.nvim_create_autocmd("CursorHold", {
+	callback = function()
+		vim.lsp.buf.hover({})
+	end,
+})
+
 -- Set up language servers
 local util = require("lspconfig/util")
 require("lspconfig").lua_ls.setup({})
