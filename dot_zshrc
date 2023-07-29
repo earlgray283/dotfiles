@@ -2,10 +2,9 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
 eval "$(direnv hook zsh)"
 
-# zsh history
-setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_ALL_DUPS  # ignore duplicate histories
+setopt interactivecomments   # allow comments in zsh command
 
-# zinit installation
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
