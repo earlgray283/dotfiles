@@ -4,17 +4,24 @@ return {
 		"neovim/nvim-lspconfig",
 		event = { "BufEnter", "BufReadPre", "BufNewFile" },
 		dependencies = {
-			{ "williamboman/mason.nvim", opts = {} },
+			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		init = function()
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+				border = "rounded",
+			})
 			local Util = require("plugins.lsp.util")
 			Util.on_attach(function(client, buffer)
+				require("plugins.lsp.autocmd")
 				require("plugins.lsp.keymap")
 			end)
 			local lspconfig = require("lspconfig")
 			local util = require("lspconfig/util")
+			local capabilities =
+				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 			lspconfig.gopls.setup({
 				cmd = { "gopls", "serve" },
 				filetypes = { "go", "gomod" },
@@ -27,8 +34,42 @@ return {
 						staticcheck = true,
 					},
 				},
+				capabilities = capabilities,
 			})
-			lspconfig.lua_ls.setup({})
+			lspconfig.lua_ls.setup({ capabilities = capabilities })
+			lspconfig.rust_analyzer.setup({
+				on_attach = function(client)
+					require("completion").on_attach(client)
+				end,
+				settings = {
+					["rust-analyzer"] = {
+						imports = {
+							granularity = { group = "module" },
+							prefix = "self",
+						},
+						diagnostics = { enable = true },
+						cargo = {
+							buildScripts = { enable = true },
+						},
+						procMacro = {
+							enable = true,
+						},
+						check = {
+							command = "clippy",
+						},
+					},
+				},
+				capabilities = capabilities,
+			})
+            lspconfig.dockerls.setup({ capabilities = capabilities })
+            lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
+            lspconfig.zls.setup({ capabilities = capabilities })
+            lspconfig.clangd.setup({ capabilities = capabilities })
+            lspconfig.eslint.setup({ capabilities = capabilities })
+            lspconfig.tsserver.setup({ capabilities = capabilities })
+            lspconfig.html.setup({ capabilities = capabilities })
+            lspconfig.jsonls.setup({ capabilities = capabilities })
+            lspconfig.yamlls.setup({ capabilities = capabilities })
 		end,
 	},
 	{
@@ -63,7 +104,13 @@ return {
 							group = augroup,
 							buffer = bufnr,
 							callback = function()
-								vim.lsp.buf.format({ async = false })
+								vim.lsp.buf.format({
+									async = false,
+									bufnr = bufnr,
+									filter = function(c)
+										return c.name == "null-ls"
+									end,
+								})
 							end,
 						})
 					end
@@ -74,18 +121,23 @@ return {
 	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
+		version = false,
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
-			"petertriho/cmp-git",
 			"L3MON4D3/LuaSnip",
 			"saadparwaiz1/cmp_luasnip",
 			"hrsh7th/cmp-cmdline",
+			"hrsh7th/cmp-nvim-lsp-signature-help",
+			"onsails/lspkind.nvim",
 		},
 		init = function()
 			local cmp = require("cmp")
 			cmp.setup({
+				completion = {
+					completeopt = "menu,menuone,noselect,noinsert",
+				},
 				snippet = {
 					expand = function(args)
 						require("luasnip").lsp_expand(args.body)
@@ -102,9 +154,22 @@ return {
 					["<C-e>"] = cmp.mapping.abort(),
 					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 				}),
+				formatting = {
+					format = require("lspkind").cmp_format({
+						mode = "symbol",
+						maxwidth = 50,
+						ellipsis_char = "...",
+						before = function(_, vim_item)
+							return vim_item
+						end,
+					}),
+				},
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
+					{ name = "buffer" },
+					{ name = "path" },
+					{ name = "nvim_lsp_signature_help" },
 				}, {
 					{ name = "buffer" },
 				}),
@@ -133,6 +198,25 @@ return {
 					{ name = "cmdline" },
 				}),
 			})
+		end,
+	},
+	{
+		"williamboman/mason.nvim",
+		opts = {
+			ui = {
+				border = "rounded",
+			},
+		},
+	},
+	{
+		"lewis6991/gitsigns.nvim",
+	},
+	{
+		"ray-x/lsp_signature.nvim",
+		event = "VeryLazy",
+		opts = {},
+		config = function(_, opts)
+			require("lsp_signature").setup(opts)
 		end,
 	},
 }

@@ -32,7 +32,6 @@ return {
 			sort_by = "case_sensitive",
 			renderer = {
 				icons = {
-					webdev_colors = true,
 					glyphs = {
 						git = {
 							unstaged = "",
@@ -84,6 +83,8 @@ return {
 	},
 	{
 		"nvim-tree/nvim-web-devicons",
+		lazy = false,
+		priority = 100000,
 		opts = {
 			color_icons = true,
 			default = true,
@@ -93,12 +94,15 @@ return {
 		"nvim-lualine/lualine.nvim",
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
-			"nord.nvim",
 		},
 		opts = {
 			options = {
 				theme = "nord",
+				globalstatus = true,
 			},
 		},
+		init = function()
+			require("lualine").setup()
+		end,
 	},
 }

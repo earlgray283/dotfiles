@@ -35,8 +35,26 @@ return {
 		init = function()
 			vim.o.timeout = true
 			vim.o.timeoutlen = 300
-            local wk = require("which-key")
-            wk.register(mappings, opts)
-		end,		
+			local wk = require("which-key")
+			wk.register(mappings, opts)
+		end,
+	},
+	{
+		"nvim-telescope/telescope.nvim",
+		tag = "0.1.2",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		init = function()
+			local builtin = require("telescope.builtin")
+			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "find files" })
+			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "live grep" })
+			vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "search from buffers" })
+			vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "help tags" })
+		end,
+	},
+	{
+		"github/copilot.vim",
+		init = function()
+            vim.b.copilot_enabled = false
+		end,
 	},
 }
