@@ -72,7 +72,10 @@ return {
 			lspconfig.dockerls.setup({ capabilities = capabilities })
 			lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
 			lspconfig.zls.setup({ capabilities = capabilities })
-			lspconfig.clangd.setup({ capabilities = capabilities })
+			lspconfig.clangd.setup({
+				filetypes = { "c", "cpp", "h" },
+				capabilities = capabilities,
+			})
 			lspconfig.eslint.setup({ capabilities = capabilities })
 			lspconfig.tsserver.setup({ capabilities = capabilities })
 			lspconfig.html.setup({ capabilities = capabilities })
@@ -99,7 +102,14 @@ return {
 			ft("c,cpp"):fmt("clang-format")
 			ft("dockerfile"):lint("hadolint")
 			ft("typescript,javascript,typescriptreact"):lint({ cmd = "eslint" })
-			ft("proto"):fmt("clang-format"):lint({ cmd = "buf" })
+			ft("proto"):fmt({
+				cmd = "buf",
+				args = { "format" },
+				fname = true,
+			}):lint({
+				cmd = "buf",
+				args = { "lint" },
+			})
 			require("guard").setup({
 				fmt_on_save = true,
 			})
