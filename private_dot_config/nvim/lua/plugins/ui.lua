@@ -6,10 +6,6 @@ return {
 			"nord.nvim",
 		},
 		opts = function()
-			local highlights = require("nord").bufferline.highlights({
-				italic = true,
-				bold = true,
-			})
 			return {
 				options = {
 					separator_style = "thin",
@@ -22,7 +18,10 @@ return {
 						},
 					},
 				},
-				highlights = highlights,
+				highlights = require("nord").bufferline.highlights({
+					italic = true,
+					bold = true,
+				}),
 			}
 		end,
 	},
@@ -42,6 +41,12 @@ return {
 					},
 				},
 			},
+			filters = {
+				custom = { "node_modules", "^.git$" },
+			},
+            git = {
+                ignore = false, -- show files which are contained in .gitignore
+            }
 		},
 		init = function()
 			-- launch nvim-tree when open nvim
@@ -64,18 +69,22 @@ return {
 			})
 
 			-- close nvim-tree automatically when close all buffers
-			-- https://github.com/nvim-tree/nvim-tree.lua/wiki/Auto-Close#beauwilliams
-			vim.api.nvim_create_autocmd("BufEnter", {
-				group = vim.api.nvim_create_augroup("NvimTreeClose", { clear = true }),
-				pattern = "NvimTree_*",
+			-- https://github.com/nvim-tree/nvim-tree.lua/wiki/Auto-Close#ppwwyyxx
+			vim.api.nvim_create_autocmd("QuitPre", {
 				callback = function()
-					local layout = vim.api.nvim_call_function("winlayout", {})
-					if
-						layout[1] == "leaf"
-						and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(layout[2]), "filetype") == "NvimTree"
-						and layout[3] == nil
-					then
-						vim.cmd("confirm quit")
+					local invalid_win = {}
+					local wins = vim.api.nvim_list_wins()
+					for _, w in ipairs(wins) do
+						local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
+						if bufname:match("NvimTree_") ~= nil then
+							table.insert(invalid_win, w)
+						end
+					end
+					if #invalid_win == #wins - 1 then
+						-- Should quit, so we close all invalid windows.
+						for _, w in ipairs(invalid_win) do
+							vim.api.nvim_win_close(w, true)
+						end
 					end
 				end,
 			})
@@ -103,6 +112,16 @@ return {
 		},
 		init = function()
 			require("lualine").setup()
+		end,
+	},
+	{
+		"akinsho/toggleterm.nvim",
+		version = "*",
+		config = true,
+		init = function()
+			vim.keymap.set("n", "<leader>th", "<Cmd>ToggleTerm direction=horizontal<CR>")
+			vim.keymap.set("n", "<leader>tv", "<Cmd>ToggleTerm direction=vertical<CR>")
+			vim.keymap.set("n", "<leader>tf", "<Cmd>ToggleTerm direction=float<CR>")
 		end,
 	},
 }

@@ -12,31 +12,39 @@ return {
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 				border = "rounded",
 			})
-			local Util = require("plugins.lsp.util")
-			Util.on_attach(function(client, buffer)
-				require("plugins.lsp.autocmd")
+			require("plugins.lsp.util").on_attach(function(client, buffer)
 				require("plugins.lsp.keymap")
 			end)
 			local lspconfig = require("lspconfig")
-			local util = require("lspconfig/util")
 			local capabilities =
 				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 			lspconfig.gopls.setup({
 				cmd = { "gopls", "serve" },
 				filetypes = { "go", "gomod" },
-				root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+				root_dir = require("lspconfig/util").root_pattern("go.work", "go.mod", ".git"),
 				settings = {
 					gopls = {
 						analyses = {
 							unusedparams = true,
 						},
-						staticcheck = true,
 					},
 				},
 				capabilities = capabilities,
 			})
-			lspconfig.lua_ls.setup({ capabilities = capabilities })
+			lspconfig.lua_ls.setup({
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = {
+								"vim",
+								"require",
+							},
+						},
+					},
+				},
+				capabilities = capabilities,
+			})
 			lspconfig.rust_analyzer.setup({
 				on_attach = function(client)
 					require("completion").on_attach(client)
@@ -61,61 +69,40 @@ return {
 				},
 				capabilities = capabilities,
 			})
-            lspconfig.dockerls.setup({ capabilities = capabilities })
-            lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
-            lspconfig.zls.setup({ capabilities = capabilities })
-            lspconfig.clangd.setup({ capabilities = capabilities })
-            lspconfig.eslint.setup({ capabilities = capabilities })
-            lspconfig.tsserver.setup({ capabilities = capabilities })
-            lspconfig.html.setup({ capabilities = capabilities })
-            lspconfig.jsonls.setup({ capabilities = capabilities })
-            lspconfig.yamlls.setup({ capabilities = capabilities })
+			lspconfig.dockerls.setup({ capabilities = capabilities })
+			lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
+			lspconfig.zls.setup({ capabilities = capabilities })
+			lspconfig.clangd.setup({ capabilities = capabilities })
+			lspconfig.eslint.setup({ capabilities = capabilities })
+			lspconfig.tsserver.setup({ capabilities = capabilities })
+			lspconfig.html.setup({ capabilities = capabilities })
+			lspconfig.jsonls.setup({ capabilities = capabilities })
+			lspconfig.yamlls.setup({ capabilities = capabilities })
+			lspconfig.bufls.setup({ capabilities = capabilities })
 		end,
 	},
 	{
-		"jose-elias-alvarez/null-ls.nvim",
+		"nvimdev/guard.nvim",
 		event = { "BufEnter", "BufReadPre", "BufNewFile" },
-		dependencies = { "mason.nvim", "nvim-lua/plenary.nvim" },
+		dependencies = { "mason.nvim" },
 		opts = function()
-			local null_ls = require("null-ls")
-			return {
-				root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
-				sources = {
-					null_ls.builtins.code_actions.gitsigns,
-					null_ls.builtins.code_actions.eslint,
-					null_ls.builtins.diagnostics.actionlint, -- github actions
-					null_ls.builtins.formatting.yamlfmt, -- yaml
-					null_ls.builtins.formatting.goimports, -- go
-					null_ls.builtins.formatting.rustfmt, -- rust
-					null_ls.builtins.formatting.stylua, -- lua
-					null_ls.builtins.formatting.dprint, -- js/ts, json, markdown, etc.
-					null_ls.builtins.formatting.clang_format, -- c/c++, proto
-					null_ls.builtins.formatting.zigfmt, -- zig
-					null_ls.builtins.diagnostics.staticcheck, -- go
-					null_ls.builtins.diagnostics.hadolint, -- Dockerfile
-					null_ls.builtins.diagnostics.eslint, -- js/ts
-					null_ls.builtins.diagnostics.buf, -- proto
-					null_ls.builtins.completion.luasnip,
-				},
-				on_attach = function(client, bufnr)
-					if client.supports_method("textDocument/formatting") then
-						vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-						vim.api.nvim_create_autocmd("BufWritePre", {
-							group = augroup,
-							buffer = bufnr,
-							callback = function()
-								vim.lsp.buf.format({
-									async = false,
-									bufnr = bufnr,
-									filter = function(c)
-										return c.name == "null-ls"
-									end,
-								})
-							end,
-						})
-					end
-				end,
-			}
+			local ft = require("guard.filetype")
+			ft("go"):fmt({ cmd = "goimports" }):lint({ cmd = "staticcheck" })
+			ft("rust"):fmt("lsp"):lint({
+				cmd = "cargo",
+				args = { "clippy" },
+			})
+			ft("lua"):fmt("stylua"):lint("luacheck")
+			ft("yaml"):fmt({ cmd = "yamlfmt" }):lint({ cmd = "yamllint" })
+			ft("yaml"):fmt({ cmd = "yamlfmt" }):lint({ cmd = "actionlint" })
+			ft("typescript,javascript,typescriptreact,json,markdown,toml,dockerfile"):fmt({ cmd = "dprint" })
+			ft("c,cpp"):fmt("clang-format")
+			ft("dockerfile"):lint("hadolint")
+			ft("typescript,javascript,typescriptreact"):lint({ cmd = "eslint" })
+			ft("proto"):fmt("clang-format"):lint({ cmd = "buf" })
+			require("guard").setup({
+				fmt_on_save = true,
+			})
 		end,
 	},
 	{

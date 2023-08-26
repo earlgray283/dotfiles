@@ -11,3 +11,4 @@ opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.laststatus = 3
+opt.swapfile = false
