@@ -51,6 +51,18 @@ return {
 			vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "[telescope] search from buffers" })
 			vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[telescope] help tags" })
 		end,
+		opts = {
+			pickers = {
+				find_files = {
+					find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+				},
+				live_grep = {
+					additional_args = function(opts)
+						return { "--hidden" }
+					end,
+				},
+			},
+		},
 	},
 	{
 		"github/copilot.vim",
