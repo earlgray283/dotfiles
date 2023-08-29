@@ -25,7 +25,7 @@ return {
 				auto_install = true,
 				highlight = {
 					enable = true,
-					disable = { "yaml" },
+					disable = { "yaml", "dockerfile", "make" },
 				},
 			})
 		end,
