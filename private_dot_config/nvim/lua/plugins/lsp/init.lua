@@ -215,9 +215,6 @@ return {
 		},
 	},
 	{
-		"lewis6991/gitsigns.nvim",
-	},
-	{
 		"ray-x/lsp_signature.nvim",
 		event = "VeryLazy",
 		opts = {},
