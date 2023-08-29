@@ -12,3 +12,4 @@ opt.tabstop = 4
 opt.shiftwidth = 4
 opt.laststatus = 3
 opt.swapfile = false
+opt.autoread = true
