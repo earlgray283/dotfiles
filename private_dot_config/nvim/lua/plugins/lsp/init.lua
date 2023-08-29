@@ -1,4 +1,3 @@
-local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -9,79 +8,89 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		init = function()
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-				border = "rounded",
-			})
-			require("plugins.lsp.util").on_attach(function(client, buffer)
-				require("plugins.lsp.keymap")
-			end)
-			local lspconfig = require("lspconfig")
-			local capabilities =
-				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-			lspconfig.gopls.setup({
-				cmd = { "gopls", "serve" },
-				filetypes = { "go", "gomod" },
-				root_dir = require("lspconfig/util").root_pattern("go.work", "go.mod", ".git"),
-				settings = {
-					gopls = {
-						analyses = {
-							unusedparams = true,
+			local langs = {
+				gopls = {
+					cmd = { "gopls", "serve" },
+					filetypes = { "go", "gomod" },
+					root_dir = require("lspconfig/util").root_pattern("go.work", "go.mod", ".git"),
+					settings = {
+						gopls = {
+							analyses = {
+								unusedparams = true,
+							},
+							staticcheck = true,
 						},
 					},
 				},
-				capabilities = capabilities,
-			})
-			lspconfig.lua_ls.setup({
-				settings = {
-					Lua = {
-						diagnostics = {
-							globals = {
-								"vim",
-								"require",
+				lua_ls = {
+					settings = {
+						Lua = {
+							diagnostics = {
+								globals = {
+									"vim",
+									"require",
+								},
 							},
 						},
 					},
 				},
-				capabilities = capabilities,
-			})
-			lspconfig.rust_analyzer.setup({
-				on_attach = function(client)
-					require("completion").on_attach(client)
-				end,
-				settings = {
-					["rust-analyzer"] = {
-						imports = {
-							granularity = { group = "module" },
-							prefix = "self",
-						},
-						diagnostics = { enable = true },
-						cargo = {
-							buildScripts = { enable = true },
-						},
-						procMacro = {
-							enable = true,
-						},
-						check = {
-							command = "clippy",
+				rust_analyzer = {
+					on_attach = function(client)
+						require("completion").on_attach(client)
+					end,
+					settings = {
+						["rust-analyzer"] = {
+							imports = {
+								granularity = { group = "module" },
+								prefix = "self",
+							},
+							diagnostics = { enable = true },
+							cargo = {
+								buildScripts = { enable = true },
+							},
+							procMacro = {
+								enable = true,
+							},
+							check = {
+								command = "clippy",
+							},
 						},
 					},
 				},
-				capabilities = capabilities,
-			})
-			lspconfig.dockerls.setup({ capabilities = capabilities })
-			lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
-			lspconfig.zls.setup({ capabilities = capabilities })
-			lspconfig.clangd.setup({
-				filetypes = { "c", "cpp", "h" },
-				capabilities = capabilities,
-			})
-			lspconfig.eslint.setup({ capabilities = capabilities })
-			lspconfig.tsserver.setup({ capabilities = capabilities })
-			lspconfig.html.setup({ capabilities = capabilities })
-			lspconfig.jsonls.setup({ capabilities = capabilities })
-			lspconfig.yamlls.setup({ capabilities = capabilities })
-			lspconfig.bufls.setup({ capabilities = capabilities })
+				clangd = { filetypes = { "c", "cpp", "h" } },
+				tsserver = {},
+				angularls = {},
+				dockerls = {},
+				docker_compose_language_service = {
+					root_dir = require("lspconfig/util").root_pattern("docker-compose.yaml", "compose.yaml"),
+				},
+				bufls = {},
+				html = {},
+				jsonls = {},
+				yamlls = {
+					settings = {
+						yaml = {
+							schemas = {
+								["https://github.com/OAI/OpenAPI-Specification/raw/main/schemas/v3.1/schema.yaml"] = "/*",
+							},
+						},
+					},
+				},
+			}
+
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+			vim.lsp.handlers["textDocument/diagnostic"] =
+				vim.lsp.with(vim.lsp.diagnostic.on_diagnostic, { update_in_insert = true })
+			local capabilities =
+				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+			for name, config in pairs(langs) do
+				config.capabilities = capabilities
+				require("lspconfig")[name].setup(config)
+			end
+
+			require("plugins.lsp.util").on_attach(function(client, buffer)
+				require("plugins.lsp.keymap")
+			end)
 		end,
 	},
 	{
