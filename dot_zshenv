@@ -1,6 +1,7 @@
 JAVA_HOME=$(/usr/libexec/java_home -v 20)
 VOLTA_HOME="$HOME/.volta"
 GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/application_default_credentials.json
+NG_CLI_ANALYTICS="false"
 
 path=(
 	$HOME/.cargo/bin(N-/)
@@ -13,6 +14,7 @@ path=(
 	$HOME/.orbstack/bin(N-/)
 
 	/opt/homebrew/opt/make/libexec/gnubin(N-/)
+	/opt/homebrew/opt/gnu-sed/libexec/gnubin(N-/)
 	
 	$path
 )
