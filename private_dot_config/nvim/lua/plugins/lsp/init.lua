@@ -96,7 +96,10 @@ return {
 	{
 		"nvimdev/guard.nvim",
 		event = { "BufEnter", "BufReadPre", "BufNewFile" },
-		dependencies = { "mason.nvim" },
+		dependencies = {
+			"mason.nvim",
+			"nvimdev/guard-collection",
+		},
 		opts = function()
 			local ft = require("guard.filetype")
 			ft("go"):fmt({ cmd = "goimports" }):lint({ cmd = "staticcheck" })
@@ -121,6 +124,7 @@ return {
 			})
 			require("guard").setup({
 				fmt_on_save = true,
+				lsp_as_default_formatter = false,
 			})
 		end,
 	},
