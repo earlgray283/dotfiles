@@ -94,41 +94,6 @@ return {
 		end,
 	},
 	{
-		"nvimdev/guard.nvim",
-		event = { "BufEnter", "BufReadPre", "BufNewFile" },
-		dependencies = {
-			"mason.nvim",
-			"nvimdev/guard-collection",
-		},
-		opts = function()
-			local ft = require("guard.filetype")
-			ft("go"):fmt({ cmd = "goimports" }):lint({ cmd = "staticcheck" })
-			ft("rust"):fmt("lsp"):lint({
-				cmd = "cargo",
-				args = { "clippy" },
-			})
-			ft("lua"):fmt("stylua"):lint("luacheck")
-			ft("yaml"):fmt({ cmd = "yamlfmt" }):lint({ cmd = "yamllint" })
-			ft("yaml"):fmt({ cmd = "yamlfmt" }):lint({ cmd = "actionlint" })
-			ft("typescript,javascript,typescriptreact,json,markdown,toml,dockerfile"):fmt({ cmd = "dprint" })
-			ft("c,cpp"):fmt("clang-format")
-			ft("dockerfile"):lint("hadolint")
-			ft("typescript,javascript,typescriptreact"):lint({ cmd = "eslint" })
-			ft("proto"):fmt({
-				cmd = "buf",
-				args = { "format" },
-				fname = true,
-			}):lint({
-				cmd = "buf",
-				args = { "lint" },
-			})
-			require("guard").setup({
-				fmt_on_save = true,
-				lsp_as_default_formatter = false,
-			})
-		end,
-	},
-	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
 		version = false,
@@ -165,11 +130,12 @@ return {
 					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 				}),
 				formatting = {
+					fields = { "kind", "abbr", "menu" },
 					format = require("lspkind").cmp_format({
 						mode = "symbol",
 						maxwidth = 50,
 						ellipsis_char = "...",
-						before = function(_, vim_item)
+						before = function(entry, vim_item)
 							return vim_item
 						end,
 					}),
@@ -224,6 +190,40 @@ return {
 		opts = {},
 		config = function(_, opts)
 			require("lsp_signature").setup(opts)
+		end,
+	},
+	{
+		"nvimdev/guard.nvim",
+		dependencies = {
+			"mason.nvim",
+			"nvimdev/guard-collection",
+		},
+		init = function()
+			local ft = require("guard.filetype")
+			ft("go"):fmt({ cmd = "goimports", fname = true })
+			ft("rust"):fmt("lsp"):lint({
+				cmd = "cargo",
+				args = { "clippy" },
+			})
+			ft("lua"):fmt("stylua"):lint("luacheck")
+			ft("yaml"):fmt({ cmd = "yamlfmt" }):lint({ cmd = "yamllint" })
+			ft("yaml"):fmt({ cmd = "yamlfmt" }):lint({ cmd = "actionlint" })
+			ft("typescript,javascript,typescriptreact,json,markdown,toml,dockerfile"):fmt("dprint")
+			ft("c,cpp"):fmt("clang-format")
+			ft("dockerfile"):lint("hadolint")
+			ft("typescript,javascript,typescriptreact"):lint({ cmd = "eslint" })
+			ft("proto"):fmt({
+				cmd = "buf",
+				args = { "format", "-w" },
+				fname = true,
+			}):lint({
+				cmd = "buf",
+				args = { "lint" },
+			})
+			require("guard").setup({
+				fmt_on_save = true,
+				lsp_as_default_formatter = false,
+			})
 		end,
 	},
 }
