@@ -1,16 +1,10 @@
 return {
 	{
-		"shaunsingh/nord.nvim",
+		"gbprod/nord.nvim",
 		lazy = false,
 		priority = 100000,
 		init = function()
-			vim.g.nord_contrast = true
-			vim.g.nord_borders = true
-			vim.g.nord_disable_background = false
-			vim.g.nord_italic = true
-			vim.g.nord_uniform_diff_background = true
-			vim.g.nord_bold = false
-			require("nord").set()
+			require("nord").setup({})
 			vim.cmd([[colorscheme nord]])
 		end,
 	},
@@ -42,7 +36,7 @@ return {
 					virtual_text = {
 						spacing = 5,
 						severity_limit = "Warning",
-					},
+				},
 					update_in_insert = true,
 				})
 		end,
