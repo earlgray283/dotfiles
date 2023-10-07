@@ -3,7 +3,7 @@ return {
 		"akinsho/bufferline.nvim",
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
-			"nord.nvim",
+			"gbprod/nord.nvim",
 		},
 		opts = function()
 			return {
@@ -18,10 +18,6 @@ return {
 						},
 					},
 				},
-				highlights = require("nord").bufferline.highlights({
-					italic = true,
-					bold = true,
-				}),
 			}
 		end,
 	},
