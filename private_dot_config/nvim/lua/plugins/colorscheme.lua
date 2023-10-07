@@ -21,7 +21,6 @@ return {
 				auto_install = true,
 				highlight = {
 					enable = true,
-					disable = { "yaml", "dockerfile", "make", "html" },
 				},
 				indent = {
 					enable = true,
@@ -36,7 +35,7 @@ return {
 					virtual_text = {
 						spacing = 5,
 						severity_limit = "Warning",
-				},
+					},
 					update_in_insert = true,
 				})
 		end,
