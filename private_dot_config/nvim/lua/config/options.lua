@@ -14,3 +14,4 @@ opt.laststatus = 3
 opt.swapfile = false
 opt.autoread = true
 opt.autoindent = true
+opt.smartindent = true

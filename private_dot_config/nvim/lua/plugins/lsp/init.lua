@@ -9,28 +9,14 @@ return {
 		},
 		init = function()
 			local langs = {
+				-- Programming Languages
 				gopls = {
-					cmd = { "gopls", "serve" },
-					filetypes = { "go", "gomod" },
-					root_dir = require("lspconfig/util").root_pattern("go.work", "go.mod", ".git"),
 					settings = {
 						gopls = {
 							analyses = {
 								unusedparams = true,
 							},
 							staticcheck = true,
-						},
-					},
-				},
-				lua_ls = {
-					settings = {
-						Lua = {
-							diagnostics = {
-								globals = {
-									"vim",
-									"require",
-								},
-							},
 						},
 					},
 				},
@@ -57,15 +43,23 @@ return {
 						},
 					},
 				},
-				clangd = { filetypes = { "c", "cpp", "h" } },
-				tsserver = {},
-				angularls = {},
+				clangd = {},
+				lua_ls = {},
+
+				-- Docker
 				dockerls = {},
 				docker_compose_language_service = {
 					root_dir = require("lspconfig/util").root_pattern("docker-compose.yaml", "compose.yaml"),
 				},
-				bufls = {},
+
+				-- Frontend Development
+				cssls = {},
+				tailwindcss = {},
+				tsserver = {},
+				angularls = {},
 				html = {},
+
+				-- Schema Language
 				jsonls = {},
 				yamlls = {
 					settings = {
@@ -76,7 +70,7 @@ return {
 						},
 					},
 				},
-				tailwindcss = {},
+				bufls = {},
 			}
 
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
@@ -185,46 +179,12 @@ return {
 			},
 		},
 	},
-	{
-		"ray-x/lsp_signature.nvim",
-		event = "VeryLazy",
-		opts = {},
-		config = function(_, opts)
-			require("lsp_signature").setup(opts)
-		end,
-	},
-	{
-		"nvimdev/guard.nvim",
-		dependencies = {
-			"mason.nvim",
-			"nvimdev/guard-collection",
-		},
-		init = function()
-			local ft = require("guard.filetype")
-			ft("go"):fmt({ cmd = "goimports", fname = true })
-			ft("rust"):fmt("lsp"):lint({
-				cmd = "cargo",
-				args = { "clippy" },
-			})
-			ft("lua"):fmt("stylua"):lint("luacheck")
-			ft("yaml"):fmt({ cmd = "yamlfmt" }):lint({ cmd = "yamllint" })
-			ft("yaml"):fmt({ cmd = "yamlfmt" }):lint({ cmd = "actionlint" })
-			ft("typescript,javascript,typescriptreact,json,markdown,toml,dockerfile"):fmt("dprint")
-			ft("c,cpp"):fmt("clang-format")
-			ft("dockerfile"):lint("hadolint")
-			ft("typescript,javascript,typescriptreact"):lint({ cmd = "eslint" })
-			ft("proto"):fmt({
-				cmd = "buf",
-				args = { "format", "-w" },
-				fname = true,
-			}):lint({
-				cmd = "buf",
-				args = { "lint" },
-			})
-			require("guard").setup({
-				fmt_on_save = true,
-				lsp_as_default_formatter = false,
-			})
-		end,
-	},
+	-- {
+	-- 	"ray-x/lsp_signature.nvim",
+	-- 	event = "VeryLazy",
+	-- 	opts = {},
+	-- 	config = function(_, opts)
+	-- 		require("lsp_signature").setup(opts)
+	-- 	end,
+	-- },
 }
