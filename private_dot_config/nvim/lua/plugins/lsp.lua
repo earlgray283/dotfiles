@@ -52,6 +52,8 @@ return {
           },
         },
 
+        marksman = {},
+
         rust_analyzer = {
           on_attach = function(client)
             require("completion").on_attach(client)
