@@ -7,8 +7,11 @@ return {
         lua = { "stylua" },
         fish = { "fish_indent" },
         sh = { "shfmt" },
-        go = { "goimports" },
+        go = { "goimports", "gofumpt" },
         rust = { "rustfmt" },
+        typescript = { "prettier" },
+        javascript = { "prettier" },
+        html = { "prettier" },
       },
       ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
       formatters = {
