@@ -1,3 +1,5 @@
+local util = require("conform.util")
+
 return {
   {
     "stevearc/conform.nvim",
@@ -9,13 +11,21 @@ return {
         sh = { "shfmt" },
         go = { "goimports", "gofumpt" },
         rust = { "rustfmt" },
-        typescript = { "prettier" },
-        javascript = { "prettier" },
+        typescript = { { "prettier", "dprint" } },
+        typescriptreact = { { "prettier", "dprint" } },
+        javascript = { { "prettier", "dprint" } },
         html = { "prettier" },
+        json = { { "prettier", "dprint" } },
+        python = { "ruff" },
+        yaml = { "yamlfmt" },
+        proto = { "buf" },
       },
       ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
       formatters = {
         injected = { options = { ignore_errors = true } },
+        dprint = {
+          command = util.from_node_modules("dprint"),
+        },
         -- # Example of using dprint only when a dprint.json file is present
         -- dprint = {
         --   condition = function(ctx)
