@@ -21,3 +21,5 @@
 [alias]
 	lo = log --oneline
 
+[push]
+	autoSetupRemote = true
