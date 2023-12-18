@@ -1,13 +1,14 @@
-JAVA_HOME=$(/usr/libexec/java_home -v 20)
-VOLTA_HOME="$HOME/.volta"
-GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/application_default_credentials.json
-NG_CLI_ANALYTICS="false"
+export JAVA_HOME=$(/usr/libexec/java_home -v 20)
+export VOLTA_HOME="$HOME/.volta"
+export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/application_default_credentials.json
+export NG_CLI_ANALYTICS="false"
+export FZF_DEFAULT_COMMAND='fd --type f --hidden -follow --exclude .git --color=always'
+export CXX="/opt/homebrew/bin/g++-13"
 
 path=(
 	$HOME/.cargo/bin(N-/)
 	$HOME/go/bin(N-/)
 	$VOLTA_HOME/bin(N-/)
-	$HOME/.rye/shims(N-/)
 	/opt/homebrew/opt/openjdk/bin(N-/)
 
 	/Applications/Alacritty.app/Contents/MacOS(N-/)
@@ -18,3 +19,4 @@ path=(
 	
 	$path
 )
+. "$HOME/.cargo/env"
