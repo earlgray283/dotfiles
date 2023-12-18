@@ -6,19 +6,21 @@ return {
     opts = {
       ---@type table<string, conform.FormatterUnit[]>
       formatters_by_ft = {
-        lua = { "stylua" },
+        css = { { "prettier", "lsp" } },
         fish = { "fish_indent" },
-        sh = { "shfmt" },
         go = { "goimports", "gofumpt" },
+        html = { "prettier" },
+        javascript = { { "prettier", "dprint" } },
+        json = { { "prettier", "dprint" } },
+        lua = { "stylua" },
+        proto = { "buf" },
+        python = { "ruff_format" },
         rust = { "rustfmt" },
+        scss = { { "prettier", "lsp" } },
+        sh = { "shfmt" },
         typescript = { { "prettier", "dprint" } },
         typescriptreact = { { "prettier", "dprint" } },
-        javascript = { { "prettier", "dprint" } },
-        html = { "prettier" },
-        json = { { "prettier", "dprint" } },
-        python = { "ruff" },
         yaml = { "yamlfmt" },
-        proto = { "buf" },
       },
       ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
       formatters = {
