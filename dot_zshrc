@@ -25,13 +25,25 @@ autoload -Uz compinit && compinit
 # zstyle
 zstyle ':completion:*' menu select
 
-# zellij autostart script
-if [[ $TERM_PROGRAM != "vscode" ]]; then
-	eval "$(zellij setup --generate-auto-start zsh)"
-fi
-
 source "/opt/homebrew/share/google-cloud-sdk/path.zsh.inc"
 source "/opt/homebrew/share/google-cloud-sdk/completion.zsh.inc"
+
+# tmux autostart script
+if [[ ! -n $TMUX ]] && [[ $TERM_PROGRAM != "vscode" ]]; then
+	ID="`tmux list-sessions`"
+    if [[ -z "$ID" ]]; then
+        tmux new-session
+    fi
+    ID="$ID\nCreate New Session"
+    ID="`echo $ID | fzf | cut -d: -f1`"
+    if [[ "$ID" = "Create New Session" ]]; then
+        tmux new-session
+    elif [[ -n "$ID" ]]; then
+        tmux attach-session -t "$ID"
+    else
+        :
+    fi
+fi
 
 function togif() {
     ffmpeg -i $1 -r 10 -vf scale=320:-1 "$(basename $1).gif"
@@ -46,20 +58,37 @@ function gotestcov() {
     PROFILE_OUT="${TMPDIR}/cover.out"
     HTML_OUT="${TMPDIR}/cover.html"
     chmod +w ${TMPDIR}
-    go test -cover -coverprofile=${PROFILE_OUT} $1
-    go tool cover -html=${PROFILE_OUT} -o ${HTML_OUT}
-    open ${HTML_OUT}
+    go test -shuffle on -race -v -cover -coverprofile=${PROFILE_OUT} -p 1 $1 \
+    && go tool cover -html=${PROFILE_OUT} -o ${HTML_OUT} \
+    && open ${HTML_OUT}
 }
 
 # alias
-alias ls='exa --icons'
+alias ls='lsd'
 alias cat='bat'
 alias fd='fd -I --no-ignore-vcs'
-alias g++='g++-13 -std=c++17 -g2 -O2 -Wall -Wextra -Wshadow -Wconversion -ftrapv'
-alias gcc='gcc-13 -std=c17 -g2 -O2 -Wall -Wextra -Wshadow -Wconversion -ftrapv'
 alias matumoto='echo "Hello, I am matumoto!"'
 alias mv='mv -v'
 #alias rm='rm -v'
 alias gitroot='cd `git rev-parse --show-superproject-working-tree --show-toplevel | head -1`'
 alias sed="gsed"
 
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+
+# bun completions
+[ -s "/Users/earlgray/.bun/_bun" ] && source "/Users/earlgray/.bun/_bun"
