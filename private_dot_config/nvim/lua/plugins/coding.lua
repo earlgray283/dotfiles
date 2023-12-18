@@ -56,4 +56,10 @@ return {
       cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
     end,
   },
+  {
+    "zbirenbaum/copilot.lua",
+    init = function()
+      vim.api.nvim_command(":Copilot disable")
+    end,
+  },
 }
