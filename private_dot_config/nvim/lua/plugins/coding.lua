@@ -9,20 +9,20 @@ return {
       --   end,
       --   expr = true, silent = true, mode = "i",
       -- },
-      {
-        "<tab>",
-        function()
-          require("luasnip").jump(1)
-        end,
-        mode = "s",
-      },
-      {
-        "<s-tab>",
-        function()
-          require("luasnip").jump(-1)
-        end,
-        mode = { "i", "s" },
-      },
+      -- {
+      --   "<tab>",
+      --   function()
+      --     require("luasnip").jump(1)
+      --   end,
+      --   mode = "s",
+      -- },
+      -- {
+      --   "<s-tab>",
+      --   function()
+      --     require("luasnip").jump(-1)
+      --   end,
+      --   mode = { "i", "s" },
+      -- },
     },
     init = function()
       local luasnip = require("luasnip")
