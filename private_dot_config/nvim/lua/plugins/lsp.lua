@@ -2,8 +2,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      ---@type lspconfig.options
-      ---@diagnostic disable-next-line: missing-fields
+      inlay_hints = { enabled = false },
       servers = {
         angularls = {},
 
@@ -33,6 +32,7 @@ return {
           },
         },
       },
+      diagnostics = {},
     },
   },
 }

@@ -15,7 +15,7 @@ return {
         lua = { "stylua" },
         proto = { "buf" },
         python = { "ruff_format" },
-        rust = { "rustfmt" },
+        rust = { "lsp" },
         scss = { { "prettier", "lsp" } },
         sh = { "shfmt" },
         typescript = { { "prettier", "dprint" } },
