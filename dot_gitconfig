@@ -1,6 +1,7 @@
 [user]
 	name = earlgray
 	email = earlgray283@gmail.com
+	signingkey = 1DE93A7E9C638A40
 
 [core]
     pager = delta
@@ -23,5 +24,13 @@
 
 [push]
 	autoSetupRemote = true
+
 [init]
 	defaultBranch = main
+
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
+
+[commit]
+  gpgsign = true
+
