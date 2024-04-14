@@ -7,7 +7,11 @@ return {
 		opts = {
 			diagnostics = {
 				enable = true,
+        show_on_dirs = true,
 			},
+      modified = {
+        enable = true,
+      },
 			filters = {
 				dotfiles = true,
 			},

@@ -27,7 +27,33 @@ return {
 				},
 				html = {},
 				jsonls = {},
-				lua_ls = {},
+				lua_ls = {
+					on_init = function(client)
+						local path = client.workspace_folders[1].name
+						if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+							return
+						end
+
+						client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+							runtime = {
+								version = "LuaJIT",
+							},
+							workspace = {
+								checkThirdParty = true,
+								library = {
+									vim.env.VIMRUNTIME,
+								},
+							},
+						})
+					end,
+					settings = {
+						Lua = {
+							diagnostics = {
+								globals = { "vim" },
+							},
+						},
+					},
+				},
 				pylyzer = {},
 				rust_analyzer = {
 					on_attach = function(client)
@@ -108,6 +134,13 @@ return {
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
+		config = function()
+			require("mason-lspconfig").setup_handlers({
+				function(server_name)
+					require("lspconfig")[server_name].setup({})
+				end,
+			})
+		end,
 	},
 	{
 		"hrsh7th/nvim-cmp",
