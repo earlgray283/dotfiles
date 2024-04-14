@@ -1,16 +1,11 @@
 return {
-  {
-    "gbprod/nord.nvim",
-    lazy = false,
-    priority = 100000,
-  },
-  {
-    "LazyVim/LazyVim",
-    dependencies = {
-      "gbprod/nord.nvim",
-    },
-    opts = {
-      colorscheme = "nord",
-    },
-  },
+	{
+		"gbprod/nord.nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			require("nord").setup({})
+			vim.cmd.colorscheme("nord")
+		end,
+	},
 }
