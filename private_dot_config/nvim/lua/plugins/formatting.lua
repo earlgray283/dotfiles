@@ -9,6 +9,9 @@ return {
 				lua = { "stylua" },
 				go = { "goimports" },
 				rust = { "rustfmt" },
+				proto = { "buf" },
+				typescript = { { "dprint", "prettier" } },
+				typescriptreact = { { "dprint", "prettier" } },
 			},
 			format_on_save = {
 				timeout_ms = 3000,
