@@ -13,8 +13,17 @@ return {
 				typescript = { { "dprint", "prettier" } },
 				typescriptreact = { { "dprint", "prettier" } },
 			},
+			formatters = {
+				dprint = function()
+					return {
+						command = require("conform.util").find_executable({
+							"node_modules/.bin/dprint",
+						}, "dprint"),
+					}
+				end,
+			},
 			format_on_save = {
-				timeout_ms = 3000,
+				timeout_ms = 200,
 				lsp_fallback = false,
 			},
 		},
