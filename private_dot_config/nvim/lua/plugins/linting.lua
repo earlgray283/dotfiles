@@ -6,6 +6,8 @@ return {
 			linters_by_ft = {
 				go = { "golangcilint" },
 				proto = { "buf_lint" },
+				typescript = { "eslint" },
+				typescriptreact = { "eslint" },
 			},
 		},
 		config = function(_, opts)
