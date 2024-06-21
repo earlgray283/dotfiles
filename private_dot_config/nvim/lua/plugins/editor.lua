@@ -65,6 +65,7 @@ return {
 		config = function()
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
+			vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "Find Diagnostics" })
 			vim.keymap.set("n", "<leader>/", builtin.live_grep, { desc = "Live Grep" })
 			vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "" })
 			vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
@@ -199,7 +200,6 @@ return {
 		},
 		opts = {}, -- for default options, refer to the configuration section for custom setup.
 	},
-
 	{
 		"RRethy/vim-illuminate",
 		opts = {
@@ -211,6 +211,24 @@ return {
 		},
 		config = function(_, opts)
 			require("illuminate").configure(opts)
+		end,
+	},
+	{
+		"nvim-pack/nvim-spectre",
+		dependencies = "nvim-lua/plenary.nvim",
+		init = function()
+			vim.keymap.set("n", "<leader>S", '<cmd>lua require("spectre").toggle()<CR>', {
+				desc = "Toggle Spectre",
+			})
+			vim.keymap.set("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+				desc = "Search current word",
+			})
+			vim.keymap.set("v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', {
+				desc = "Search current word",
+			})
+			vim.keymap.set("n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+				desc = "Search on current file",
+			})
 		end,
 	},
 }
