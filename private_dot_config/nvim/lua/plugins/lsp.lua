@@ -8,9 +8,8 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		opts = {
+			events = { "BufWritePost", "BufReadPost", "InsertLeave" },
 			servers = {
-				-- angularls = {},
-				bufls = {},
 				clangd = {},
 				cssls = {},
 				dockerls = {},
@@ -22,6 +21,7 @@ return {
 								unusedparams = true,
 								unusedvariable = true,
 							},
+							usePlaceholders = true,
 						},
 					},
 				},
@@ -80,16 +80,21 @@ return {
 				},
 				tailwindcss = {},
 				tsserver = {},
-				yamlls = {},
+				yamlls = {
+					settings = {
+						yaml = {
+							schemas = {
+								["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+							},
+						},
+					},
+				},
 			},
 		},
 		config = function(_, opts)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 				callback = function(ev)
-					-- Enable completion triggered by <c-x><c-o>
-					vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-
 					-- Buffer local mappings.
 					-- See `:help vim.lsp.*` for documentation on any of the below functions
 					local opts = { buffer = ev.buf }
@@ -110,6 +115,21 @@ return {
 					vim.keymap.set("n", "<space>f", function()
 						vim.lsp.buf.format({ async = true })
 					end, opts)
+
+					vim.o.updatetime = 750
+					-- vim.api.nvim_create_autocmd("CursorHold", {
+					-- 	buffer = ev.buf,
+					-- 	callback = function()
+					-- 		vim.diagnostic.open_float(nil, {
+					-- 			focusable = false,
+					-- 			close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+					-- 			border = "rounded",
+					-- 			source = "always",
+					-- 			prefix = " ",
+					-- 			scope = "cursor",
+					-- 		})
+					-- 	end,
+					-- })
 				end,
 			})
 

@@ -12,6 +12,7 @@ return {
 				proto = { "buf" },
 				typescript = { { "dprint", "prettier" } },
 				typescriptreact = { { "dprint", "prettier" } },
+        yaml = {"yamlfmt"},
 			},
 			formatters = {
 				dprint = function()
