@@ -7,7 +7,6 @@ return {
 	{
 		"windwp/nvim-ts-autotag",
 		event = "InsertEnter",
-		opts = {},
 	},
 	{
 		"L3MON4D3/LuaSnip",

@@ -10,5 +10,8 @@ return {
 			require("nord").setup(opts)
 			vim.cmd.colorscheme("nord")
 		end,
+		install = {
+			colorscheme = { "nord" },
+		},
 	},
 }

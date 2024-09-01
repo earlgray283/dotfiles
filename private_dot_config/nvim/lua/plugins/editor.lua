@@ -33,26 +33,26 @@ return {
 		},
 	},
 	{
-		"nvim-tree/nvim-web-devicons",
-		opts = {},
-	},
-	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
-		init = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 300
-		end,
+		dependencies = {
+			"echasnovski/mini.icons",
+			"nvim-tree/nvim-web-devicons",
+		},
 		opts = {
 			-- your configuration comes here
 			-- or leave it empty to use the default settings
 			-- refer to the configuration section below
 		},
-		config = function(_, opts)
-			local wk = require("which-key")
-			wk.setup(opts)
-			wk.register(opts.defaults)
-		end,
+		keys = {
+			{
+				"<leader>?",
+				function()
+					require("which-key").show({ global = false })
+				end,
+				desc = "Buffer Local Keymaps (which-key)",
+			},
+		},
 	},
 	{
 		"nvim-telescope/telescope.nvim",
@@ -65,10 +65,10 @@ return {
 		config = function()
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
-			vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "Find Diagnostics" })
 			vim.keymap.set("n", "<leader>/", builtin.live_grep, { desc = "Live Grep" })
 			vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "" })
 			vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+			vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "List Diagnostics" })
 		end,
 	},
 	{
@@ -198,8 +198,11 @@ return {
 				desc = "Quickfix List (Trouble)",
 			},
 		},
-		opts = {}, -- for default options, refer to the configuration section for custom setup.
+		opts = {
+			auto_open = true,
+		},
 	},
+
 	{
 		"RRethy/vim-illuminate",
 		opts = {
@@ -211,24 +214,6 @@ return {
 		},
 		config = function(_, opts)
 			require("illuminate").configure(opts)
-		end,
-	},
-	{
-		"nvim-pack/nvim-spectre",
-		dependencies = "nvim-lua/plenary.nvim",
-		init = function()
-			vim.keymap.set("n", "<leader>S", '<cmd>lua require("spectre").toggle()<CR>', {
-				desc = "Toggle Spectre",
-			})
-			vim.keymap.set("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-				desc = "Search current word",
-			})
-			vim.keymap.set("v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', {
-				desc = "Search current word",
-			})
-			vim.keymap.set("n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-				desc = "Search on current file",
-			})
 		end,
 	},
 }
