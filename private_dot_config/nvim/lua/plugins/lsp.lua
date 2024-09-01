@@ -2,6 +2,8 @@ return {
 
 	{
 		"neovim/nvim-lspconfig",
+		lazy = false,
+		priority = 1000,
 		dependencies = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
@@ -116,20 +118,24 @@ return {
 						vim.lsp.buf.format({ async = true })
 					end, opts)
 
-					vim.o.updatetime = 750
-					-- vim.api.nvim_create_autocmd("CursorHold", {
-					-- 	buffer = ev.buf,
-					-- 	callback = function()
-					-- 		vim.diagnostic.open_float(nil, {
-					-- 			focusable = false,
-					-- 			close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-					-- 			border = "rounded",
-					-- 			source = "always",
-					-- 			prefix = " ",
-					-- 			scope = "cursor",
-					-- 		})
-					-- 	end,
-					-- })
+					local wk = require("which-key")
+					wk.add({
+						{
+							group = "lsp",
+							{ "gD", desc = "go to declaration" },
+							{ "gd", desc = "go to definition" },
+							{ "K", desc = "hover" },
+							{ "gi", desc = "go to implementation" },
+							{ "<C-k>", desc = "signature help" },
+							{ "<space>wa", desc = "add workspace folder" },
+							{ "<space>wr", desc = "remove workspace folder" },
+							{ "<space>wl", desc = "list workspace folders" },
+							{ "<space>D", desc = "type definition" },
+							{ "<space>rn", desc = "rename" },
+							{ "<space>ca", desc = "code action" },
+							{ "gr", desc = "references" },
+						},
+					})
 				end,
 			})
 
