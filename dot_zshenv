@@ -1,12 +1,6 @@
 export JAVA_HOME=$(/usr/libexec/java_home -v 20)
 export VOLTA_HOME="$HOME/.volta"
-export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/application_default_credentials.json
-export NG_CLI_ANALYTICS="false"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden -follow --exclude .git --color=always'
-export CXX="/opt/homebrew/bin/g++-13"
-export LDFLAGS="-L/opt/homebrew/opt/libxml2/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/libxml2/include"
-export PYENV_ROOT="$HOME/.pyenv"
 
 path=(
 	$HOME/.cargo/bin(N-/)
@@ -21,8 +15,6 @@ path=(
 	/opt/homebrew/opt/gnu-sed/libexec/gnubin(N-/)
   /opt/homebrew/opt/findutils/libexec/gnubin(N-/)
 
-  $PYENV_ROOT/bin(N-/)
-	
 	$path
 )
-. "$HOME/.cargo/env"
+

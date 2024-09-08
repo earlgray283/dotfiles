@@ -1,0 +1,41 @@
+shell = "zsh"
+match = [
+    "{{ name }}.plugin.zsh",
+    "{{ name }}.zsh",
+    "{{ name }}.sh",
+    "{{ name }}.zsh-theme",
+    "*.plugin.zsh",
+    "*.zsh",
+    "*.sh",
+    "*.zsh-theme",
+    "completion.zsh.inc"
+]
+
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+apply = ["source"]
+
+[plugins.compinit]
+inline = 'autoload -Uz compinit && zsh-defer compinit'
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+
+[plugins.zfunc]
+local = "~/.zfunc"
+apply = ["fpath"]
+
+[plugins.site-functions]
+local = "/opt/homebrew/share/zsh/site-functions"
+apply = ["fpath"]
+
+[templates]
+defer = "{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}"
+
+
