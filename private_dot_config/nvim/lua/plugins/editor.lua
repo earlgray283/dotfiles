@@ -164,7 +164,6 @@ return {
 	{
 		"folke/trouble.nvim",
 		cmd = { "TroubleToggle", "Trouble" },
-		branch = "dev",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		keys = {
 			{

@@ -81,7 +81,7 @@ return {
 					},
 				},
 				tailwindcss = {},
-				tsserver = {},
+				ts_ls = {},
 				yamlls = {
 					settings = {
 						yaml = {
