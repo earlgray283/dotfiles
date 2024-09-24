@@ -13,6 +13,7 @@ match = [
 
 [plugins.zsh-defer]
 github = "romkatv/zsh-defer"
+proto = "ssh"
 apply = ["source"]
 
 [plugins.compinit]
@@ -20,12 +21,15 @@ inline = 'autoload -Uz compinit && zsh-defer compinit'
 
 [plugins.zsh-completions]
 github = "zsh-users/zsh-completions"
+proto = "ssh"
 
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
+proto = "ssh"
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
+proto = "ssh"
 
 [plugins.zfunc]
 local = "~/.zfunc"
@@ -34,6 +38,11 @@ apply = ["fpath"]
 [plugins.site-functions]
 local = "/opt/homebrew/share/zsh/site-functions"
 apply = ["fpath"]
+
+[plugins.gcloud-zsh-completion]
+local = "/opt/homebrew/share/google-cloud-sdk"
+use = ["completion.zsh.inc"]
+apply = ["defer"]
 
 [templates]
 defer = "{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}"
