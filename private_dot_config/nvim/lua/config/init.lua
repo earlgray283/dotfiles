@@ -11,6 +11,7 @@ opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.laststatus = 3
 opt.swapfile = false
 opt.autoread = true
+opt.guicursor = ""
 
 -- indentation
 opt.autoindent = true
