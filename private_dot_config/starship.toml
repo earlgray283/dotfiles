@@ -1,14 +1,6 @@
-add_newline = true
-
-[character]
-success_symbol = "[\\$](bold fg:#99b7dc)"
-error_symbol = "[\\$](bold red)"
-
-[directory]
-read_only = " 󰌾"
-truncate_to_repo = false
-fish_style_pwd_dir_length = 1
-format = "[$path [$read_only](bg:#99b7dc fg:red)](fg:#fffafa bg:#99b7dc)[](fg:#99b7dc) "
+format = '''
+$directory$kubernetes$package
+$character'''
 
 [aws]
 symbol = "  "
@@ -22,21 +14,41 @@ symbol = " "
 [conda]
 symbol = " "
 
+[character]
+success_symbol = "[\\$](bold fg:#99b7dc)"
+error_symbol = "[\\$](bold red)"
+
+[crystal]
+symbol = " "
+
 [dart]
 symbol = " "
 
+[directory]
+read_only = " 󰌾"
+truncate_to_repo = false
+fish_style_pwd_dir_length = 1
+format = "[$path [$read_only](bg:#99b7dc fg:red)](fg:#fffafa bg:#99b7dc)[](fg:#99b7dc) "
 
 [docker_context]
 symbol = " "
 
 [elixir]
-symbol = " "
+symbol = " "
 
 [elm]
 symbol = " "
 
+[fennel]
+symbol = " "
+
 [fossil_branch]
 symbol = " "
+
+[gcloud]
+disabled = true
+symbol = '☁️'
+format = 'on [$symbol$project(\($region\))]($style) '
 
 [git_branch]
 symbol = " "
@@ -51,7 +63,7 @@ symbol = " "
 symbol = " "
 
 [haxe]
-symbol = "⌘ "
+symbol = " "
 
 [hg_branch]
 symbol = " "
@@ -64,6 +76,13 @@ symbol = " "
 
 [julia]
 symbol = " "
+
+[kotlin]
+symbol = " "
+
+[kubernetes]
+# TODO: fix format
+disabled = true
 
 [lua]
 symbol = " "
@@ -83,9 +102,13 @@ symbol = " "
 [nodejs]
 symbol = " "
 
+[ocaml]
+symbol = " "
+
 [os.symbols]
 Alpaquita = " "
 Alpine = " "
+AlmaLinux = " "
 Amazon = " "
 Android = " "
 Arch = " "
@@ -101,6 +124,7 @@ Garuda = "󰛓 "
 Gentoo = " "
 HardenedBSD = "󰞌 "
 Illumos = "󰈸 "
+Kali = " "
 Linux = " "
 Mabox = " "
 Macos = " "
@@ -117,18 +141,27 @@ Pop = " "
 Raspbian = " "
 Redhat = " "
 RedHatEnterprise = " "
+RockyLinux = " "
 Redox = "󰀘 "
 Solus = "󰠳 "
 SUSE = " "
 Ubuntu = " "
 Unknown = " "
+Void = " "
 Windows = "󰍲 "
 
 [package]
 symbol = "󰏗 "
 
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
 [pijul_channel]
-symbol = "🪺 "
+symbol = " "
+
 
 [python]
 symbol = " "
@@ -140,11 +173,13 @@ symbol = "󰟔 "
 symbol = " "
 
 [rust]
-symbol = " "
+symbol = "󱘗 "
 
 [scala]
 symbol = " "
 
-[spack]
-symbol = "🅢 "
+[swift]
+symbol = " "
 
+[zig]
+symbol = " "
