@@ -11,6 +11,7 @@ opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.laststatus = 3
 opt.swapfile = false
 opt.autoread = true
+opt.splitright = true
 
 -- indentation
 opt.autoindent = true
@@ -25,8 +26,8 @@ vim.api.nvim_set_keymap("n", "<Space>", "<NOP>", { noremap = true, silent = true
 vim.g.mapleader = " " -- leaderキーを<Space>に設定する
 
 vim.filetype.add({
-  pattern = {
-    ['.*/.github/workflows/.*%.yml'] = 'yaml.ghaction',
-    ['.*/.github/workflows/.*%.yaml'] = 'yaml.ghaction',
-  },
+	pattern = {
+		[".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
+		[".*/.github/workflows/.*%.yaml"] = "yaml.ghaction",
+	},
 })
