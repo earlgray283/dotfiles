@@ -222,4 +222,7 @@ return {
 			require("illuminate").configure(opts)
 		end,
 	},
+	{
+		"almo7aya/openingh.nvim",
+	},
 }

@@ -6,10 +6,11 @@ return {
 		cmd = "ConformInfo",
 		opts = {
 			formatters_by_ft = {
-				lua = { "stylua" },
 				go = { "goimports" },
+				lua = { "stylua" },
+				proto = { "clang-format" },
 				rust = { "rustfmt" },
-				proto = { "buf" },
+				toml = { "taplo" },
 				typescript = { { "dprint", "prettier" } },
 				typescriptreact = { { "dprint", "prettier" } },
 				yaml = { "yamlfmt" },
@@ -39,8 +40,8 @@ return {
 				end,
 			})
 			vim.api.nvim_create_user_command("ConformDisable", function(args)
+				-- TODO: support to toggle each buffers
 				if args.bang then
-					-- FormatDisable! will disable formatting just for this buffer
 					vim.b.disable_autoformat = true
 				else
 					vim.g.disable_autoformat = true
