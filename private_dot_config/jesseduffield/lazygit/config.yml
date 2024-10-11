@@ -1,0 +1,4 @@
+os:
+  editPreset: nvim
+  # edit: 'nvim'
+  # editAtLine: '{{editor}} --server /tmp/nvim-server.pipe --remote-tab "{{filename}}"'
