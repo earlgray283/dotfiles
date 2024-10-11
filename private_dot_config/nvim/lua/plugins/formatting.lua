@@ -24,21 +24,16 @@ return {
 					}
 				end,
 			},
-			format_on_save = {
-				timeout_ms = 200,
-				lsp_fallback = false,
-			},
+			format_on_save = function(bufnr)
+				-- Disable with a global or buffer-local variable
+				if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+					vim.notify("disabled")
+					return
+				end
+				return { timeout_ms = 200, lsp_format = "never" }
+			end,
 		},
 		init = function()
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				pattern = "*",
-				callback = function(args)
-					if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then
-						return
-					end
-					require("conform").format({ bufnr = args.buf })
-				end,
-			})
 			vim.api.nvim_create_user_command("ConformDisable", function(args)
 				-- TODO: support to toggle each buffers
 				if args.bang then
