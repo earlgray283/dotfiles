@@ -1,3 +1,5 @@
+export LANG=en_US.UTF-8
+
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
 eval "$(direnv hook zsh)"
@@ -44,5 +46,14 @@ alias mv='mv -v'
 alias gitroot='cd `git rev-parse --show-superproject-working-tree --show-toplevel | head -1`'
 alias sed="gsed"
 alias xargs="gxargs"
-alias nvim="nvim --listen /tmp/nvim-server.pipe"
+alias nvim='function f() {
+  if [ -f $1 ]; then
+    nvim --listen /tmp/nvim-server.pipe --cmd "cd $(dirname $1)" $1
+  elif [ -d $1 ]; then
+    nvim --listen /tmp/nvim-server.pipe --cmd "cd $1"
+  fi
+};f'
+
+# bun completions
+[ -s "/Users/earlgray/.bun/_bun" ] && source "/Users/earlgray/.bun/_bun"
 
