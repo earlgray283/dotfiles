@@ -2,7 +2,6 @@ return {
 	{
 		"stevearc/conform.nvim",
 		dependencies = { "mason.nvim" },
-		lazy = true,
 		cmd = "ConformInfo",
 		opts = {
 			formatters_by_ft = {
@@ -11,8 +10,8 @@ return {
 				proto = { "clang-format" },
 				rust = { "rustfmt" },
 				toml = { "taplo" },
-				typescript = { { "dprint", "prettier" } },
-				typescriptreact = { { "dprint", "prettier" } },
+				typescript = { "dprint", "prettier", stop_after_first = true },
+				typescriptreact = { "dprint", "prettier", stop_after_first = true },
 				yaml = { "yamlfmt" },
 			},
 			formatters = {
@@ -24,18 +23,22 @@ return {
 					}
 				end,
 			},
-			format_on_save = function(bufnr)
-				-- Disable with a global or buffer-local variable
-				if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-					vim.notify("disabled")
-					return
-				end
-				return { timeout_ms = 200, lsp_format = "never" }
-			end,
 		},
 		init = function()
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				pattern = "*",
+				callback = function(args)
+					if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then
+						return
+					end
+					require("conform").format({
+						bufnr = args.buf,
+						timeout_ms = 500,
+						lsp_format = "never",
+					})
+				end,
+			})
 			vim.api.nvim_create_user_command("ConformDisable", function(args)
-				-- TODO: support to toggle each buffers
 				if args.bang then
 					vim.b.disable_autoformat = true
 				else
@@ -43,6 +46,7 @@ return {
 				end
 			end, {
 				desc = "Disable autoformat-on-save",
+				bang = false,
 			})
 			vim.api.nvim_create_user_command("ConformEnable", function()
 				vim.b.disable_autoformat = false

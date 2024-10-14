@@ -37,7 +37,22 @@ return {
 				end,
 				desc = "Toggle NvimTree",
 			},
+			{
+				"<leader>rr",
+				function()
+					require("nvim-tree.api").tree.reload()
+				end,
+				desc = "Refresh NvimTree",
+			},
 		},
+		init = function()
+			-- TODO: implement auto refresh
+			-- vim.api.nvim_create_autocmd("ModeChanged", {
+			-- 	callback = function()
+			-- 		require("nvim-tree.api").tree.reload()
+			-- 	end,
+			-- })
+		end,
 	},
 	{
 		"folke/which-key.nvim",
@@ -170,7 +185,7 @@ return {
 	},
 	{
 		"folke/trouble.nvim",
-		cmd = { "TroubleToggle", "Trouble" },
+		cmd = { "Trouble" },
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		keys = {
 			{
