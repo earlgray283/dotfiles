@@ -16,13 +16,22 @@ return {
 		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
 		build = "make install_jsregexp",
 	},
+
 	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		opts = {},
-		init = function()
-			vim.api.nvim_command(":Copilot disable")
+		"zbirenbaum/copilot-cmp",
+		dependencies = {
+			{
+				"zbirenbaum/copilot.lua",
+				cmd = "Copilot",
+				event = "InsertEnter",
+				opts = {},
+				init = function()
+					vim.api.nvim_command(":Copilot disable")
+				end,
+			},
+		},
+		config = function()
+			require("copilot_cmp").setup()
 		end,
 	},
 	{

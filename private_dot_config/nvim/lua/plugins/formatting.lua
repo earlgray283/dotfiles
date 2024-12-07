@@ -5,6 +5,7 @@ return {
 		cmd = "ConformInfo",
 		opts = {
 			formatters_by_ft = {
+				cue = { "cue_fmt" },
 				go = { "goimports" },
 				lua = { "stylua" },
 				proto = { "clang-format" },
