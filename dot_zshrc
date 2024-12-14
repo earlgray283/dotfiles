@@ -37,7 +37,7 @@ function gotestcov() {
 }
 
 # alias
-alias ls='lsd'
+alias ls='eza --icons'
 alias cat='bat'
 alias fd='fd -I --no-ignore-vcs'
 alias matumoto='echo "Hello, I am matumoto!"'
@@ -51,6 +51,8 @@ alias nvim='function f() {
     nvim --listen /tmp/nvim-server.pipe --cmd "cd $(dirname $1)" $1
   elif [ -d $1 ]; then
     nvim --listen /tmp/nvim-server.pipe --cmd "cd $1"
+  else
+    nvim --listen /tmp/nvim-server.pipe --cmd "cd $(pwd)"
   fi
 };f'
 
