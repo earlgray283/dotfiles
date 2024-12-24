@@ -7,6 +7,9 @@ return {
 		},
 		init = function()
 			vim.g.barbar_auto_setup = false
+			vim.keymap.set("n", "<leader>bb", function()
+				vim.api.nvim_command(":BufferCloseAllButCurrent")
+			end, { desc = "(barbar) BufferCloseAllButCurrent" })
 		end,
 		opts = {
 			sidebar_filetypes = {
