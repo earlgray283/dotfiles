@@ -3,7 +3,6 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
 		build = ":TSUpdate",
-		-- event = { "VeryLazy" },
 		opts = {
 			auto_install = true,
 			highlight = { enable = true },

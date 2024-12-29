@@ -17,16 +17,38 @@ return {
 				dockerls = {},
 				docker_compose_language_service = {},
 				gopls = {
-					settings = {
-						gopls = {
-							analyses = {
-								unusedparams = true,
-								unusedvariable = true,
-							},
-							usePlaceholders = true,
-							completeFunctionCalls = false,
-						},
+					gofumpt = true,
+					codelenses = {
+						gc_details = false,
+						generate = true,
+						regenerate_cgo = true,
+						run_govulncheck = true,
+						test = true,
+						tidy = true,
+						upgrade_dependency = true,
+						vendor = true,
 					},
+					hints = {
+						assignVariableTypes = true,
+						compositeLiteralFields = true,
+						compositeLiteralTypes = true,
+						constantValues = true,
+						functionTypeParameters = true,
+						parameterNames = true,
+						rangeVariableTypes = true,
+					},
+					analyses = {
+						fieldalignment = true,
+						nilness = true,
+						unusedparams = true,
+						unusedwrite = true,
+						useany = true,
+					},
+					usePlaceholders = true,
+					completeUnimported = true,
+					staticcheck = true,
+					directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+					semanticTokens = true,
 				},
 				html = {},
 				jsonls = {},
@@ -227,5 +249,9 @@ return {
 			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 		end,
+	},
+	{
+		"NoahTheDuke/vim-just",
+		ft = { "just" },
 	},
 }

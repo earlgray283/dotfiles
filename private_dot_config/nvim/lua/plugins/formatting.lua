@@ -7,25 +7,18 @@ return {
 			formatters_by_ft = {
 				cue = { "cue_fmt" },
 				go = { "goimports" },
+				just = { "just" },
 				lua = { "stylua" },
-				proto = { "clang-format" },
+				proto = { "buf", "clang-format", stop_after_first = true },
 				rust = { "rustfmt" },
 				toml = { "taplo" },
 				typescript = { "dprint", "prettier", stop_after_first = true },
 				typescriptreact = { "dprint", "prettier", stop_after_first = true },
 				yaml = { "yamlfmt" },
 			},
-			formatters = {
-				dprint = function()
-					return {
-						command = require("conform.util").find_executable({
-							"node_modules/.bin/dprint",
-						}, "dprint"),
-					}
-				end,
-			},
 		},
 		init = function()
+			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				pattern = "*",
 				callback = function(args)
@@ -34,8 +27,9 @@ return {
 					end
 					require("conform").format({
 						bufnr = args.buf,
-						timeout_ms = 500,
+						timeout_ms = 5000,
 						lsp_format = "never",
+						-- async = true,
 					})
 				end,
 			})
