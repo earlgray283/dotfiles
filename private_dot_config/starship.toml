@@ -1,6 +1,5 @@
 format = '''
-$directory$kubernetes$package
-$character'''
+$all$character'''
 
 [aws]
 symbol = "  "
