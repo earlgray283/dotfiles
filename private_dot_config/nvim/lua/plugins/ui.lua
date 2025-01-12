@@ -10,6 +10,9 @@ return {
 			vim.keymap.set("n", "<leader>bb", function()
 				vim.api.nvim_command(":BufferCloseAllButCurrent")
 			end, { desc = "(barbar) BufferCloseAllButCurrent" })
+			vim.keymap.set("n", "<leader>bc", function()
+				vim.api.nvim_command(":BufferClose!")
+			end, { desc = "(barbar) BufferClose!" })
 		end,
 		opts = {
 			sidebar_filetypes = {

@@ -4,13 +4,12 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(sheldon source)"
-source <(fzf --zsh)
 
 setopt HIST_IGNORE_ALL_DUPS  # ignore duplicate histories
 setopt interactivecomments   # allow comments in zsh command
 
 # tmux autostart script
-if [[ ! -n $TMUX ]] && [[ $TERM_PROGRAM != "vscode" ]] && [[ $ZED_TERM != "true" ]]; then
+if [[ ! -n $TMUX ]]; then
 	ID="`tmux list-sessions`"
     if [[ -z "$ID" ]]; then
         tmux new-session

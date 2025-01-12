@@ -33,6 +33,14 @@ return {
 		config = function()
 			require("copilot_cmp").setup()
 		end,
+		init = function()
+			vim.keymap.set("n", "<leader>cd", function()
+				vim.api.nvim_command(":Copilot disable")
+			end, { desc = "(copilot) disable" })
+			vim.keymap.set("n", "<leader>ce", function()
+				vim.api.nvim_command(":Copilot enable")
+			end, { desc = "(copilot) enable" })
+		end,
 	},
 	{
 		"numToStr/Comment.nvim",
