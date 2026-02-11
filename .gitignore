@@ -1,0 +1,4 @@
+result
+
+# Override global gitignore to track CLAUDE.md
+!home-manager/claude-code/CLAUDE.md
