@@ -12,9 +12,9 @@
     plugins = with pkgs.tmuxPlugins; [
       sensible
       {
-        plugin = nord;
+        plugin = catppuccin;
         extraConfig = ''
-          set-option -g status-position bottom
+          set -g @catppuccin_flavor "frappe"
         '';
       }
     ];

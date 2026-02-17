@@ -3,34 +3,74 @@
 {
   programs.claude-code = {
     enable = true;
+
     package = pkgs.claude-code.override { };
+
     enableMcpIntegration = true;
 
     memory.source = ./CLAUDE.md;
+
+    hooksDir = ./hooks;
 
     skills = {
       commit = ./skills/commit;
     };
 
-    settings = {
-      mcpServers = {
-        fetch = {
-          type = "stdio";
-          command = "uvx";
-          args = [ "mcp-server-fetch" ];
-        };
-        sequential-thinking = {
-          type = "stdio";
-          command = "bunx";
-          args = [ "@modelcontextprotocol/server-sequential-thinking" ];
-        };
-        context7 = {
-          type = "http";
-          url = "https://mcp.context7.com/mcp/oauth";
-        };
+    mcpServers = {
+      fetch = {
+        type = "stdio";
+        command = "uvx";
+        args = [ "mcp-server-fetch" ];
       };
+      sequential-thinking = {
+        type = "stdio";
+        command = "bunx";
+        args = [ "@modelcontextprotocol/server-sequential-thinking" ];
+      };
+      context7 = {
+        type = "http";
+        url = "https://mcp.context7.com/mcp/oauth";
+      };
+    };
+
+    settings = {
       env = {
         DISABLE_AUTOUPDATER = "1";
+      };
+      hooks = {
+        Stop = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = "bun ~/.claude/hooks/notifications/Stop.ts";
+              }
+            ];
+            matcher = "";
+          }
+        ];
+        Notification = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = "bun ~/.claude/hooks/notifications/Notification.ts";
+              }
+            ];
+            matcher = "";
+          }
+        ];
+        PermissionRequest = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = "bun ~/.claude/hooks/notifications/PermissionRequest.ts";
+              }
+            ];
+            matcher = "";
+          }
+        ];
       };
       includeCoAuthoredBy = false;
       model = "sonnet";

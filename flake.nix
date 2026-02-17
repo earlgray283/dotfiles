@@ -4,20 +4,25 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-index-database.url = "github:nix-community/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    llm-agents.url = "github:numtide/llm-agents.nix";
-
-    _1password-shell-plugins.url = "github:1Password/shell-plugins";
+    _1password-shell-plugins = {
+      url = "github:1Password/shell-plugins";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
@@ -31,8 +36,33 @@
 
     claude-code-nix = {
       # Ref: https://github.com/earlgray283/dotfiles/issues/1
-      # url = "github:sadjow/claude-code-nix";
-      url = "github:sadjow/claude-code-nix?ref=v2.1.6";
+      url = "github:sadjow/claude-code-nix";
+      # url = "github:sadjow/claude-code-nix?ref=v2.1.6";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    codex-cli = {
+      url = "github:openai/codex";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nvf = {
+      url = "github:notashelf/nvf/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nvim-telescope = {
+      url = "github:nvim-telescope/telescope.nvim/master";
+      flake = false;
+    };
+
+    opencode = {
+      url = "github:anomalyco/opencode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    tree-sitter = {
+      url = "github:tree-sitter/tree-sitter";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -48,9 +78,22 @@
     }:
     let
       system = "aarch64-darwin";
+
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [
+          (final: prev: {
+            _1password-cli = prev._1password-cli.overrideAttrs (old: rec {
+              version = "2.33.0-beta.02";
+              # nix store prefetch-file --hash-type sha256 "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_apple_universal_v${version}.pkg"
+              src = prev.fetchurl {
+                url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_apple_universal_v${version}.pkg";
+                hash = "sha256-inHfXY1KlttPnTeSIH2kTfBIvslASyqkUDO1YHZXQ0U=";
+              };
+            });
+          })
+        ];
       };
     in
     {

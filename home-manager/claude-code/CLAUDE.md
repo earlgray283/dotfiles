@@ -17,6 +17,7 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
 - Shell Aliases:
     - Use `fd` instead of `find`.
     - Use `rg` instead of `grep`.
+- **Do NOT use the Task tool for file/code searches.** Use `fd` and `rg` directly via Bash tool.
 
 # Coding Rules
 
