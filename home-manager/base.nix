@@ -18,6 +18,7 @@
     ./claude-code/claude-code.nix
     ./mcp.nix
     ./direnv.nix
+    ./nvf
   ];
 
   # Allow unfree packages (e.g. terraform)
@@ -26,6 +27,7 @@
   # Enable overlays
   nixpkgs.overlays = [
     inputs.claude-code-nix.overlays.default
+    inputs.opencode.overlays.default
   ];
 
   home.username = "earlgray";
@@ -53,8 +55,9 @@
     pkgs.xh
     pkgs.television
     pkgs.just
-    pkgs.tree-sitter
     pkgs.google-cloud-sdk
+    pkgs.cachix
+    inputs.tree-sitter.packages.${pkgs.system}.default
     pkgs._1password-cli
 
     # Git Tools
@@ -127,6 +130,16 @@
     # DB/SQL
     pkgs.atlas
     pkgs.sqruff # SQL linter
+    pkgs.sqlfluff # SQL formatter
+
+    # C/C++
+    pkgs.clang-tools # includes clang-format
+
+    # CUE
+    pkgs.cue
+
+    # Docker
+    pkgs.dockerfmt
     # pkgs.cockroachdb            # Linux only - not available on macOS
   ];
 
