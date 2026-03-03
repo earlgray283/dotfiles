@@ -11,6 +11,7 @@
     ./formatting.nix
     ./linting.nix
     ./keymaps.nix
+    ./nvim-tree.nix
   ];
 
   programs.nvf = {

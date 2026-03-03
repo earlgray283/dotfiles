@@ -7,7 +7,6 @@
   ];
 
   nixpkgs.overlays = [
-    inputs.claude-code-nix.overlays.default
     inputs.rust-overlay.overlays.default
   ];
 

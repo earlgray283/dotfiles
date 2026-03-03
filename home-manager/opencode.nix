@@ -4,7 +4,7 @@
   programs.opencode = {
     enable = true;
 
-    package = pkgs.opencode.override { };
+    package = pkgs.llm-agents.opencode;
 
     enableMcpIntegration = true;
   };

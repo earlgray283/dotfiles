@@ -1,10 +1,10 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   programs.claude-code = {
     enable = true;
 
-    package = pkgs.claude-code.override { };
+    package = pkgs.llm-agents.claude-code;
 
     enableMcpIntegration = true;
 
@@ -14,23 +14,6 @@
 
     skills = {
       commit = ./skills/commit;
-    };
-
-    mcpServers = {
-      fetch = {
-        type = "stdio";
-        command = "uvx";
-        args = [ "mcp-server-fetch" ];
-      };
-      sequential-thinking = {
-        type = "stdio";
-        command = "bunx";
-        args = [ "@modelcontextprotocol/server-sequential-thinking" ];
-      };
-      context7 = {
-        type = "http";
-        url = "https://mcp.context7.com/mcp/oauth";
-      };
     };
 
     settings = {

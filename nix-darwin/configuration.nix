@@ -19,26 +19,48 @@
   system.defaults = {
     NSGlobalDomain = {
       AppleInterfaceStyle = "Dark"; # Enable dark mode
-      KeyRepeat = 2; # Key repeat speed (lower = faster, 2 = fastest, 120 = slowest)
+      AppleSpacesSwitchOnActivate = false; # Don't switch Spaces when activating apps
       InitialKeyRepeat = 15; # Delay before key repeat starts (lower = faster)
+      KeyRepeat = 2; # Key repeat speed (lower = faster, 2 = fastest, 120 = slowest)
       NSAutomaticCapitalizationEnabled = false; # Disable automatic capitalization
       NSAutomaticPeriodSubstitutionEnabled = false; # Disable automatic period substitution
+      "com.apple.sound.beep.volume" = 0.0; # Mute alert sounds
+      "com.apple.springing.delay" = 0.5; # Spring-loading delay (seconds)
+      "com.apple.springing.enabled" = true; # Enable spring-loading for directories
+      "com.apple.trackpad.forceClick" = true; # Enable Force Touch / haptic feedback
+      "com.apple.trackpad.scaling" = 2.0; # Trackpad tracking speed
     };
 
     dock = {
       autohide = true; # Automatically hide and show the Dock
-      tilesize = 39; # Size of the icons in the Dock
       launchanim = false; # Disable launch animation when opening apps
       mineffect = "scale"; # Minimize window effect: "genie", "scale", or "suck"
-      show-recents = false; # Don't show recent applications in Dock
       mru-spaces = false; # Don't automatically rearrange Spaces based on most recent use
+      show-recents = false; # Don't show recent applications in Dock
+      tilesize = 39; # Size of the icons in the Dock
+      wvous-br-corner = 14; # Bottom-right hot corner: Quick Note
     };
 
     finder = {
-      FXPreferredViewStyle = "Nlsv"; # Default view style: "icnv" (icon), "Nlsv" (list), "clmv" (column), "Flwv" (gallery)
       AppleShowAllExtensions = true; # Show all file extensions
-      ShowPathbar = true; # Show path bar at bottom of Finder windows
+      FXDefaultSearchScope = "PfAF"; # Default search scope: all files
       FXEnableExtensionChangeWarning = false; # Disable warning when changing file extension
+      FXPreferredViewStyle = "Nlsv"; # Default view style: "icnv" (icon), "Nlsv" (list), "clmv" (column), "Flwv" (gallery)
+      ShowPathbar = true; # Show path bar at bottom of Finder windows
+      ShowStatusBar = false; # Hide status bar at bottom of Finder windows
+      _FXShowPosixPathInTitle = true; # Show full POSIX path in Finder title bar
+    };
+
+    CustomUserPreferences = {
+      NSGlobalDomain = {
+        "com.apple.keyboard.fnState" = true; # Use F1, F2, etc. as standard function keys
+        "com.apple.sound.uiaudio.enabled" = 0; # Disable UI sounds
+      };
+      "com.apple.menuextra.clock" = {
+        ShowAMPM = true; # Show AM/PM indicator
+        ShowDate = 0; # Hide date (0 = off)
+        ShowDayOfWeek = true; # Show day of week
+      };
     };
   };
 

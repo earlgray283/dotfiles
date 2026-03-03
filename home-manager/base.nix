@@ -1,6 +1,8 @@
 {
   pkgs,
   inputs,
+  lib,
+  config,
   ...
 }:
 
@@ -26,8 +28,7 @@
 
   # Enable overlays
   nixpkgs.overlays = [
-    inputs.claude-code-nix.overlays.default
-    inputs.opencode.overlays.default
+    inputs.llm-agents.overlays.default
   ];
 
   home.username = "earlgray";

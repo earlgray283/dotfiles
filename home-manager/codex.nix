@@ -4,7 +4,7 @@
   programs.codex = {
     enable = true;
 
-    package = inputs.codex-cli.packages.${pkgs.system}.default;
+    package = pkgs.llm-agents.codex;
 
     enableMcpIntegration = true;
   };

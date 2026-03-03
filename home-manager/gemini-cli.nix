@@ -1,7 +1,9 @@
-{ ... }:
+{ inputs, pkgs, ... }:
 
 {
   programs.gemini-cli = {
-    enable = true;
+    enable = false;
+
+    package = pkgs.llm-agents.gemini-cli;
   };
 }

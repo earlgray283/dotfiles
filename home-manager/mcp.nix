@@ -25,6 +25,11 @@
         type = "http";
         url = "https://mcp.context7.com/mcp/oauth";
       };
+      filesystem = {
+        type = "stdio";
+        command = "bunx";
+        args = [ "@modelcontextprotocol/mcp-server-filesystem" ];
+      };
     };
   };
 }

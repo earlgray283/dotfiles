@@ -1,6 +1,17 @@
 {
   description = "nix-darwin, home-manager flake";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://earlgray.cachix.org"
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "earlgray.cachix.org-1:nPH/5e9Boe2TqskXQkrRLmRVJIsVIhQkPhxOghlm0v4="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
@@ -34,15 +45,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    claude-code-nix = {
-      # Ref: https://github.com/earlgray283/dotfiles/issues/1
-      url = "github:sadjow/claude-code-nix";
-      # url = "github:sadjow/claude-code-nix?ref=v2.1.6";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    codex-cli = {
-      url = "github:openai/codex";
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -54,11 +58,6 @@
     nvim-telescope = {
       url = "github:nvim-telescope/telescope.nvim/master";
       flake = false;
-    };
-
-    opencode = {
-      url = "github:anomalyco/opencode";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     tree-sitter = {
@@ -105,6 +104,21 @@
           {
             # Necessary for using flakes on this system.
             nix.settings.experimental-features = "nix-command flakes";
+
+            nix.settings.accept-flake-config = true;
+
+            nix.settings.trusted-users = [
+              "root"
+              "earlgray"
+            ];
+            nix.settings.trusted-substituters = [
+              "https://earlgray.cachix.org"
+              "https://nix-community.cachix.org"
+            ];
+            nix.settings.trusted-public-keys = [
+              "earlgray.cachix.org-1:nPH/5e9Boe2TqskXQkrRLmRVJIsVIhQkPhxOghlm0v4="
+              "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+            ];
 
             # Set Git commit hash for darwin-version.
             system.configurationRevision = self.rev or self.dirtyRev or null;

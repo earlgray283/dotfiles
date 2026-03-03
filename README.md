@@ -2,14 +2,14 @@
 
 ## Install
 
-### 1. Nix(Lix)
+### 1. Nix
 
-Ref <https://lix.systems/install/>
+Ref <https://github.com/NixOS/nix-installer>
 
 ### 2. nix-darwin
 
 ```sh
-nix run nix-darwin -- switch --flake .#makabeee-macbook-air
+sudo nix run nix-darwin -- switch --flake .#makabeee-macbook-air
 ```
 
 ### 3. home-manager
@@ -44,4 +44,3 @@ home-manager build --flake .#earlgray-work
 home-manager switch --flake .#earlgray        # Personal
 home-manager switch --flake .#earlgray-work   # Work
 ```
-
