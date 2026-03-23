@@ -64,6 +64,35 @@
       url = "github:tree-sitter/tree-sitter";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    mcp-servers-nix = {
+      url = "github:natsukium/mcp-servers-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    agent-skills = {
+      url = "github:Kyure-A/agent-skills-nix";
+    };
+
+    anthropic-skills = {
+      url = "github:anthropics/skills";
+      flake = false;
+    };
+
+    claude-code-guide-skills = {
+      url = "github:zebbern/claude-code-guide";
+      flake = false;
+    };
+
+    superpowers-skills = {
+      url = "github:obra/superpowers";
+      flake = false;
+    };
+
+    claude-plugins-official = {
+      url = "github:anthropics/claude-plugins-official";
+      flake = false;
+    };
   };
 
   outputs =
@@ -136,18 +165,16 @@
           ./home-manager/base.nix
           ./home-manager/personal.nix
           nix-index-database.homeModules.default
+          inputs.mcp-servers-nix.homeManagerModules.default
         ];
-        extraSpecialArgs = { inherit inputs; };
-      };
-
-      homeConfigurations."earlgray-work" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          ./home-manager/base.nix
-          ./home-manager/work.nix
-          nix-index-database.homeModules.default
-        ];
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = {
+          inherit inputs;
+          agent-skills = inputs.agent-skills;
+          anthropic-skills = inputs.anthropic-skills;
+          claude-code-guide-skills = inputs.claude-code-guide-skills;
+          superpowers-skills = inputs.superpowers-skills;
+          claude-plugins-official = inputs.claude-plugins-official;
+        };
       };
     };
 }

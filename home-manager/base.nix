@@ -19,6 +19,7 @@
     ./1password-shell-plugin.nix
     ./claude-code/claude-code.nix
     ./mcp.nix
+    ./agent-skills.nix
     ./direnv.nix
     ./nvf
   ];

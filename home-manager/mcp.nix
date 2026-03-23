@@ -5,31 +5,35 @@
     enable = true;
 
     servers = {
-      fetch = {
-        type = "stdio";
-        command = "uvx";
-        args = [
-          "mcp-server-fetch"
-        ];
-        env = { };
-      };
-      sequential-thinking = {
-        type = "stdio";
-        command = "bunx";
-        args = [
-          "@modelcontextprotocol/server-sequential-thinking"
-        ];
-        env = { };
-      };
+      # context7 uses the remote HTTP endpoint (different from the local stdio version in mcp-servers-nix)
       context7 = {
         type = "http";
         url = "https://mcp.context7.com/mcp/oauth";
       };
-      filesystem = {
-        type = "stdio";
-        command = "bunx";
-        args = [ "@modelcontextprotocol/mcp-server-filesystem" ];
+      # GitHub Copilot MCP uses a custom URL not available in mcp-servers-nix
+      github = {
+        type = "http";
+        url = "https://api.githubcopilot.com/mcp";
+        headers = {
+          Authorization = "Bearer {env:API_KEY_GITHUB}";
+        };
       };
+    };
+  };
+
+  # Nix-managed MCP servers via mcp-servers-nix
+  mcp-servers = {
+    programs = {
+      sequential-thinking.enable = true;
+      filesystem = {
+        enable = true;
+        args = [ "/Users/earlgray" ];
+      };
+      serena = {
+        enable = true;
+        context = "claude-code";
+      };
+      playwright.enable = true;
     };
   };
 }

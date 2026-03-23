@@ -56,7 +56,6 @@
         ];
       };
       includeCoAuthoredBy = false;
-      model = "sonnet";
       permissions = {
         allow = [
           "Bash(bun:*)"

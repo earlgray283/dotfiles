@@ -3,6 +3,9 @@
 `CLAUDE.md` はあなたと User で共に育てていくものです。
 User の指摘で恒久的な改善が必要だとあなたが判断した場合、`CLAUDE.md` の更新を User に問うてください。
 
+> **編集場所**: このファイルは Nix home-manager で管理されています。
+> 直接編集するのではなく、`~/Workspace/nix-dotfiles/home-manager/claude-code/CLAUDE.md` を編集してください。
+
 # General Rules
 
 - Response Language: **Always use Japanese (日本語)**.
@@ -18,6 +21,13 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
     - Use `fd` instead of `find`.
     - Use `rg` instead of `grep`.
 - **Do NOT use the Task tool for file/code searches.** Use `fd` and `rg` directly via Bash tool.
+
+# Bash Rules
+
+- **`cd` as a standalone command is ALLOWED** to change the working directory before subsequent commands.
+- **Do NOT chain commands starting with `cd`** (e.g. `cd /path && git add ...` is forbidden — breaks permission matching in `settings.json`).
+- **Do NOT use `git -C /path`** — use `cd /path` in a prior Bash call instead, for readability.
+- Each Bash call must start with the actual command that matches a permission rule (i.e. the command after any `cd` in a chain would not match — hence no chains).
 
 # Coding Rules
 

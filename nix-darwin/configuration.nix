@@ -1,12 +1,4 @@
 {
-  pkgs,
-  ...
-}:
-
-{
-  # Use Lix instead of Nix
-  nix.package = pkgs.lix;
-
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = [
@@ -92,6 +84,8 @@
       "orbstack"
       "slack"
       "zed"
+      "android-studio"
+      "insta360-studio"
     ];
 
     onActivation = {

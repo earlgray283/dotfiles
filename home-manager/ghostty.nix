@@ -9,7 +9,6 @@
     settings = {
       theme = "Catppuccin Frappe";
       shell-integration = "zsh";
-      package = null;
 
       font-family = [
         "JetBrainsMonoNL Nerd Font Mono"
@@ -19,7 +18,7 @@
       font-feature = [ "-dlig" ];
       font-thicken = true;
       font-thicken-strength = 100;
-      adjust-cell-width = "-10%";
+      adjust-cell-width = "-5%";
       adjust-cell-height = "10%";
 
       keybind = [
