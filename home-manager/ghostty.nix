@@ -2,10 +2,10 @@
 
 {
   # Ghostty terminal emulator
-  # Note: Ghostty package is not available on macOS, using Homebrew installation
+  # Note: No nix package for macOS (distributed as App Bundle); install via official DMG
   programs.ghostty = {
     enable = true;
-    package = null; # Not available on macOS; installed separately (e.g. via direct download)
+    package = null;
     settings = {
       theme = "Catppuccin Frappe";
       shell-integration = "zsh";

@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, claude-plugins-official, superpowers-skills, ... }:
 
 {
   programs.claude-code = {
@@ -8,7 +8,29 @@
 
     enableMcpIntegration = true;
 
-    memory.source = ./CLAUDE.md;
+    context = ./CLAUDE.md;
+
+    marketplaces = {
+      claude-plugins-official = claude-plugins-official;
+    };
+
+    plugins = [
+      "${claude-plugins-official}/plugins/frontend-design"
+      "${claude-plugins-official}/plugins/code-review"
+      "${claude-plugins-official}/plugins/code-simplifier"
+      "${claude-plugins-official}/plugins/skill-creator"
+      "${claude-plugins-official}/plugins/feature-dev"
+      "${claude-plugins-official}/plugins/claude-md-management"
+      "${claude-plugins-official}/plugins/ralph-loop"
+      "${claude-plugins-official}/plugins/security-guidance"
+      "${claude-plugins-official}/plugins/commit-commands"
+      "${claude-plugins-official}/plugins/claude-code-setup"
+      "${claude-plugins-official}/plugins/gopls-lsp"
+      "${claude-plugins-official}/plugins/rust-analyzer-lsp"
+      "${claude-plugins-official}/external_plugins/context7"
+      "${claude-plugins-official}/external_plugins/serena"
+      superpowers-skills
+    ];
 
     hooksDir = ./hooks;
 
@@ -65,9 +87,12 @@
           "Bash(git commit:*)"
           "Bash(git diff:*)"
           "Bash(go:*)"
+          "Bash(home-manager build:*)"
+          "Bash(home-manager switch:*)"
           "Bash(just:*)"
           "Bash(ls:*)"
           "Bash(mkdir:*)"
+          "Bash(nix eval:*)"
           "Bash(rg:*)"
           "mcp__context7__get-library-docs"
           "mcp__context7__resolve-library-id"

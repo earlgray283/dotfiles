@@ -21,6 +21,7 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
     - Use `fd` instead of `find`.
     - Use `rg` instead of `grep`.
 - **Do NOT use the Task tool for file/code searches.** Use `fd` and `rg` directly via Bash tool.
+- **GitHub contents access**: Use `gh` command (e.g. `gh api`, `gh repo view`) instead of `WebFetch` for GitHub URLs.
 
 # Bash Rules
 

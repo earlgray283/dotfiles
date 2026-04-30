@@ -50,16 +50,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nvf = {
-      url = "github:notashelf/nvf/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nvim-telescope = {
-      url = "github:nvim-telescope/telescope.nvim/master";
-      flake = false;
-    };
-
     tree-sitter = {
       url = "github:tree-sitter/tree-sitter";
       inputs.nixpkgs.follows = "nixpkgs";

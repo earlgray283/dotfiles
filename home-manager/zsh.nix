@@ -22,12 +22,11 @@
     };
 
     initContent = ''
+      [[ -n $ZPROF ]] && zmodload zsh/zprof
       export LANG=en_US.UTF-8
-      eval "$(/opt/homebrew/bin/brew shellenv)"
-      eval "$(tv init zsh)"
 
       # tmux autostart
-      if [[ -z $TMUX && -z $ZED_TERM ]]; then
+      if [[ -z $TMUX && -z $ZED_TERM && -z $ZPROF ]]; then
         ID="$(tmux list-sessions)"
         if [[ -z "$ID" ]]; then
           tmux new-session
@@ -45,13 +44,19 @@
     '';
 
     envExtra = ''
-      export JAVA_HOME=$(/usr/libexec/java_home -v 25)
       export XDG_CONFIG_HOME="$HOME/.config"
       export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-      export GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token)
       export CLAUDE_CODE_EFFORT_LEVEL="max"
 
+      export HOMEBREW_PREFIX="/opt/homebrew"
+      export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+      export HOMEBREW_REPOSITORY="/opt/homebrew"
+      export MANPATH="/opt/homebrew/share/man''${MANPATH+:$MANPATH}:"
+      export INFOPATH="/opt/homebrew/share/info:''${INFOPATH:-}"
+
       path=(
+        /opt/homebrew/bin(N-/)
+        /opt/homebrew/sbin(N-/)
         /opt/homebrew/opt/openjdk/bin(N-/)
         /opt/homebrew/opt/make/libexec/gnubin(N-/)
         /opt/homebrew/opt/gnu-sed/libexec/gnubin(N-/)

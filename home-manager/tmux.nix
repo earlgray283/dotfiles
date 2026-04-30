@@ -24,6 +24,9 @@
       set -sg terminal-overrides ",*:RGB"
       set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
       set -as terminal-features ',*:clipboard'
+      set -g allow-passthrough on
+      set -g monitor-bell on
+      set -g bell-action any
 
       # key bindings
       unbind-key C-b

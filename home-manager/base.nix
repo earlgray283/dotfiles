@@ -18,10 +18,11 @@
     ./tmux.nix
     ./1password-shell-plugin.nix
     ./claude-code/claude-code.nix
+    ./opencode.nix
     ./mcp.nix
     ./agent-skills.nix
     ./direnv.nix
-    ./nvf
+    ./neovim
   ];
 
   # Allow unfree packages (e.g. terraform)
@@ -30,6 +31,13 @@
   # Enable overlays
   nixpkgs.overlays = [
     inputs.llm-agents.overlays.default
+    # Workaround: direnv test-fish hangs on macOS due to broken fish code signature
+    # caused by a nix registerOutputs bug (NixOS/nixpkgs#507531, NixOS/nix#15638)
+    (final: prev: {
+      direnv = prev.direnv.overrideAttrs (_: {
+        doCheck = false;
+      });
+    })
   ];
 
   home.username = "earlgray";
@@ -68,13 +76,10 @@
     pkgs.gitleaks
     pkgs.pre-commit
 
-    # Editors
-    pkgs.neovim
-
     # Go
     pkgs.go
     pkgs.gopls
-    pkgs.gotools # Go tools including goimports
+    (lib.lowPrio pkgs.gotools) # Go tools including goimports
     pkgs.golangci-lint
 
     # Python
@@ -89,7 +94,6 @@
     # JavaScript/TypeScript
     pkgs.nodejs
     pkgs.bun
-    pkgs.deno
     pkgs.typescript-language-server
     pkgs.vtsls # TypeScript Language Server
     pkgs.tailwindcss-language-server
@@ -143,6 +147,10 @@
     # Docker
     pkgs.dockerfmt
     # pkgs.cockroachdb            # Linux only - not available on macOS
+
+    pkgs.hyperfine
+    pkgs.mise
+    pkgs.pre-commit
   ];
 
   home.file = { };
