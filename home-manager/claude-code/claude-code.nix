@@ -42,6 +42,7 @@
     settings = {
       env = {
         DISABLE_AUTOUPDATER = "1";
+        CLAUDE_CODE_NO_FLICKER = "1";
       };
       hooks = {
         Stop = [
@@ -84,14 +85,24 @@
 
         ];
         deny = [
-          "Bash(rm:*)"
+          "Bash(curl *)"
           "Read(.env)"
           "Read(credentials.json)"
-          "Write(.env)"
-          "Write(credentials.json)"
-          "Bash(find:*)"
-          "Bash(grep:*)"
+          "Bash(find *)"
+          "Bash(grep *)"
         ];
+        ask = [
+          "Bash(rm *)"
+          "Bash(git rm *)"
+          "Bash(git push *)"
+          "Bash(gh pr create *)"
+        ];
+        defaultMode = "auto";
+      };
+      sandbox = {
+        enabled = true;
+        autoAllowBashIfSandboxed = true;
+        enableWeakerNetworkIsolation = true;
       };
     };
   };

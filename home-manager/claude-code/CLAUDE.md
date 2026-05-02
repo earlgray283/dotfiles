@@ -3,8 +3,13 @@
 `CLAUDE.md` はあなたと User で共に育てていくものです。
 User の指摘で恒久的な改善が必要だとあなたが判断した場合、`CLAUDE.md` の更新を User に問うてください。
 
-> **編集場所**: このファイルは Nix home-manager で管理されています。
-> 直接編集するのではなく、`~/Workspace/nix-dotfiles/home-manager/claude-code/CLAUDE.md` を編集してください。
+> **`~/.claude` は Nix home-manager で管理されています。直接編集せず、`~/Workspace/nix-dotfiles/home-manager/claude-code/` を編集してください。**
+>
+> | `~/.claude` のパス | nix-dotfiles での管理場所 |
+> |---|---|
+> | `~/.claude/CLAUDE.md` | `home-manager/claude-code/CLAUDE.md` |
+> | `~/.claude/settings.json` | `home-manager/claude-code/claude-code.nix` の `settings` |
+> | `~/.claude/hooks/` | `home-manager/claude-code/hooks/` |
 
 # General Rules
 
@@ -17,9 +22,9 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
 # Tools & Workflow
 
 - Primary Tools: You **MUST USE** `serena` and `context7` for specialized tasks.
-- Shell Aliases:
-    - Use `fd` instead of `find`.
-    - Use `rg` instead of `grep`.
+- Required CLI Tools:
+    - **ALWAYS use `fd` instead of `find`. NEVER use `find`.**
+    - **ALWAYS use `rg` instead of `grep`. NEVER use `grep`.**
 - **Do NOT use the Task tool for file/code searches.** Use `fd` and `rg` directly via Bash tool.
 - **GitHub contents access**: Use `gh` command (e.g. `gh api`, `gh repo view`) instead of `WebFetch` for GitHub URLs.
 
