@@ -26,9 +26,9 @@
       # Lazy loaded (opt) -- lz.n controls when to packadd these
       { plugin = nvim-ts-autotag;             optional = true; }
       { plugin = lualine-nvim;                optional = true; }
-      { plugin = telescope-nvim;                  optional = true; }
-      { plugin = telescope-fzf-native-nvim;       optional = true; }
-      { plugin = telescope-file-browser-nvim;     optional = true; }
+      { plugin = fzf-lua;                          optional = true; }
+      { plugin = which-key-nvim;                  optional = true; }
+      { plugin = claudecode-nvim;                 optional = true; }
       { plugin = gitsigns-nvim;               optional = true; }
       { plugin = toggleterm-nvim;             optional = true; }
       { plugin = vim-illuminate;              optional = true; }

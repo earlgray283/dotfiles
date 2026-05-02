@@ -61,6 +61,7 @@
     pkgs.eza
     pkgs.delta
     pkgs.starship
+    pkgs.fzf
     pkgs.skim
     pkgs.tealdeer
     pkgs.xh
