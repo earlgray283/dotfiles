@@ -3,6 +3,7 @@
   inputs,
   lib,
   config,
+  github-releases,
   ...
 }:
 
@@ -98,7 +99,7 @@
     pkgs.vtsls # TypeScript Language Server
     pkgs.tailwindcss-language-server
     pkgs.oxlint
-    pkgs.biome
+    github-releases.packages.${pkgs.system}.biome
     pkgs.dprint
 
     # nix

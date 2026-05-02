@@ -5,10 +5,12 @@
     extra-substituters = [
       "https://earlgray.cachix.org"
       "https://nix-community.cachix.org"
+      "https://cache.numtide.com"
     ];
     extra-trusted-public-keys = [
       "earlgray.cachix.org-1:nPH/5e9Boe2TqskXQkrRLmRVJIsVIhQkPhxOghlm0v4="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
     ];
   };
 
@@ -57,6 +59,11 @@
 
     mcp-servers-nix = {
       url = "github:natsukium/mcp-servers-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    github-releases = {
+      url = "path:./github-releases";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -133,10 +140,12 @@
             nix.settings.trusted-substituters = [
               "https://earlgray.cachix.org"
               "https://nix-community.cachix.org"
+              "https://cache.numtide.com"
             ];
             nix.settings.trusted-public-keys = [
               "earlgray.cachix.org-1:nPH/5e9Boe2TqskXQkrRLmRVJIsVIhQkPhxOghlm0v4="
               "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+              "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
             ];
 
             # Set Git commit hash for darwin-version.
@@ -159,6 +168,7 @@
         ];
         extraSpecialArgs = {
           inherit inputs;
+          github-releases = inputs.github-releases;
           agent-skills = inputs.agent-skills;
           anthropic-skills = inputs.anthropic-skills;
           claude-code-guide-skills = inputs.claude-code-guide-skills;

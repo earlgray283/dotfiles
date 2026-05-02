@@ -56,7 +56,18 @@
           apply = [ "fpath" ];
         };
         "15-compinit" = {
-          inline = "autoload -Uz compinit && compinit";
+          inline = ''
+            autoload -Uz compinit && compinit
+            () {
+              emulate -L zsh
+              setopt extended_glob
+              if [[ -n $HOME/.zcompdump(#qN.mh+24) ]]; then
+                compinit
+              else 
+                compinit -C
+              fi
+            }
+          '';
         };
         "99-credentials" = {
           local = "${config.home.homeDirectory}/.credentials";

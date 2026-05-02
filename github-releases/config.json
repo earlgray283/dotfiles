@@ -1,0 +1,12 @@
+{
+  "biome": {
+    "repo": "biomejs/biome",
+    "assetSuffix": "darwin-arm64",
+    "tagPrefix": "@biomejs/biome@"
+  },
+  "codex": {
+    "repo": "openai/codex",
+    "assetSuffix": "aarch64-apple-darwin.tar.gz",
+    "tagPrefix": "rust-v"
+  }
+}

@@ -15,3 +15,4 @@ vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 0
+vim.opt.winborder = "single"

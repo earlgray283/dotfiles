@@ -21,6 +21,8 @@
       matumoto = ''echo "Hello, I am matumoto!"'';
     };
 
+    completionInit = "";
+
     initContent = ''
       [[ -n $ZPROF ]] && zmodload zsh/zprof
       export LANG=en_US.UTF-8

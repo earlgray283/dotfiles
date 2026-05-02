@@ -21,9 +21,9 @@
         python query regex rust
         toml tsx typescript vim vimdoc xml yaml
       ]))
+      nvim-treesitter-context
+      nvim-treesitter-textobjects
       # Lazy loaded (opt) -- lz.n controls when to packadd these
-      { plugin = nvim-treesitter-context;     optional = true; }
-      { plugin = nvim-treesitter-textobjects; optional = true; }
       { plugin = nvim-ts-autotag;             optional = true; }
       { plugin = lualine-nvim;                optional = true; }
       { plugin = telescope-nvim;                  optional = true; }
