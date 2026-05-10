@@ -1,0 +1,6 @@
+[biome]
+repo = "biomejs/biome"
+
+[codex]
+repo = "openai/codex"
+asset_prefix = "codex-aarch64-apple-darwin"

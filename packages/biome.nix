@@ -6,12 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "biome";
-  version = "2.4.14";
+  version = "2.4.15";
 
   src = fetchurl {
-    url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.4.14/biome-darwin-arm64";
-    hash = "sha256-E4lRcNJrCpgYUyuE8z4EopgLRsu36G1D7MYGxr0bHmM=";
+    url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.4.15/biome-darwin-arm64";
+    hash = "sha256-ssZWAbOw/NBgbEFS8g43dKrfC3O6eRuNvP9+bxpPoXo=";
   };
+
 
   dontUnpack = true;
 
@@ -20,4 +21,5 @@ stdenv.mkDerivation {
     cp $src $out/bin/biome
     chmod +x $out/bin/biome
   '';
+
 }

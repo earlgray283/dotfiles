@@ -62,11 +62,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    github-releases = {
-      url = "path:./github-releases";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     agent-skills = {
       url = "github:Kyure-A/agent-skills-nix";
     };
@@ -103,6 +98,8 @@
     }:
     let
       system = "aarch64-darwin";
+
+      localPackages = pkgs.callPackage ./packages { };
 
       pkgs = import nixpkgs {
         inherit system;
@@ -167,8 +164,7 @@
           inputs.mcp-servers-nix.homeManagerModules.default
         ];
         extraSpecialArgs = {
-          inherit inputs;
-          github-releases = inputs.github-releases;
+          inherit inputs localPackages;
           agent-skills = inputs.agent-skills;
           anthropic-skills = inputs.anthropic-skills;
           claude-code-guide-skills = inputs.claude-code-guide-skills;

@@ -28,12 +28,7 @@
         serverAliveCountMax = 3;
       };
 
-      # Host-specific configurations can be added here
-      # "example" = {
-      #   hostname = "example.com";
-      #   user = "username";
-      #   identityFile = "~/.ssh/id_ed25519";
-      # };
+
     };
   };
 }

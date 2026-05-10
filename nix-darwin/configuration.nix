@@ -83,9 +83,9 @@
       "karabiner-elements"
       "orbstack"
       "slack"
-      "zed"
       "android-studio"
       "insta360-studio"
+      "sigmaos"
     ];
 
     onActivation = {

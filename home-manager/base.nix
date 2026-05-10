@@ -3,7 +3,7 @@
   inputs,
   lib,
   config,
-  github-releases,
+  localPackages,
   ...
 }:
 
@@ -100,7 +100,7 @@
     pkgs.vtsls # TypeScript Language Server
     pkgs.tailwindcss-language-server
     pkgs.oxlint
-    github-releases.packages.${pkgs.system}.biome
+    localPackages.biome
     pkgs.dprint
 
     # nix
@@ -123,6 +123,8 @@
     # Docker
     pkgs.docker-language-server
     pkgs.hadolint
+    pkgs.dockerfmt
+    # pkgs.cockroachdb            # Linux only - not available on macOS
 
     # Terraform
     pkgs.terraform
@@ -146,18 +148,10 @@
     # CUE
     pkgs.cue
 
-    # Docker
-    pkgs.dockerfmt
-    # pkgs.cockroachdb            # Linux only - not available on macOS
-
     pkgs.hyperfine
     pkgs.mise
-    pkgs.pre-commit
+    pkgs.wget
   ];
-
-  home.file = { };
-
-  home.sessionVariables = { };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

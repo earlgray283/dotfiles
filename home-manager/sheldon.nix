@@ -45,11 +45,6 @@
           local = "${config.home.homeDirectory}/.nix-profile/share/zsh/site-functions";
           apply = [ "fpath" ];
         };
-        "13-gcloud-zsh-completion" = {
-          local = "${config.home.homeDirectory}/.nix-profile/google-cloud-sdk";
-          use = [ "path.zsh.inc" ];
-          apply = [ "source" ];
-        };
         "14-bun-completion" = {
           local = "${config.home.homeDirectory}/.bun";
           use = [ "_bun" ];
@@ -57,7 +52,7 @@
         };
         "15-compinit" = {
           inline = ''
-            autoload -Uz compinit && compinit
+            autoload -Uz compinit
             () {
               emulate -L zsh
               setopt extended_glob

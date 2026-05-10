@@ -17,8 +17,6 @@
       gitroot = "cd `git rev-parse --show-superproject-working-tree --show-toplevel | head -1`";
       sed = "gsed";
       xargs = "gxargs";
-      sk = ''sk --preview="bat {} --color=always"'';
-      matumoto = ''echo "Hello, I am matumoto!"'';
     };
 
     completionInit = "";
@@ -28,20 +26,8 @@
       export LANG=en_US.UTF-8
 
       # tmux autostart
-      if [[ -z $TMUX && -z $ZED_TERM && -z $ZPROF ]]; then
-        ID="$(tmux list-sessions)"
-        if [[ -z "$ID" ]]; then
-          tmux new-session
-        fi
-        ID="$ID\nCreate New Session"
-        ID="$(echo $ID | sk | cut -d: -f1)"
-        if [[ "$ID" = "Create New Session" ]]; then
-          tmux new-session
-        elif [[ -n "$ID" ]]; then
-          tmux attach-session -t "$ID"
-        else
-          :
-        fi
+      if [[ -z $TMUX && -z $ZED_TERM && -z $ZPROF && $- == *i* ]]; then
+        exec tmux new-session -A -s main
       fi
     '';
 
@@ -65,6 +51,7 @@
         /opt/homebrew/opt/findutils/libexec/gnubin(N-/)
         $HOME/.local/bin(N-/)
         /usr/local/flutter/bin(N-/)
+        $HOME/.cargo/bin(N-/)
         $path
       )
     '';

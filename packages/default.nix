@@ -4,6 +4,9 @@
 
 { pkgs }:
 {
+
   biome = pkgs.callPackage ./biome.nix { };
+
   codex = pkgs.callPackage ./codex.nix { };
+
 }

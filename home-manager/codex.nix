@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  localPackages,
   claude-plugins-official,
   superpowers-skills,
   ...
@@ -128,7 +129,7 @@ in
   programs.codex = {
     enable = true;
 
-    package = pkgs.llm-agents.codex;
+    package = localPackages.codex;
 
     enableMcpIntegration = true;
   };

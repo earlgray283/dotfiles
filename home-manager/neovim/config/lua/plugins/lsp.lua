@@ -28,15 +28,16 @@ require("lz.n").load({
 			})
 
 			vim.lsp.enable({
-				"gopls",
-				"ts_ls",
-				"lua_ls",
+				"biome",
 				"cssls",
-				"terraformls",
-				"taplo",
+				"gopls",
 				"html",
+				"lua_ls",
 				"marksman",
 				"nixd",
+				"taplo",
+				"terraformls",
+				"ts_ls",
 				"yamlls",
 			})
 		end,
