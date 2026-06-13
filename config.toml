@@ -1,6 +1,87 @@
+[StyLua]
+repo = "JohnnyMorganz/StyLua"
+asset_prefix = "stylua-macos-aarch64"
+binary_name = "stylua"
+
+[actionlint]
+repo = "rhysd/actionlint"
+
+[aqua]
+repo = "aquaproj/aqua"
+
+[bat]
+repo = "sharkdp/bat"
+
 [biome]
 repo = "biomejs/biome"
+
+[buf]
+repo = "bufbuild/buf"
 
 [codex]
 repo = "openai/codex"
 asset_prefix = "codex-aarch64-apple-darwin"
+
+[delta]
+repo = "dandavison/delta"
+
+[dprint]
+repo = "dprint/dprint"
+
+[fd]
+repo = "sharkdp/fd"
+
+[fzf]
+repo = "junegunn/fzf"
+
+[gitleaks]
+repo = "gitleaks/gitleaks"
+
+[golangci-lint]
+repo = "golangci/golangci-lint"
+
+[hyperfine]
+repo = "sharkdp/hyperfine"
+
+[just]
+repo = "casey/just"
+
+[lazygit]
+repo = "jesseduffield/lazygit"
+
+[mise]
+repo = "jdx/mise"
+
+[oxc]
+repo = "oxc-project/oxc"
+asset_prefix = "oxlint-aarch64-apple-darwin"
+
+[protolint]
+repo = "yoheimuta/protolint"
+
+[ripgrep]
+repo = "BurntSushi/ripgrep"
+binary_name = "rg"
+
+[starship]
+repo = "starship/starship"
+
+[taplo]
+repo = "tamasfe/taplo"
+
+[television]
+repo = "alexpasmantier/television"
+asset_prefix = "tv"
+binary_name = "tv"
+
+[tree-sitter]
+repo = "tree-sitter/tree-sitter"
+
+[uv]
+repo = "astral-sh/uv"
+
+[vale]
+repo = "vale-cli/vale"
+
+[xh]
+repo = "ducaale/xh"

@@ -5,12 +5,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  pname = "biome";
-  version = "2.5.0";
+  pname = "taplo";
+  version = "0.10.0";
 
   src = fetchurl {
-    url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.5.0/biome-darwin-arm64";
-    hash = "sha256-m54E90nbawN7CtOLoMXM5jsYWnzDsEnld9rTwY9K2yw=";
+    url = "https://github.com/tamasfe/taplo/releases/download/0.10.0/taplo-darwin-aarch64.gz";
+    hash = "sha256-cTc0MUw+cYlLnndRPFNJg17vvVKQhEWg1zsMfcRpNH0=";
   };
 
 
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp $src $out/bin/biome
-    chmod +x $out/bin/biome
+    gunzip -c $src > $out/bin/taplo
+    chmod +x $out/bin/taplo
   '';
 
 }

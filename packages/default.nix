@@ -5,8 +5,58 @@
 { pkgs }:
 {
 
+  StyLua = pkgs.callPackage ./StyLua.nix { };
+
+  actionlint = pkgs.callPackage ./actionlint.nix { };
+
+  aqua = pkgs.callPackage ./aqua.nix { };
+
+  bat = pkgs.callPackage ./bat.nix { };
+
   biome = pkgs.callPackage ./biome.nix { };
 
+  buf = pkgs.callPackage ./buf.nix { };
+
   codex = pkgs.callPackage ./codex.nix { };
+
+  delta = pkgs.callPackage ./delta.nix { };
+
+  dprint = pkgs.callPackage ./dprint.nix { };
+
+  fd = pkgs.callPackage ./fd.nix { };
+
+  fzf = pkgs.callPackage ./fzf.nix { };
+
+  gitleaks = pkgs.callPackage ./gitleaks.nix { };
+
+  golangci-lint = pkgs.callPackage ./golangci-lint.nix { };
+
+  hyperfine = pkgs.callPackage ./hyperfine.nix { };
+
+  just = pkgs.callPackage ./just.nix { };
+
+  lazygit = pkgs.callPackage ./lazygit.nix { };
+
+  mise = pkgs.callPackage ./mise.nix { };
+
+  oxc = pkgs.callPackage ./oxc.nix { };
+
+  protolint = pkgs.callPackage ./protolint.nix { };
+
+  ripgrep = pkgs.callPackage ./ripgrep.nix { };
+
+  starship = pkgs.callPackage ./starship.nix { };
+
+  taplo = pkgs.callPackage ./taplo.nix { };
+
+  television = pkgs.callPackage ./television.nix { };
+
+  tree-sitter = pkgs.callPackage ./tree-sitter.nix { };
+
+  uv = pkgs.callPackage ./uv.nix { };
+
+  vale = pkgs.callPackage ./vale.nix { };
+
+  xh = pkgs.callPackage ./xh.nix { };
 
 }

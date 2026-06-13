@@ -20,20 +20,4 @@
       };
     };
   };
-
-  # Nix-managed MCP servers via mcp-servers-nix
-  mcp-servers = {
-    programs = {
-      sequential-thinking.enable = true;
-      filesystem = {
-        enable = true;
-        args = [ "/Users/earlgray" ];
-      };
-      serena = {
-        enable = true;
-        context = "claude-code";
-      };
-      playwright.enable = true;
-    };
-  };
 }

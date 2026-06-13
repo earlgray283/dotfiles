@@ -55,7 +55,7 @@ require("lz.n").load({
 				},
 
 				sources = {
-					default = { "lsp", "omni", "path", "snippets", "buffer" },
+					default = { "lsp", "path", "snippets", "buffer" },
 				},
 
 				signature = {

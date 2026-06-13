@@ -9,6 +9,7 @@ require("lz.n").load({
       { "<leader>fh", function() require("fzf-lua").helptags() end,                desc = "Help tags" },
       { "<leader>fd", function() require("fzf-lua").diagnostics_workspace() end,   desc = "Diagnostics" },
       { "<leader>fs", function() require("fzf-lua").git_status() end,              desc = "Git status" },
+      { "<leader>fk", function() require("fzf-lua").keymaps() end,                 desc = "Keymaps" },
     },
     after = function()
       require("fzf-lua").setup({

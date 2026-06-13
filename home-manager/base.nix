@@ -17,11 +17,9 @@
     ./sheldon.nix
     ./ssh.nix
     ./tmux.nix
-    ./1password-shell-plugin.nix
     ./claude-code/claude-code.nix
     ./opencode.nix
     ./mcp.nix
-    ./agent-skills.nix
     ./direnv.nix
     ./neovim
   ];
@@ -55,56 +53,53 @@
 
   home.packages = [
     # Shell/Terminal Tools
-    pkgs.fd
-    pkgs.bat
-    pkgs.ripgrep
+    localPackages.fd
+    localPackages.bat
+    localPackages.ripgrep
     pkgs.eza
-    pkgs.delta
-    pkgs.starship
-    pkgs.fzf
+    localPackages.delta
+    localPackages.fzf
     pkgs.skim
     pkgs.tealdeer
-    pkgs.xh
-    pkgs.television
-    pkgs.just
+    localPackages.xh
+    localPackages.television
+    localPackages.just
     pkgs.google-cloud-sdk
     pkgs.cachix
-    inputs.tree-sitter.packages.${pkgs.system}.default
+    localPackages.tree-sitter
     pkgs._1password-cli
 
     # Git Tools
-    pkgs.lazygit
+    localPackages.lazygit
     pkgs.gh
-    pkgs.gitleaks
+    localPackages.gitleaks
     pkgs.pre-commit
 
     # Go
     pkgs.go
     pkgs.gopls
     (lib.lowPrio pkgs.gotools) # Go tools including goimports
-    pkgs.golangci-lint
+    localPackages.golangci-lint
 
     # Python
-    pkgs.uv
+    localPackages.uv
 
     # Lua
     pkgs.lua
     pkgs.lua-language-server
-    pkgs.stylua
+    localPackages.StyLua
     pkgs.luarocks
 
     # JavaScript/TypeScript
     pkgs.nodejs
     pkgs.bun
     pkgs.typescript-language-server
-    pkgs.vtsls # TypeScript Language Server
     pkgs.tailwindcss-language-server
     pkgs.oxlint
     localPackages.biome
-    pkgs.dprint
+    localPackages.dprint
 
     # nix
-    pkgs.nil # Nix Language Server
     pkgs.nixd # Nix Language Server
     pkgs.nixfmt
     pkgs.nixfmt-tree
@@ -112,10 +107,10 @@
     # YAML
     pkgs.yamlfmt
     pkgs.yaml-language-server
-    pkgs.actionlint
+    localPackages.actionlint
 
     # TOML
-    pkgs.taplo # TOML toolkit
+    localPackages.taplo # TOML toolkit
 
     # Markdown
     pkgs.markdown-oxide # Markdown LSP
@@ -131,11 +126,11 @@
     pkgs.terraform-ls
 
     # Protocol Buffers
-    pkgs.buf
-    pkgs.protolint
+    localPackages.buf
+    localPackages.protolint
 
     # Linters/Formatters
-    pkgs.vale # Prose linter
+    localPackages.vale # Prose linter
 
     # DB/SQL
     pkgs.atlas
@@ -148,8 +143,9 @@
     # CUE
     pkgs.cue
 
-    pkgs.hyperfine
-    pkgs.mise
+    localPackages.hyperfine
+    localPackages.mise
+    localPackages.aqua
     pkgs.wget
   ];
 

@@ -7,7 +7,9 @@
     launchd.enable = true;
     settings = {
       after-login-command = [ ];
-      after-startup-command = [ ];
+      after-startup-command = [
+        "exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0"
+      ];
       start-at-login = true;
 
       enable-normalization-flatten-containers = true;
@@ -129,8 +131,16 @@
       };
 
       workspace-to-monitor-force-assignment = {
-        "9" = "secondary";
-        "10" = "secondary";
+        "1" = "secondary";
+        "2" = "secondary";
+        "3" = "secondary";
+        "4" = "secondary";
+        "5" = "secondary";
+        "6" = "secondary";
+        "7" = "secondary";
+        "8" = "secondary";
+        "9" = "built-in";
+        "10" = "built-in";
       };
     };
   };

@@ -1,0 +1,72 @@
+name: Auto Update
+
+on:
+  schedule:
+    - cron: '0 15 * * 0' # Every Monday at 00:00 JST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: NixOS/nix-installer-action@main
+
+      - uses: DeterminateSystems/magic-nix-cache-action@v14
+
+      - name: Get bin2nix HEAD SHA
+        id: bin2nix-sha
+        run: |
+          sha=$(gh api repos/earlgray/bin2nix/commits/HEAD --jq '.sha')
+          echo "sha=$sha" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache bin2nix binary
+        uses: actions/cache@v5
+        id: cache-bin2nix
+        with:
+          path: ~/.cargo/bin/bin2nix
+          key: bin2nix-${{ runner.os }}-${{ steps.bin2nix-sha.outputs.sha }}
+
+      - uses: dtolnay/rust-toolchain@stable
+        if: steps.cache-bin2nix.outputs.cache-hit != 'true'
+
+      - uses: Swatinem/rust-cache@v2
+        if: steps.cache-bin2nix.outputs.cache-hit != 'true'
+        with:
+          workspaces: "~/.cargo -> registry"
+
+      - name: Install bin2nix
+        if: steps.cache-bin2nix.outputs.cache-hit != 'true'
+        run: cargo install --git https://github.com/earlgray/bin2nix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: nix flake update
+        run: nix flake update
+
+      - name: bin2nix update
+        run: bin2nix update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/auto-update
+          commit-message: "chore: auto update nix flake and packages"
+          title: "chore: weekly auto update"
+          body: |
+            Automated weekly update.
+
+            - `nix flake update`: updated flake inputs
+            - `bin2nix update`: updated GitHub Release packages
+          labels: dependencies
+          delete-branch: true

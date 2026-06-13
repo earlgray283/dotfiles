@@ -57,15 +57,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    mcp-servers-nix = {
-      url = "github:natsukium/mcp-servers-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    agent-skills = {
-      url = "github:Kyure-A/agent-skills-nix";
-    };
-
     anthropic-skills = {
       url = "github:anthropics/skills";
       flake = false;
@@ -83,6 +74,11 @@
 
     claude-plugins-official = {
       url = "github:anthropics/claude-plugins-official";
+      flake = false;
+    };
+
+    claude-mem = {
+      url = "github:thedotmack/claude-mem";
       flake = false;
     };
   };
@@ -159,17 +155,15 @@
         inherit pkgs;
         modules = [
           ./home-manager/base.nix
-          ./home-manager/personal.nix
           nix-index-database.homeModules.default
-          inputs.mcp-servers-nix.homeManagerModules.default
         ];
         extraSpecialArgs = {
           inherit inputs localPackages;
-          agent-skills = inputs.agent-skills;
           anthropic-skills = inputs.anthropic-skills;
           claude-code-guide-skills = inputs.claude-code-guide-skills;
           superpowers-skills = inputs.superpowers-skills;
           claude-plugins-official = inputs.claude-plugins-official;
+          claude-mem = inputs.claude-mem;
         };
       };
     };

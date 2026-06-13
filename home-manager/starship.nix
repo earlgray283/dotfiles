@@ -1,8 +1,9 @@
-{ ... }:
+{ localPackages, ... }:
 
 {
   programs.starship = {
     enable = true;
+    package = localPackages.starship;
     settings = {
       format = "$all$character";
 

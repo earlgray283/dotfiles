@@ -69,7 +69,6 @@
       "xcodegen"
       "felixkratz/formulae/borders"
       "openjdk"
-      "cockroachdb/tap/cockroach"
     ];
 
     casks = [
@@ -91,11 +90,16 @@
     onActivation = {
       autoUpdate = true;
       upgrade = true;
+      cleanup = "zap";
     };
   };
 
   nix.gc = {
     automatic = true;
+    interval = {
+      Hour = 3;
+      Weekday = 0;
+    };
     options = "--delete-older-than 7d";
   };
 
