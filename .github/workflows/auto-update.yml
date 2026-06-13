@@ -52,7 +52,7 @@ jobs:
         run: nix flake update
 
       - name: bin2nix update
-        run: bin2nix update
+        run: bin2nix update --target aarch64-apple-darwin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
