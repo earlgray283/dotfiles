@@ -25,7 +25,7 @@ jobs:
           sha=$(gh api repos/earlgray/bin2nix/commits/HEAD --jq '.sha')
           echo "sha=$sha" >> $GITHUB_OUTPUT
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.DOTFILES_GITHUB_TOKEN }}
 
       - name: Cache bin2nix binary
         uses: actions/cache@v5
@@ -44,9 +44,9 @@ jobs:
 
       - name: Install bin2nix
         if: steps.cache-bin2nix.outputs.cache-hit != 'true'
-        run: cargo install --git https://github.com/earlgray/bin2nix
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.DOTFILES_GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          cargo install --git https://github.com/earlgray/bin2nix
 
       - name: nix flake update
         run: nix flake update
