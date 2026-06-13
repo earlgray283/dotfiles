@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'golangci-lint' -type f -exec cp {} $out/bin/golangci-lint \;
+    tar xzf $src
+    cp golangci-lint-* $out/bin/golangci-lint || cp golangci-lint $out/bin/golangci-lint
     chmod +x $out/bin/golangci-lint
   '';
 

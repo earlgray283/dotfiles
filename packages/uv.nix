@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'uv' -type f -exec cp {} $out/bin/uv \;
+    tar xzf $src
+    cp uv-* $out/bin/uv || cp uv $out/bin/uv
     chmod +x $out/bin/uv
   '';
 

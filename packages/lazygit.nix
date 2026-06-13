@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'lazygit' -type f -exec cp {} $out/bin/lazygit \;
+    tar xzf $src
+    cp lazygit-* $out/bin/lazygit || cp lazygit $out/bin/lazygit
     chmod +x $out/bin/lazygit
   '';
 

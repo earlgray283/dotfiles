@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'oxc' -type f -exec cp {} $out/bin/oxc \;
+    tar xzf $src
+    cp oxc-* $out/bin/oxc || cp oxc $out/bin/oxc
     chmod +x $out/bin/oxc
   '';
 

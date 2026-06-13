@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'starship' -type f -exec cp {} $out/bin/starship \;
+    tar xzf $src
+    cp starship-* $out/bin/starship || cp starship $out/bin/starship
     chmod +x $out/bin/starship
   '';
 

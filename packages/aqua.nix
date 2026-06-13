@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'aqua' -type f -exec cp {} $out/bin/aqua \;
+    tar xzf $src
+    cp aqua-* $out/bin/aqua || cp aqua $out/bin/aqua
     chmod +x $out/bin/aqua
   '';
 

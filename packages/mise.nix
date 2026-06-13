@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation {
   pname = "mise";
-  version = "2026.6.5";
+  version = "2026.6.6";
 
   src = fetchurl {
-    url = "https://github.com/jdx/mise/releases/download/v2026.6.5/mise-v2026.6.5-macos-arm64.tar.gz";
-    hash = "sha256-OCqFXu1Fh3ywQn4cEcJ6oiorwQbb5DrtldA9f6xK4vo=";
+    url = "https://github.com/jdx/mise/releases/download/v2026.6.6/mise-v2026.6.6-macos-arm64.tar.gz";
+    hash = "sha256-vO/hGQ+xfJN79Q5T6py+VFSnTEj1uliZrVH5OOkfzMQ=";
   };
 
 
@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'mise' -type f -exec cp {} $out/bin/mise \;
+    tar xzf $src
+    cp mise-* $out/bin/mise || cp mise $out/bin/mise
     chmod +x $out/bin/mise
   '';
 

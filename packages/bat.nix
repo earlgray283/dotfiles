@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'bat' -type f -exec cp {} $out/bin/bat \;
+    tar xzf $src
+    cp bat-* $out/bin/bat || cp bat $out/bin/bat
     chmod +x $out/bin/bat
   '';
 

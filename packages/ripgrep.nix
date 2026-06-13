@@ -18,8 +18,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'rg' -type f -exec cp {} $out/bin/rg \;
-    chmod +x $out/bin/rg
+    tar xzf $src
+    cp ripgrep-* $out/bin/ripgrep || cp ripgrep $out/bin/ripgrep
+    chmod +x $out/bin/ripgrep
   '';
 
 }

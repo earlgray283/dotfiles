@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'actionlint' -type f -exec cp {} $out/bin/actionlint \;
+    tar xzf $src
+    cp actionlint-* $out/bin/actionlint || cp actionlint $out/bin/actionlint
     chmod +x $out/bin/actionlint
   '';
 

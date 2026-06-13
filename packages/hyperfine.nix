@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'hyperfine' -type f -exec cp {} $out/bin/hyperfine \;
+    tar xzf $src
+    cp hyperfine-* $out/bin/hyperfine || cp hyperfine $out/bin/hyperfine
     chmod +x $out/bin/hyperfine
   '';
 

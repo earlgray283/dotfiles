@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'gitleaks' -type f -exec cp {} $out/bin/gitleaks \;
+    tar xzf $src
+    cp gitleaks-* $out/bin/gitleaks || cp gitleaks $out/bin/gitleaks
     chmod +x $out/bin/gitleaks
   '';
 

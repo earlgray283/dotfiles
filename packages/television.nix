@@ -18,8 +18,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'tv' -type f -exec cp {} $out/bin/tv \;
-    chmod +x $out/bin/tv
+    tar xzf $src
+    cp television-* $out/bin/television || cp television $out/bin/television
+    chmod +x $out/bin/television
   '';
 
 }

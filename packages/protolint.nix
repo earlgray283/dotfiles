@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'protolint' -type f -exec cp {} $out/bin/protolint \;
+    tar xzf $src
+    cp protolint-* $out/bin/protolint || cp protolint $out/bin/protolint
     chmod +x $out/bin/protolint
   '';
 

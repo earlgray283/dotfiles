@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'delta' -type f -exec cp {} $out/bin/delta \;
+    tar xzf $src
+    cp delta-* $out/bin/delta || cp delta $out/bin/delta
     chmod +x $out/bin/delta
   '';
 

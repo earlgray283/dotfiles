@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    find . -name 'codex' -type f -exec cp {} $out/bin/codex \;
+    tar xzf $src
+    cp codex-* $out/bin/codex || cp codex $out/bin/codex
     chmod +x $out/bin/codex
   '';
 

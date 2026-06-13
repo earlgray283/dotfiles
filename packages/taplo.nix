@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    gunzip -c $src > $out/bin/taplo
+    cp $src $out/bin/taplo
     chmod +x $out/bin/taplo
   '';
 
