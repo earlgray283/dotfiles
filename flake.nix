@@ -151,7 +151,7 @@
         specialArgs = { inherit inputs; };
       };
 
-      homeConfigurations."earlgray" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."earlgray@makabeee-macbook-air" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
           ./home-manager/base.nix
