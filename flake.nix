@@ -113,6 +113,24 @@
           })
         ];
       };
+
+      mkHome =
+        hostModules:
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            ./home-manager/base.nix
+            nix-index-database.homeModules.default
+          ] ++ hostModules;
+          extraSpecialArgs = {
+            inherit inputs localPackages;
+            anthropic-skills = inputs.anthropic-skills;
+            claude-code-guide-skills = inputs.claude-code-guide-skills;
+            superpowers-skills = inputs.superpowers-skills;
+            claude-plugins-official = inputs.claude-plugins-official;
+            claude-mem = inputs.claude-mem;
+          };
+        };
     in
     {
       # Build darwin flake using:
@@ -151,20 +169,8 @@
         specialArgs = { inherit inputs; };
       };
 
-      homeConfigurations."earlgray" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          ./home-manager/base.nix
-          nix-index-database.homeModules.default
-        ];
-        extraSpecialArgs = {
-          inherit inputs localPackages;
-          anthropic-skills = inputs.anthropic-skills;
-          claude-code-guide-skills = inputs.claude-code-guide-skills;
-          superpowers-skills = inputs.superpowers-skills;
-          claude-plugins-official = inputs.claude-plugins-official;
-          claude-mem = inputs.claude-mem;
-        };
-      };
+      homeConfigurations."earlgray@makabeee-macbook-air" = mkHome [
+        ./home-manager/hosts/makabeee-macbook-air.nix
+      ];
     };
 }
