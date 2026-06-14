@@ -12,6 +12,7 @@
     ./starship.nix
     ./ghostty.nix
     ./aerospace.nix
+    ./gh.nix
     ./git.nix
     ./zsh.nix
     ./sheldon.nix
@@ -71,7 +72,6 @@
 
     # Git Tools
     localPackages.lazygit
-    pkgs.gh
     localPackages.gitleaks
     pkgs.pre-commit
 
