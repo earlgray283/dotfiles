@@ -18,6 +18,11 @@ repo = "biomejs/biome"
 [buf]
 repo = "bufbuild/buf"
 
+[gh]
+repo = "cli/cli"
+asset_prefix = "gh_"
+binary_name = "gh"
+
 [codex]
 repo = "openai/codex"
 asset_prefix = "codex-aarch64-apple-darwin"

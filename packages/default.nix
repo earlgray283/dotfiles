@@ -27,6 +27,8 @@
 
   fzf = pkgs.callPackage ./fzf.nix { };
 
+  gh = pkgs.callPackage ./gh.nix { };
+
   gitleaks = pkgs.callPackage ./gitleaks.nix { };
 
   golangci-lint = pkgs.callPackage ./golangci-lint.nix { };
