@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "mise";
-  version = "2026.6.6";
+  version = "2026.6.9";
 
   src = fetchurl {
-    url = "https://github.com/jdx/mise/releases/download/v2026.6.6/mise-v2026.6.6-macos-arm64.tar.gz";
-    hash = "sha256-vO/hGQ+xfJN79Q5T6py+VFSnTEj1uliZrVH5OOkfzMQ=";
+    url = "https://github.com/jdx/mise/releases/download/v2026.6.9/mise-v2026.6.9-macos-arm64.tar.gz";
+    hash = "sha256-ykT9GAYCy1Sl2e07pXSoDF5oNdQf18KpqlDBO8SQUUM=";
   };
 
 
