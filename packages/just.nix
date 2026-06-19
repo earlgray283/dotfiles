@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "just";
-  version = "1.52.0";
+  version = "1.53.0";
 
   src = fetchurl {
-    url = "https://github.com/casey/just/releases/download/1.52.0/just-1.52.0-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-FTjK9WbJ2N2ZKGohwOEiS4n2Z2twwWpLy+tS3SH8ePU=";
+    url = "https://github.com/casey/just/releases/download/1.53.0/just-1.53.0-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-J/E2Hy5Ptdczg38an4D4XCN+WjbHXuFJYeWRQXE6pO0=";
   };
 
 

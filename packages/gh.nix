@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "gh";
-  version = "2.94.0";
+  version = "2.95.0";
 
   src = fetchurl {
-    url = "https://github.com/cli/cli/releases/download/v2.94.0/gh_2.94.0_macOS_arm64.zip";
-    hash = "sha256-T5vBped1AHNykKMHtAtMOWpNI3KfVTQPKoP0FEEBZaE=";
+    url = "https://github.com/cli/cli/releases/download/v2.95.0/gh_2.95.0_macOS_arm64.zip";
+    hash = "sha256-Nnf5wnllgl+cfVA5VHPBNO2upLSENz72sl3mU1cKBIk=";
   };
 
 
