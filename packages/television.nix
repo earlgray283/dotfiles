@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "television";
-  version = "0.15.8";
+  version = "0.15.9";
 
   src = fetchurl {
-    url = "https://github.com/alexpasmantier/television/releases/download/0.15.8/tv-0.15.8-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-5aKNjVzcMlKbflN5TZ73rLV43irAn1QE/r+aMTmkga4=";
+    url = "https://github.com/alexpasmantier/television/releases/download/0.15.9/tv-0.15.9-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-lK5xd9SZ9051RCQ//pyCNxGDyhGmNj8Ziks9Din4JzI=";
   };
 
 

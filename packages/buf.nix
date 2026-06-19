@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "buf";
-  version = "1.70.0";
+  version = "1.71.0";
 
   src = fetchurl {
-    url = "https://github.com/bufbuild/buf/releases/download/v1.70.0/buf-Darwin-arm64.tar.gz";
-    hash = "sha256-nOwjZY3wk9UPMxhYDhfx4wnUW4F5J/IuneMPePPU1Fs=";
+    url = "https://github.com/bufbuild/buf/releases/download/v1.71.0/buf-Darwin-arm64.tar.gz";
+    hash = "sha256-lhUaDUQ0PQWTCXYGnMXUvsdzbMkgMEgWonRZBugiFw0=";
   };
 
 
