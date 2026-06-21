@@ -25,4 +25,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/tree-sitter
   '';
 
+
+  meta.mainProgram = "tree-sitter";
 }

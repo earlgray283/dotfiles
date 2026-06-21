@@ -24,4 +24,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/mise
   '';
 
+
+  meta.mainProgram = "mise";
 }

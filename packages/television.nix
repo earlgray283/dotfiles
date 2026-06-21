@@ -24,4 +24,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/tv
   '';
 
+
+  meta.mainProgram = "tv";
 }

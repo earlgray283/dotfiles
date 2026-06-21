@@ -24,4 +24,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/bat
   '';
 
+
+  meta.mainProgram = "bat";
 }

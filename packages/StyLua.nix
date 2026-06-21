@@ -25,4 +25,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/stylua
   '';
 
+
+  meta.mainProgram = "stylua";
 }
