@@ -25,4 +25,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/dprint
   '';
 
+
+  meta.mainProgram = "dprint";
 }

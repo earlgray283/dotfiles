@@ -24,4 +24,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/golangci-lint
   '';
 
+
+  meta.mainProgram = "golangci-lint";
 }

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "uv";
-  version = "0.11.22";
+  version = "0.11.23";
 
   src = fetchurl {
-    url = "https://github.com/astral-sh/uv/releases/download/0.11.22/uv-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-l6ReL/jV6iYmI+7VfsLZxGikLXRJbVw8Pu8RNAI1vX8=";
+    url = "https://github.com/astral-sh/uv/releases/download/0.11.23/uv-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-ce+d6F24IHSbOxK3WFYk7ieenFr8vG+CNrw9YoxDBbA=";
   };
 
 
@@ -24,4 +24,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/uv
   '';
 
+
+  meta.mainProgram = "uv";
 }

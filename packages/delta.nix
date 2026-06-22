@@ -24,4 +24,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/delta
   '';
 
+
+  meta.mainProgram = "delta";
 }

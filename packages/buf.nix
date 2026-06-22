@@ -24,4 +24,6 @@ stdenv.mkDerivation {
     chmod +x $out/bin/buf
   '';
 
+
+  meta.mainProgram = "buf";
 }
