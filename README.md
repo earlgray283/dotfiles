@@ -1,46 +1,40 @@
 # nix-dotfiles
 
+macOS environment managed entirely with Nix (nix-darwin + home-manager).
+
 ## Install
 
-### 1. Nix
+**1. Nix** — <https://github.com/NixOS/nix-installer>
 
-Ref <https://github.com/NixOS/nix-installer>
-
-### 2. nix-darwin
-
+**2. nix-darwin**
 ```sh
 sudo nix run nix-darwin -- switch --flake .#makabeee-macbook-air
 ```
 
-### 3. home-manager
-
+**3. home-manager**
 ```sh
-nix run home-manager/master -- switch --flake .
-
-# switch profile
-nix run home-manager/master -- switch --flake.#earlgray-work
+nix run home-manager/master -- switch --flake .#earlgray
 ```
 
 ## Apply changes
 
-### macOS settings
-
 ```sh
-# Dry-run
-darwin-rebuild build --flake .#makabeee-macbook-air
-
-# Apply
-sudo darwin-rebuild switch --flake .#makabeee-macbook-air
+just switch-darwin-rebuild    # nix-darwin (requires sudo)
+just switch-home-manager      # home-manager
+just fmt                      # format (treefmt)
+just lint                     # lint (deadnix)
 ```
 
-### home-manager
-
+Dry-run before applying:
 ```sh
-# Dry-run
+darwin-rebuild build --flake .#makabeee-macbook-air
 home-manager build --flake .#earlgray
-home-manager build --flake .#earlgray-work
+```
 
-# Apply
-home-manager switch --flake .#earlgray        # Personal
-home-manager switch --flake .#earlgray-work   # Work
+## Package management (`packages/`)
+
+Managed by `bin2nix` — do not edit manually. Add packages to `config.toml`, then run:
+```sh
+bin2nix update          # refresh all packages
+bin2nix add <owner/repo>
 ```
