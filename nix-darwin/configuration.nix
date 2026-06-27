@@ -43,6 +43,48 @@
       _FXShowPosixPathInTitle = true; # Show full POSIX path in Finder title bar
     };
 
+    trackpad = {
+      Clicking = false; # Tap to click (disabled)
+      TrackpadRightClick = true; # Two-finger secondary click
+      TrackpadThreeFingerDrag = false; # Three-finger drag (disabled)
+      TrackpadThreeFingerHorizSwipeGesture = 2; # 0=off, 1=page swipe, 2=swipe between full-screen apps
+      TrackpadThreeFingerTapGesture = 0; # 0=off, 2=Look up & data detectors
+      TrackpadThreeFingerVertSwipeGesture = 2; # 0=off, 2=Mission Control / App Exposé
+    };
+
+    screencapture = {
+      location = "/Users/earlgray/Desktop";
+      type = "png";
+      disable-shadow = false;
+    };
+
+    screensaver = {
+      askForPassword = true;
+      askForPasswordDelay = 0;
+    };
+
+    controlcenter = {
+      BatteryShowPercentage = true;
+      Sound = true;
+    };
+
+    loginwindow = {
+      GuestEnabled = false;
+    };
+
+    WindowManager = {
+      AppWindowGroupingBehavior = true; # All windows at once (not one at a time)
+      AutoHide = true; # Auto-hide Stage Manager strip
+      EnableStandardClickToShowDesktop = false; # Click wallpaper shows desktop only in Stage Manager
+      HideDesktop = true; # Hide items in Stage Manager
+      StandardHideWidgets = true; # Hide widgets on desktop
+      StageManagerHideWidgets = true; # Hide widgets in Stage Manager
+    };
+
+    spaces = {
+      spans-displays = false; # Each display has its own Spaces
+    };
+
     CustomUserPreferences = {
       NSGlobalDomain = {
         "com.apple.keyboard.fnState" = true; # Use F1, F2, etc. as standard function keys
