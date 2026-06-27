@@ -205,6 +205,22 @@
         "type": "github"
       }
     },
+    "google-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781940423,
+        "narHash": "sha256-8aiA/3zUDC5+HBuikRntQN21IXbQEOP/PWDZG5J6ET8=",
+        "owner": "google",
+        "repo": "skills",
+        "rev": "872e31b26b961d5611336f5d2c8f433f2e21d981",
+        "type": "github"
+      },
+      "original": {
+        "owner": "google",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -336,6 +352,7 @@
         "claude-mem": "claude-mem",
         "claude-plugins-official": "claude-plugins-official",
         "ghostty": "ghostty",
+        "google-skills": "google-skills",
         "home-manager": "home-manager_2",
         "llm-agents": "llm-agents",
         "nix-darwin": "nix-darwin",

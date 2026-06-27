@@ -7,7 +7,7 @@
     terminal = "screen-256color";
     escapeTime = 0;
     mouse = true;
-    prefix = "C-Space";
+    prefix = "C-a";
 
     plugins = with pkgs.tmuxPlugins; [
       sensible
@@ -30,9 +30,11 @@
 
       # key bindings
       unbind-key C-b
-      bind-key C-Space send-prefix
-      bind | split-window -h  # prefix-| で垂直分割
-      bind _ split-window -v  # prefix-_ で水平分割
+      bind-key C-a send-prefix
+      bind '|' split-window -hf
+      bind '\' split-window -h
+      bind '_' split-window -vf
+      bind '-' split-window -v
     '';
   };
 }

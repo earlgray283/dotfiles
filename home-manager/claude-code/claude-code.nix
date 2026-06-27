@@ -3,6 +3,7 @@
   claude-plugins-official,
   superpowers-skills,
   claude-mem,
+  google-skills,
   ...
 }:
 
@@ -39,6 +40,8 @@
       superpowers-skills
       claude-mem
     ];
+
+    skills = "${google-skills}/skills/cloud";
 
     hooksDir = ./hooks;
 

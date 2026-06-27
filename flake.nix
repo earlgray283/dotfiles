@@ -81,6 +81,11 @@
       url = "github:thedotmack/claude-mem";
       flake = false;
     };
+
+    google-skills = {
+      url = "github:google/skills";
+      flake = false;
+    };
   };
 
   outputs =
@@ -164,6 +169,7 @@
           superpowers-skills = inputs.superpowers-skills;
           claude-plugins-official = inputs.claude-plugins-official;
           claude-mem = inputs.claude-mem;
+          google-skills = inputs.google-skills;
         };
       };
     };
