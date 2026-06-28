@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "dprint";
-  version = "0.54.0";
+  version = "0.55.1";
 
   src = fetchurl {
-    url = "https://github.com/dprint/dprint/releases/download/0.54.0/dprint-aarch64-apple-darwin.zip";
-    hash = "sha256-HWqPsU1my6DwSXOO3Uqzsa/B3m2TbNMuSD4zKEz9Gt4=";
+    url = "https://github.com/dprint/dprint/releases/download/0.55.1/dprint-aarch64-apple-darwin.zip";
+    hash = "sha256-lKnOXKkdu2CdTyLyzPKNi0ImJ8CUTG7mPRvuysKPjNQ=";
   };
 
 

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "uv";
-  version = "0.11.23";
+  version = "0.11.25";
 
   src = fetchurl {
-    url = "https://github.com/astral-sh/uv/releases/download/0.11.23/uv-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-ce+d6F24IHSbOxK3WFYk7ieenFr8vG+CNrw9YoxDBbA=";
+    url = "https://github.com/astral-sh/uv/releases/download/0.11.25/uv-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-X8M0uyXRmAYmLv0fbn04AVXH6BfYm/Qm30unroc8lHE=";
   };
 
 
