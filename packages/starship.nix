@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "starship";
-  version = "1.25.1";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "https://github.com/starship/starship/releases/download/v1.25.1/starship-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-EGKiNjSJuTNVKbgyBEcvAmM8CPw2CfGzJb5eujb+tjE=";
+    url = "https://github.com/starship/starship/releases/download/v1.26.0/starship-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-xAsnsR9YBBHgaPL6bBvngwo4fAvEepTR038ysFTFNh0=";
   };
 
 
