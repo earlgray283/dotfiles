@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "biome";
-  version = "2.5.1";
+  version = "2.5.3";
 
   src = fetchurl {
-    url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.5.1/biome-darwin-arm64";
-    hash = "sha256-CP0HtTUD/EM1hu7LTuuSSR26CzHeoKp9wVipNXNKHEw=";
+    url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.5.3/biome-darwin-arm64";
+    hash = "sha256-YQ0+HncNNzNo1MzuWhnF4XNbAjUCT8vtauB+sIDTuwk=";
   };
 
 
