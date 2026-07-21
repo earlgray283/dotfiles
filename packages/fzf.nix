@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "fzf";
-  version = "0.74.0";
+  version = "0.74.1";
 
   src = fetchurl {
-    url = "https://github.com/junegunn/fzf/releases/download/v0.74.0/fzf-0.74.0-darwin_arm64.tar.gz";
-    hash = "sha256-2mDomA5COaD8Xx/P6HPyQ9/ak6ahO2lrAOHchYSneoc=";
+    url = "https://github.com/junegunn/fzf/releases/download/v0.74.1/fzf-0.74.1-darwin_arm64.tar.gz";
+    hash = "sha256-hJ0dM7BQ8E3Wt2VmXkF9oVGw5GVNvtj1XGD9jiPzuiA=";
   };
 
 

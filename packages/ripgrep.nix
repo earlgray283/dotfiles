@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "ripgrep";
-  version = "15.1.0";
+  version = "15.2.0";
 
   src = fetchurl {
-    url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-N46XMokXbKDGBUBU7n9jGgZYdKNSv0Pw+mDvB5trpxU=";
+    url = "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-N1Cy6T834MaSZX2ldNcBmhAcAITaBaeQyD/TNbrZc+Q=";
   };
 
 
