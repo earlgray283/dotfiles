@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "xh";
-  version = "0.26.1";
+  version = "0.26.2";
 
   src = fetchurl {
-    url = "https://github.com/ducaale/xh/releases/download/v0.26.1/xh-v0.26.1-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-xm4vZs8NSGBm+LxrteC1Z/piUZs8ufaLSiz++LzpKJI=";
+    url = "https://github.com/ducaale/xh/releases/download/v0.26.2/xh-v0.26.2-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-zFc50GGoRp0AEcoKuS1KXNcmzFbw7zAQiVOxGfVNBxk=";
   };
 
 

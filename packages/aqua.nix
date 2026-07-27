@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "aqua";
-  version = "2.62.0";
+  version = "2.62.1";
 
   src = fetchurl {
-    url = "https://github.com/aquaproj/aqua/releases/download/v2.62.0/aqua_darwin_arm64.tar.gz";
-    hash = "sha256-tINfaowqoUlsI4IN233VWLv8X5W0JBCs20lpUKkKo0o=";
+    url = "https://github.com/aquaproj/aqua/releases/download/v2.62.1/aqua_darwin_arm64.tar.gz";
+    hash = "sha256-UDlR+udxyMb7lGc0YzmvpxpXVq/Jl+bxnqmFaug9uw4=";
   };
 
 
