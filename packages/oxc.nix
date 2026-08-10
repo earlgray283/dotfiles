@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "oxc";
-  version = "1.75.0";
+  version = "1.77.0";
 
   src = fetchurl {
-    url = "https://github.com/oxc-project/oxc/releases/download/apps_v1.75.0/oxlint-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-bhMc+oFkXc4BS9V3Z7W/FHxOkQiAevDkYPFPLyZZZHM=";
+    url = "https://github.com/oxc-project/oxc/releases/download/apps_v1.77.0/oxlint-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-725r1fzzwg65+BIOVZQIolLE/6C6pK+b/xeAxFuOK/Y=";
   };
 
 

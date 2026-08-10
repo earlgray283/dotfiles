@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "lazygit";
-  version = "0.63.1";
+  version = "0.64.0";
 
   src = fetchurl {
-    url = "https://github.com/jesseduffield/lazygit/releases/download/v0.63.1/lazygit_0.63.1_darwin_arm64.tar.gz";
-    hash = "sha256-uWPp0KH0ZJcIxZSsbJmc3NQ1+OZ54iDnjofEZCut7dY=";
+    url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.0/lazygit_0.64.0_darwin_arm64.tar.gz";
+    hash = "sha256-340t0nzcEHV4Xxq7hbdP45P83B8/32yytYf+s85yujM=";
   };
 
 

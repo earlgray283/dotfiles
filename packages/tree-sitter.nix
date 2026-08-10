@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "tree-sitter";
-  version = "0.26.11";
+  version = "0.26.12";
 
   src = fetchurl {
-    url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.11/tree-sitter-cli-macos-arm64.zip";
-    hash = "sha256-BQ9B1goFS2COo5K6FHIrupRXvcCrEaVwbHfwNNr8aKw=";
+    url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tree-sitter-cli-macos-arm64.zip";
+    hash = "sha256-PKGBYFGNCsj2MUSMdxrBAnSEgq9RiZKtywn5ZCO6FT8=";
   };
 
 
