@@ -47,7 +47,6 @@
         ]
       ))
       nvim-treesitter-context
-      nvim-treesitter-textobjects
       # Lazy loaded (opt) -- lz.n controls when to packadd these
       {
         plugin = nvim-ts-autotag;

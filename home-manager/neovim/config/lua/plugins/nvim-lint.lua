@@ -1,7 +1,7 @@
 require("lz.n").load({
   {
     "nvim-lint",
-    event = "BufRead",
+    event = "BufWritePost",
     after = function()
       local lint = require("lint")
 
