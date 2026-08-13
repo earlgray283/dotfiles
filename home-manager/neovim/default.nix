@@ -14,6 +14,7 @@
       friendly-snippets
       SchemaStore-nvim
       mini-nvim
+      oil-nvim
       (nvim-treesitter.withPlugins (
         p: with p; [
           bash
@@ -78,10 +79,6 @@
       }
       {
         plugin = openingh-nvim;
-        optional = true;
-      }
-      {
-        plugin = oil-nvim;
         optional = true;
       }
       {
