@@ -27,11 +27,7 @@ require("lz.n").load({
 
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
-      -- Format asynchronously so the UI never blocks on save. BufWritePre lets the
-      -- original (unformatted) write go through immediately; once the async job
-      -- finishes we re-write the buffer (noautocmd, to avoid retriggering this
-      -- same autocmd) so the file on disk ends up formatted a moment later.
-      -- Caveat: quitting immediately after `:wq` can race the async job.
+      -- immediate :wq can race this async job and skip the reformat
       vim.api.nvim_create_autocmd("BufWritePre", {
         pattern  = "*",
         callback = function(args)

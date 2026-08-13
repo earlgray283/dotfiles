@@ -15,7 +15,6 @@ vim.filetype.add({
   },
 })
 
--- Mark large files so other autocmds (treesitter, mini.cursorword, ...) can skip them
 vim.api.nvim_create_autocmd("BufReadPre", {
   callback = function(args)
     local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(args.buf))

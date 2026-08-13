@@ -1,6 +1,4 @@
--- oil.nvim must not be lazy-loaded: it hooks BufReadCmd to replace netrw for
--- directories, so it needs to be active before any directory buffer is opened
--- (e.g. `nvim .`), which can happen before any lz.n trigger (cmd/keys/event) fires.
+-- not lazy-loaded: must be active before any directory buffer opens (e.g. `nvim .`)
 require("oil").setup({
   default_file_explorer = true,
   view_options = {

@@ -2,7 +2,6 @@ vim.g.mapleader = " "
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- Skip loading builtin plugins that are never used, to shave startup time
 for _, plugin in ipairs({
   "gzip",
   "zip",
