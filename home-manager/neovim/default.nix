@@ -77,10 +77,6 @@
         optional = true;
       }
       {
-        plugin = vim-illuminate;
-        optional = true;
-      }
-      {
         plugin = nvim-spectre;
         optional = true;
       }
@@ -93,10 +89,6 @@
         optional = true;
       }
       {
-        plugin = nvim-autopairs;
-        optional = true;
-      }
-      {
         plugin = lazydev-nvim;
         optional = true;
       }
@@ -106,10 +98,6 @@
       }
       {
         plugin = nvim-lint;
-        optional = true;
-      }
-      {
-        plugin = nvim-tree-lua;
         optional = true;
       }
       {

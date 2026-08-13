@@ -30,7 +30,6 @@ require("lz.n").load({
         { "<leader>f", group = "find" },
         { "<leader>s", group = "search" },
         { "<leader>t", group = "terminal" },
-        { "<leader>r", group = "refresh" },
       })
     end,
   },

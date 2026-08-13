@@ -1,48 +1,12 @@
 require("lz.n").load({
   {
-    "vim-illuminate",
-    event = "BufRead",
-    after = function()
-      require("illuminate").configure({
-        delay = 100,
-        large_file_cutoff = 2000,
-        providers = { "lsp", "treesitter", "regex" },
-      })
-    end,
-  },
-  {
     "nvim-spectre",
-    cmd = { "Spectre" },
+    cmd  = { "Spectre" },
     keys = {
-      {
-        "<leader>S",
-        function()
-          require("spectre").toggle()
-        end,
-        desc = "Toggle Spectre",
-      },
-      {
-        "<leader>sw",
-        function()
-          require("spectre").open_visual({ select_word = true })
-        end,
-        desc = "Search current word",
-      },
-      {
-        "<leader>sw",
-        function()
-          require("spectre").open_visual()
-        end,
-        mode = "v",
-        desc = "Search current word",
-      },
-      {
-        "<leader>sp",
-        function()
-          require("spectre").open_file_search({ select_word = true })
-        end,
-        desc = "Search on current file",
-      },
+      { "<leader>S",  function() require("spectre").toggle() end,                              desc = "Toggle Spectre" },
+      { "<leader>sw", function() require("spectre").open_visual({ select_word = true }) end,   desc = "Search current word" },
+      { "<leader>sw", function() require("spectre").open_visual() end,                         mode = "v", desc = "Search current word" },
+      { "<leader>sp", function() require("spectre").open_file_search({ select_word = true }) end, desc = "Search on current file" },
     },
     after = function()
       require("spectre").setup({
@@ -53,15 +17,8 @@ require("lz.n").load({
     end,
   },
   {
-    "nvim-autopairs",
-    event = "InsertEnter",
-    after = function()
-      require("nvim-autopairs").setup({})
-    end,
-  },
-  {
     "lazydev.nvim",
-    ft = "lua",
+    ft    = "lua",
     after = function()
       require("lazydev").setup({
         library = {
@@ -76,5 +33,9 @@ require("lz.n").load({
   },
 })
 
--- mini.comment is a start plugin (mini-nvim); set up directly
+-- mini.comment/pairs/cursorword are submodules of mini-nvim, a start plugin; set up directly
 require("mini.comment").setup({})
+require("mini.pairs").setup({})
+require("mini.cursorword").setup({
+  delay = 100,
+})
