@@ -65,10 +65,6 @@
         optional = true;
       }
       {
-        plugin = claudecode-nvim;
-        optional = true;
-      }
-      {
         plugin = gitsigns-nvim;
         optional = true;
       }
@@ -82,6 +78,10 @@
       }
       {
         plugin = openingh-nvim;
+        optional = true;
+      }
+      {
+        plugin = oil-nvim;
         optional = true;
       }
       {
