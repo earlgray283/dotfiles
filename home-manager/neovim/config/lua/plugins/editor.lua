@@ -1,12 +1,37 @@
 require("lz.n").load({
   {
     "nvim-spectre",
-    cmd  = { "Spectre" },
+    cmd = { "Spectre" },
     keys = {
-      { "<leader>S",  function() require("spectre").toggle() end,                              desc = "Toggle Spectre" },
-      { "<leader>sw", function() require("spectre").open_visual({ select_word = true }) end,   desc = "Search current word" },
-      { "<leader>sw", function() require("spectre").open_visual() end,                         mode = "v", desc = "Search current word" },
-      { "<leader>sp", function() require("spectre").open_file_search({ select_word = true }) end, desc = "Search on current file" },
+      {
+        "<leader>S",
+        function()
+          require("spectre").toggle()
+        end,
+        desc = "Toggle Spectre",
+      },
+      {
+        "<leader>sw",
+        function()
+          require("spectre").open_visual({ select_word = true })
+        end,
+        desc = "Search current word",
+      },
+      {
+        "<leader>sw",
+        function()
+          require("spectre").open_visual()
+        end,
+        mode = "v",
+        desc = "Search current word",
+      },
+      {
+        "<leader>sp",
+        function()
+          require("spectre").open_file_search({ select_word = true })
+        end,
+        desc = "Search on current file",
+      },
     },
     after = function()
       require("spectre").setup({
@@ -18,7 +43,7 @@ require("lz.n").load({
   },
   {
     "lazydev.nvim",
-    ft    = "lua",
+    ft = "lua",
     after = function()
       require("lazydev").setup({
         library = {

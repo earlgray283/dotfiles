@@ -1,7 +1,9 @@
 -- Use neovim built-in treesitter (0.10+); nvim-treesitter plugin kept for grammars/plugin deps only
 vim.api.nvim_create_autocmd("FileType", {
   callback = function(ev)
-    if vim.b[ev.buf].bigfile then return end
+    if vim.b[ev.buf].bigfile then
+      return
+    end
     pcall(vim.treesitter.start, ev.buf)
   end,
 })
