@@ -7,7 +7,7 @@ require("mini.icons").setup()
 
 require("mini.statusline").setup({ use_icons = true })
 
-require("mini.comment").setup({})
+-- No mini.comment: gc/gcc and the gc textobject are built in since 0.10.
 require("mini.pairs").setup({})
 require("mini.cursorword").setup({
   delay = 100,
