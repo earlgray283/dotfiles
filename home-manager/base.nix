@@ -15,7 +15,6 @@
     ./gh.nix
     ./git.nix
     ./zsh.nix
-    ./sheldon.nix
     ./ssh.nix
     ./tmux.nix
     ./claude-code/claude-code.nix
