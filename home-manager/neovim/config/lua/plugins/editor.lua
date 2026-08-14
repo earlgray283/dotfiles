@@ -1,44 +1,42 @@
 require("lz.n").load({
   {
-    "nvim-spectre",
-    cmd = { "Spectre" },
+    "grug-far.nvim",
+    cmd = { "GrugFar", "GrugFarWithin" },
     keys = {
       {
         "<leader>S",
         function()
-          require("spectre").toggle()
+          require("grug-far").open()
         end,
-        desc = "Toggle Spectre",
+        desc = "Search and replace",
       },
       {
         "<leader>sw",
         function()
-          require("spectre").open_visual({ select_word = true })
+          require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } })
         end,
         desc = "Search current word",
       },
       {
         "<leader>sw",
         function()
-          require("spectre").open_visual()
+          require("grug-far").with_visual_selection()
         end,
         mode = "v",
-        desc = "Search current word",
+        desc = "Search current selection",
       },
       {
         "<leader>sp",
         function()
-          require("spectre").open_file_search({ select_word = true })
+          require("grug-far").open({
+            prefills = { paths = vim.fn.expand("%"), search = vim.fn.expand("<cword>") },
+          })
         end,
         desc = "Search on current file",
       },
     },
     after = function()
-      require("spectre").setup({
-        replace_engine = {
-          sed = { cmd = "sed", args = { "-i", "", "-E" } },
-        },
-      })
+      require("grug-far").setup({})
     end,
   },
   {
@@ -56,11 +54,4 @@ require("lz.n").load({
     "openingh.nvim",
     cmd = { "OpenInGHRepo", "OpenInGHFile", "OpenInGHFileLines" },
   },
-})
-
--- mini.comment/pairs/cursorword are submodules of mini-nvim, a start plugin; set up directly
-require("mini.comment").setup({})
-require("mini.pairs").setup({})
-require("mini.cursorword").setup({
-  delay = 100,
 })

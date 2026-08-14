@@ -9,10 +9,11 @@
       # Always loaded (start)
       lz-n
       catppuccin-nvim
-      nvim-web-devicons
-      lspkind-nvim
       friendly-snippets
       SchemaStore-nvim
+      # Supplies icons (replacing nvim-web-devicons and lspkind) and the
+      # statusline (replacing lualine), on top of comment/pairs/cursorword.
+      # oil, fzf-lua and which-key all prefer mini.icons when it is set up.
       mini-nvim
       oil-nvim
       (nvim-treesitter.withPlugins (
@@ -46,14 +47,15 @@
           yaml
         ]
       ))
-      nvim-treesitter-context
       # Lazy loaded (opt) -- lz.n controls when to packadd these
       {
-        plugin = nvim-ts-autotag;
+        # treesitter.lua declares this with `event = "BufRead"`, which only has
+        # an effect once the plugin is opt.
+        plugin = nvim-treesitter-context;
         optional = true;
       }
       {
-        plugin = lualine-nvim;
+        plugin = nvim-ts-autotag;
         optional = true;
       }
       {
@@ -73,7 +75,7 @@
         optional = true;
       }
       {
-        plugin = nvim-spectre;
+        plugin = grug-far-nvim;
         optional = true;
       }
       {
