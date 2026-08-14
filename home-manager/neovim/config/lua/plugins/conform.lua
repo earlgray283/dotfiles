@@ -5,32 +5,34 @@ require("lz.n").load({
     after = function()
       require("conform").setup({
         formatters_by_ft = {
-          cue            = { "cue_fmt" },
-          dockerfile     = { "dockerfmt" },
-          go             = { "goimports" },
-          javascript     = { "biome", "prettier", stop_after_first = true },
-          just           = { "just" },
-          json           = { "biome" },
-          lua            = { "stylua" },
-          markdown       = { "dprint" },
-          nix            = { "nixfmt" },
-          proto          = { "buf", "clang-format", stop_after_first = true },
-          rust           = { "rustfmt" },
-          sql            = { "sqlfluff" },
-          terraform      = { "terraform_fmt" },
-          toml           = { "taplo" },
-          typescript     = { "biome", "prettier", stop_after_first = true },
+          cue = { "cue_fmt" },
+          dockerfile = { "dockerfmt" },
+          go = { "goimports" },
+          javascript = { "biome", "prettier", stop_after_first = true },
+          just = { "just" },
+          json = { "biome" },
+          lua = { "stylua" },
+          markdown = { "dprint" },
+          nix = { "nixfmt" },
+          proto = { "buf", "clang-format", stop_after_first = true },
+          rust = { "rustfmt" },
+          sql = { "sqlfluff" },
+          terraform = { "terraform_fmt" },
+          toml = { "taplo" },
+          typescript = { "biome", "prettier", stop_after_first = true },
           typescriptreact = { "biome", "prettier", stop_after_first = true },
-          yaml           = { "yamlfmt" },
+          yaml = { "yamlfmt" },
         },
       })
 
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
       vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern  = "*",
+        pattern = "*",
         callback = function(args)
-          if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then return end
+          if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then
+            return
+          end
           require("conform").format({ bufnr = args.buf, timeout_ms = 2000, lsp_format = "never" })
         end,
       })

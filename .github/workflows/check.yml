@@ -1,0 +1,39 @@
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Both configurations target aarch64-darwin, so they can only be built on a
+  # macOS ARM runner. Without this the weekly auto-update PR is merged with no
+  # evidence that it evaluates, let alone builds.
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: NixOS/nix-installer-action@main
+        with:
+          extra-conf: accept-flake-config = true
+
+      - name: nix flake check
+        run: nix flake check --print-build-logs
+
+      - name: deadnix
+        run: nix run .#deadnix -- --fail .
+
+      - name: Build home-manager configuration
+        run: |
+          nix build --print-build-logs --no-link \
+            .#homeConfigurations.earlgray.activationPackage
+
+      - name: Build nix-darwin configuration
+        run: |
+          nix build --print-build-logs --no-link \
+            .#darwinConfigurations.makabeee-macbook-air.system

@@ -6,7 +6,7 @@ require("lz.n").load({
       require("lualine").setup({
         options = {
           globalstatus = true,
-          theme        = "catppuccin",
+          theme = "catppuccin",
         },
         sections = {
           lualine_a = { "mode" },

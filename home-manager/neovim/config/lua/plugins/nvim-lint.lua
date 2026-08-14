@@ -6,16 +6,16 @@ require("lz.n").load({
       local lint = require("lint")
 
       lint.linters_by_ft = {
-        dockerfile      = { "hadolint" },
-        go              = { "golangcilint" },
-        markdown        = { "vale" },
-        nix             = { "nix" },
-        proto           = { "protolint", "buf_lint" },
-        rust            = { "clippy" },
-        sql             = { "sqlruff" },
-        typescript      = { "oxlint" },
+        dockerfile = { "hadolint" },
+        go = { "golangcilint" },
+        markdown = { "vale" },
+        nix = { "nix" },
+        proto = { "protolint", "buf_lint" },
+        rust = { "clippy" },
+        sql = { "sqlruff" },
+        typescript = { "oxlint" },
         typescriptreact = { "oxlint" },
-        javascript      = { "oxlint" },
+        javascript = { "oxlint" },
         ["yaml.ghaction"] = { "actionlint" },
       }
 
