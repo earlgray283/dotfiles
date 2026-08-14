@@ -42,6 +42,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     ghostty = {
       url = "github:ghostty-org/ghostty";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -95,12 +100,15 @@
       nixpkgs,
       home-manager,
       nix-index-database,
+      treefmt-nix,
       ...
     }:
     let
       system = "aarch64-darwin";
 
       localPackages = pkgs.callPackage ./packages { };
+
+      treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
 
       pkgs = import nixpkgs {
         inherit system;
@@ -120,6 +128,13 @@
       };
     in
     {
+      # `nix fmt`
+      formatter.${system} = treefmtEval.config.build.wrapper;
+
+      # `nix flake check`. The configurations themselves are built in CI rather
+      # than here, so that a plain `nix flake check` stays cheap.
+      checks.${system}.formatting = treefmtEval.config.build.check self;
+
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#makabeee-macbook-air
       darwinConfigurations."makabeee-macbook-air" = nix-darwin.lib.darwinSystem {
