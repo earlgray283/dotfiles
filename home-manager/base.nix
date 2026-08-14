@@ -19,6 +19,7 @@
     ./ssh.nix
     ./tmux.nix
     ./claude-code/claude-code.nix
+    ./codex.nix
     ./opencode.nix
     ./mcp.nix
     ./direnv.nix
@@ -30,7 +31,7 @@
 
   # Enable overlays
   nixpkgs.overlays = [
-    inputs.llm-agents.overlays.default
+    inputs.llm-agents.overlays.shared-nixpkgs
     # Workaround: direnv test-fish hangs on macOS due to broken fish code signature
     # caused by a nix registerOutputs bug (NixOS/nixpkgs#507531, NixOS/nix#15638)
     (final: prev: {
@@ -73,6 +74,7 @@
     # Git Tools
     localPackages.lazygit
     localPackages.gitleaks
+    localPackages.worktrunk # git worktree manager (wt)
     pkgs.pre-commit
 
     # Go
