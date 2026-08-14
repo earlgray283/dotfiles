@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   claude-plugins-official,
   superpowers-skills,
   claude-mem,
@@ -7,6 +8,9 @@
   ...
 }:
 
+let
+  dotfilesDir = "${config.home.homeDirectory}/dev/dotfiles/home-manager/claude-code";
+in
 {
   programs.claude-code = {
     enable = true;
@@ -14,8 +18,6 @@
     package = pkgs.llm-agents.claude-code;
 
     enableMcpIntegration = true;
-
-    context = ./CLAUDE.md;
 
     marketplaces = {
       claude-plugins-official = claude-plugins-official;
@@ -46,6 +48,8 @@
     hooksDir = ./hooks;
 
     settings = {
+      model = "claude-opus-5";
+      effortLevel = "high";
       env = {
         DISABLE_AUTOUPDATER = "1";
         CLAUDE_CODE_NO_FLICKER = "1";
@@ -86,7 +90,6 @@
         ];
       };
       includeCoAuthoredBy = true;
-      effortLevel = "xhigh";
       permissions = {
         allow = [
           "Bash(bin2nix *)"
@@ -134,4 +137,7 @@
       };
     };
   };
+
+  home.file.".claude/CLAUDE.md".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/CLAUDE.md";
 }
