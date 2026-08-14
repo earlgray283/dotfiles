@@ -2,7 +2,6 @@
   pkgs,
   inputs,
   lib,
-  config,
   localPackages,
   ...
 }:
@@ -33,7 +32,7 @@
     inputs.llm-agents.overlays.shared-nixpkgs
     # Workaround: direnv test-fish hangs on macOS due to broken fish code signature
     # caused by a nix registerOutputs bug (NixOS/nixpkgs#507531, NixOS/nix#15638)
-    (final: prev: {
+    (_final: prev: {
       direnv = prev.direnv.overrideAttrs (_: {
         doCheck = false;
       });

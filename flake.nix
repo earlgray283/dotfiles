@@ -114,8 +114,8 @@
         inherit system;
         config.allowUnfree = true;
         overlays = [
-          (final: prev: {
-            _1password-cli = prev._1password-cli.overrideAttrs (old: rec {
+          (_final: prev: {
+            _1password-cli = prev._1password-cli.overrideAttrs (_old: rec {
               version = "2.33.0-beta.02";
               # nix store prefetch-file --hash-type sha256 "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_apple_universal_v${version}.pkg"
               src = prev.fetchurl {
@@ -130,6 +130,11 @@
     {
       # `nix fmt`
       formatter.${system} = treefmtEval.config.build.wrapper;
+
+      # Pins the linter to this flake's nixpkgs. `--inputs-from .` would be the
+      # usual way to do that, but it registers every input by name and
+      # `_1password-shell-plugins` is not a valid flake ID, so it errors out.
+      packages.${system}.deadnix = pkgs.deadnix;
 
       # `nix flake check`. The configurations themselves are built in CI rather
       # than here, so that a plain `nix flake check` stays cheap.

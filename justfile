@@ -1,7 +1,7 @@
-# --inputs-from pins deadnix to this flake's nixpkgs rather than resolving
+# .#deadnix pins the linter to this flake's nixpkgs rather than resolving
 # github:astro/deadnix afresh on every run.
 lint:
-    nix run --inputs-from . nixpkgs#deadnix -- -e .
+    nix run .#deadnix -- -e .
 
 fmt:
     nix fmt

@@ -25,6 +25,9 @@ jobs:
       - name: nix flake check
         run: nix flake check --print-build-logs
 
+      - name: deadnix
+        run: nix run .#deadnix -- --fail .
+
       - name: Build home-manager configuration
         run: |
           nix build --print-build-logs --no-link \
@@ -34,17 +37,3 @@ jobs:
         run: |
           nix build --print-build-logs --no-link \
             .#darwinConfigurations.makabeee-macbook-air.system
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: NixOS/nix-installer-action@main
-        with:
-          extra-conf: accept-flake-config = true
-
-      # --inputs-from pins deadnix to this flake's nixpkgs instead of whatever
-      # the registry resolves to today.
-      - name: deadnix
-        run: nix run --inputs-from . nixpkgs#deadnix -- --fail .

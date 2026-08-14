@@ -5,7 +5,9 @@ require("lz.n").load({
     keys = {
       {
         "<leader>?",
-        function() require("which-key").show({ global = false }) end,
+        function()
+          require("which-key").show({ global = false })
+        end,
         desc = "Buffer keymaps",
       },
     },
@@ -14,12 +16,12 @@ require("lz.n").load({
       wk.setup({
         plugins = {
           presets = {
-            operators    = true, -- d/y/c などの後に使えるモーションを表示
-            motions      = true, -- w/b/e などのモーションを表示
+            operators = true, -- d/y/c などの後に使えるモーションを表示
+            motions = true, -- w/b/e などのモーションを表示
             text_objects = true, -- a/i の後にテキストオブジェクト一覧を表示
-            windows      = true, -- <C-w> コマンド一覧
-            z            = true, -- z コマンド一覧（fold, spell 等）
-            g            = true, -- g コマンド一覧
+            windows = true, -- <C-w> コマンド一覧
+            z = true, -- z コマンド一覧（fold, spell 等）
+            g = true, -- g コマンド一覧
           },
         },
       })

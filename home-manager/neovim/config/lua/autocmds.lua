@@ -1,17 +1,17 @@
 vim.filetype.add({
   pattern = {
-    [".*/.github/workflows/.*%.yml"]  = "yaml.ghaction",
+    [".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
     [".*/.github/workflows/.*%.yaml"] = "yaml.ghaction",
-    [".*/.envrc"]                     = "zsh",
-    [".*/Dockerfile.*"]               = "Dockerfile",
-    [".*/templates/.*%.tpl"]          = "helm",
-    [".*/templates/.*%.ya?ml"]        = "helm",
-    ["helmfile.*%.ya?ml"]             = "helm",
-    [".*%.go%.tmpl"]                  = "gotmpl",
+    [".*/.envrc"] = "zsh",
+    [".*/Dockerfile.*"] = "Dockerfile",
+    [".*/templates/.*%.tpl"] = "helm",
+    [".*/templates/.*%.ya?ml"] = "helm",
+    ["helmfile.*%.ya?ml"] = "helm",
+    [".*%.go%.tmpl"] = "gotmpl",
   },
   extension = {
     template = "templ",
-    gotmpl   = "gotmpl",
+    gotmpl = "gotmpl",
   },
 })
 

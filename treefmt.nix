@@ -10,7 +10,12 @@
     nixfmt.enable = true;
     stylua.enable = true; # home-manager/neovim/config
     taplo.enable = true; # config.toml
-    yamlfmt.enable = true; # .github/workflows
+    yamlfmt = {
+      enable = true; # .github/workflows
+      # Without this yamlfmt collapses the blank lines between workflow steps,
+      # which is most of what makes them readable.
+      settings.formatter.retain_line_breaks_single = true;
+    };
   };
 
   settings.global.excludes = [
