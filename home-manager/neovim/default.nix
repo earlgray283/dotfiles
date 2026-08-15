@@ -11,9 +11,10 @@
       catppuccin-nvim
       friendly-snippets
       SchemaStore-nvim
-      # Supplies icons (replacing nvim-web-devicons and lspkind) and the
-      # statusline (replacing lualine), on top of comment/pairs/cursorword.
-      # oil, fzf-lua and which-key all prefer mini.icons when it is set up.
+      # Supplies icons (replacing nvim-web-devicons and lspkind), the
+      # statusline (replacing lualine), and pairs/cursorword (replacing
+      # nvim-autopairs and vim-illuminate). oil, fzf-lua and which-key all
+      # prefer mini.icons when it is set up.
       mini-nvim
       oil-nvim
       (nvim-treesitter.withPlugins (
