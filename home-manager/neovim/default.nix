@@ -11,10 +11,7 @@
       catppuccin-nvim
       friendly-snippets
       SchemaStore-nvim
-      # Supplies icons (replacing nvim-web-devicons and lspkind), the
-      # statusline (replacing lualine), and pairs/cursorword (replacing
-      # nvim-autopairs and vim-illuminate). oil, fzf-lua and which-key all
-      # prefer mini.icons when it is set up.
+      # icons, statusline, pairs, cursorword
       mini-nvim
       oil-nvim
       (nvim-treesitter.withPlugins (
@@ -50,8 +47,6 @@
       ))
       # Lazy loaded (opt) -- lz.n controls when to packadd these
       {
-        # treesitter.lua declares this with `event = "BufRead"`, which only has
-        # an effect once the plugin is opt.
         plugin = nvim-treesitter-context;
         optional = true;
       }

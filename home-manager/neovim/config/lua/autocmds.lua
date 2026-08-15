@@ -15,8 +15,6 @@ vim.filetype.add({
   },
 })
 
--- Everything that walks the whole buffer gets switched off past 1MB. The flag
--- is read by treesitter.lua, nvim-lint.lua and conform.lua (disable_autoformat).
 vim.api.nvim_create_autocmd("BufReadPre", {
   callback = function(args)
     local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(args.buf))

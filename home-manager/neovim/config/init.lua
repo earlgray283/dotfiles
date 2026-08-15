@@ -5,7 +5,7 @@ require("autocmds")
 require("keymaps")
 
 require("plugins.colorscheme")
--- Before anything that resolves icons, so mini.icons is the one it finds.
+-- Before anything that resolves icons.
 require("plugins.mini")
 require("plugins.treesitter")
 require("plugins.lsp")

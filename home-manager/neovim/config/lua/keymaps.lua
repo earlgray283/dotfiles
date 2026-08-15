@@ -12,9 +12,7 @@ end, { silent = true, desc = "Open diagnostic float" })
 map("n", "<C-Up>", "<Cmd>resize +2<CR>", { desc = "Resize window up" })
 map("n", "<C-Down>", "<Cmd>resize -2<CR>", { desc = "Resize window down" })
 
--- Bound per buffer on attach. Naming vim.lsp.buf.* at file scope would pull the
--- whole LSP stack into startup (~4ms) before any client exists, and the maps
--- would be live in buffers that have no server anyway.
+-- Keep vim.lsp.buf.* out of file scope: naming it there loads the LSP stack at startup.
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local function opts(desc)

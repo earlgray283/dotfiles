@@ -3,9 +3,7 @@ require("lz.n").load({
     "nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     after = function()
-      -- nvim-lspconfig ships each server as lsp/<name>.lua, which
-      -- vim.lsp.enable() resolves straight off the runtimepath. Requiring the
-      -- lspconfig module would load the old framework for nothing.
+      -- No require("lspconfig"): vim.lsp.enable reads lsp/<name>.lua off the runtimepath.
       vim.lsp.config("nixd", {
         settings = {
           nixd = {

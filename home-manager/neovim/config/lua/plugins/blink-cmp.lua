@@ -15,9 +15,6 @@ require("lz.n").load({
             draw = {
               treesitter = { "lsp" },
               components = {
-                -- mini.icons covers both the file icons (Path source) and the
-                -- LSP kind symbols, so neither nvim-web-devicons nor lspkind
-                -- is needed here.
                 kind_icon = {
                   text = function(ctx)
                     local category = ctx.source_name == "Path" and "file" or "lsp"
@@ -57,10 +54,7 @@ require("lz.n").load({
         },
 
         fuzzy = {
-          -- nixpkgs ships target/release/libblink_cmp_fuzzy.dylib with the
-          -- plugin, so the Rust matcher is always there. Demanding it means a
-          -- packaging regression fails loudly instead of quietly dropping back
-          -- to the much slower Lua matcher.
+          -- nixpkgs ships the dylib; fail loudly rather than fall back to the Lua matcher.
           implementation = "rust",
           sorts = { "exact", "score", "sort_text" },
         },
