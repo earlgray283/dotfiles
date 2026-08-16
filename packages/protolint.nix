@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation {
   pname = "protolint";
-  version = "0.56.4";
+  version = "0.57.0";
 
   src = fetchurl {
-    url = "https://github.com/yoheimuta/protolint/releases/download/v0.56.4/protolint_0.56.4_darwin_arm64.tar.gz";
-    hash = "sha256-MlPwjSrvtY+GEXM2vwZne3tzdHZTpEb+U57MUuNLU3E=";
+    url = "https://github.com/yoheimuta/protolint/releases/download/v0.57.0/protolint_0.57.0_darwin_arm64.tar.gz";
+    hash = "sha256-pb5vQxSEsFS4KBxxkD36N+Nm9psJhHJxDYTBiE9ljrg=";
   };
 
   sourceRoot = ".";
