@@ -21,6 +21,7 @@
       "com.apple.springing.enabled" = true; # Enable spring-loading for directories
       "com.apple.trackpad.forceClick" = true; # Enable Force Touch / haptic feedback
       "com.apple.trackpad.scaling" = 2.0; # Trackpad tracking speed
+      _HIHideMenuBar = true; # Automatically hide and show the menu bar
     };
 
     dock = {
@@ -89,6 +90,12 @@
       NSGlobalDomain = {
         "com.apple.keyboard.fnState" = true; # Use F1, F2, etc. as standard function keys
         "com.apple.sound.uiaudio.enabled" = 0; # Disable UI sounds
+        "com.apple.sound.beep.flash" = 0; # Disable screen flash on alert sound
+        AppleMenuBarVisibleInFullscreen = false; # Hide the menu bar in fullscreen apps
+        AppleMiniaturizeOnDoubleClick = false; # Don't minimize windows on title bar double-click
+      };
+      "com.apple.dock" = {
+        enterMissionControlByTopWindowDrag = false; # Don't enter Mission Control when dragging a window to the screen edge
       };
       "com.apple.menuextra.clock" = {
         ShowAMPM = true; # Show AM/PM indicator
@@ -127,6 +134,14 @@
       "android-studio"
       "insta360-studio"
       "sigmaos"
+      "brave-browser"
+      "claude"
+      "kiro"
+      "notion"
+      "protonvpn"
+      "raycast"
+      "sony-ps-remote-play"
+      "zed"
     ];
 
     onActivation = {
@@ -144,6 +159,8 @@
     };
     options = "--delete-older-than 7d";
   };
+
+  nix.optimise.automatic = true;
 
   # Enable alternative shell support in nix-darwin.
   # programs.fish.enable = true;

@@ -33,7 +33,14 @@ jobs:
           nix build --print-build-logs --no-link \
             .#homeConfigurations.earlgray.activationPackage
 
-      - name: Build nix-darwin configuration
+      - name: Build nix-darwin configuration(s)
+        # Builds whatever hosts are defined rather than hardcoding a hostname,
+        # so this step keeps working across host renames.
         run: |
-          nix build --print-build-logs --no-link \
-            .#darwinConfigurations.makabeee-macbook-air.system
+          hosts=$(nix eval --raw --apply \
+            'x: builtins.concatStringsSep " " (builtins.attrNames x)' \
+            .#darwinConfigurations)
+          for host in $hosts; do
+            nix build --print-build-logs --no-link \
+              .#darwinConfigurations.$host.system
+          done
