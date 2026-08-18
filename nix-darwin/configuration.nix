@@ -127,6 +127,14 @@
       "android-studio"
       "insta360-studio"
       "sigmaos"
+      "brave-browser"
+      "claude"
+      "kiro"
+      "notion"
+      "protonvpn"
+      "raycast"
+      "sony-ps-remote-play"
+      "zed"
     ];
 
     onActivation = {
@@ -144,6 +152,8 @@
     };
     options = "--delete-older-than 7d";
   };
+
+  nix.optimise.automatic = true;
 
   # Enable alternative shell support in nix-darwin.
   # programs.fish.enable = true;
