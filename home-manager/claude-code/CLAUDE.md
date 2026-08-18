@@ -3,9 +3,9 @@
 `CLAUDE.md` はあなたと User で共に育てていくものです。
 User の指摘で恒久的な改善が必要だとあなたが判断した場合、`CLAUDE.md` の更新を User に問うてください。
 
-> **`~/.claude` は Nix home-manager で管理されています。直接編集せず、`~/Workspace/nix-dotfiles/home-manager/claude-code/` を編集してください。**
+> **`~/.claude` は Nix home-manager で管理されています。直接編集せず、`~/dev/dotfiles/home-manager/claude-code/` を編集してください。**
 >
-> | `~/.claude` のパス | nix-dotfiles での管理場所 |
+> | `~/.claude` のパス | dotfiles での管理場所 |
 > |---|---|
 > | `~/.claude/CLAUDE.md` | `home-manager/claude-code/CLAUDE.md` |
 > | `~/.claude/settings.json` | `home-manager/claude-code/claude-code.nix` の `settings` |
@@ -34,10 +34,14 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
 - **Do NOT chain commands starting with `cd`** (e.g. `cd /path && git add ...` is forbidden — breaks permission matching in `settings.json`).
 - **Do NOT use `git -C /path`** — use `cd /path` in a prior Bash call instead, for readability.
 - Each Bash call must start with the actual command that matches a permission rule (i.e. the command after any `cd` in a chain would not match — hence no chains).
+- **`sed` は使用不可** — `alias sed=gsed` があるが `gsed` は未インストール。`rg` / `awk` / Edit ツールを使うこと。
+- **パイプの終了コードは `$pipestatus[1]`** — zsh なので `$?` はパイプ最終段の結果になる（`PIPESTATUS` は空）。`cmd | tail` で成否を判定しないこと。
 
 # Coding Rules
 
 - Code comments and identifiers should remain in English unless the project dictates otherwise.
+- コード内コメントは最小限に。理由・計測値・トレードオフはコミットメッセージへ。コードに残すのは「無いと誤って修正される」箇所のみ、原則1行。
+- 互換層・ラッパー・フォールバックを足す前に、それが本当に必要かソースで確認すること。
 
 # Edit Rules
 
