@@ -2,6 +2,24 @@ vim.g.mapleader = " "
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+for _, plugin in ipairs({
+  "gzip",
+  "zip",
+  "zipPlugin",
+  "tar",
+  "tarPlugin",
+  "getscript",
+  "getscriptPlugin",
+  "vimball",
+  "vimballPlugin",
+  "2html_plugin",
+  "logipat",
+  "rrhelper",
+  "spellfile_plugin",
+}) do
+  vim.g["loaded_" .. plugin] = 1
+end
+
 vim.opt.clipboard = "unnamedplus"
 vim.opt.number = true
 vim.opt.autowrite = true

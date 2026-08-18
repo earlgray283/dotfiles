@@ -9,11 +9,11 @@
       # Always loaded (start)
       lz-n
       catppuccin-nvim
-      nvim-web-devicons
-      lspkind-nvim
       friendly-snippets
       SchemaStore-nvim
+      # icons, statusline, pairs, cursorword
       mini-nvim
+      oil-nvim
       (nvim-treesitter.withPlugins (
         p: with p; [
           bash
@@ -45,15 +45,13 @@
           yaml
         ]
       ))
-      nvim-treesitter-context
-      nvim-treesitter-textobjects
       # Lazy loaded (opt) -- lz.n controls when to packadd these
       {
-        plugin = nvim-ts-autotag;
+        plugin = nvim-treesitter-context;
         optional = true;
       }
       {
-        plugin = lualine-nvim;
+        plugin = nvim-ts-autotag;
         optional = true;
       }
       {
@@ -65,10 +63,6 @@
         optional = true;
       }
       {
-        plugin = claudecode-nvim;
-        optional = true;
-      }
-      {
         plugin = gitsigns-nvim;
         optional = true;
       }
@@ -77,11 +71,7 @@
         optional = true;
       }
       {
-        plugin = vim-illuminate;
-        optional = true;
-      }
-      {
-        plugin = nvim-spectre;
+        plugin = grug-far-nvim;
         optional = true;
       }
       {
@@ -90,10 +80,6 @@
       }
       {
         plugin = blink-cmp;
-        optional = true;
-      }
-      {
-        plugin = nvim-autopairs;
         optional = true;
       }
       {
@@ -106,10 +92,6 @@
       }
       {
         plugin = nvim-lint;
-        optional = true;
-      }
-      {
-        plugin = nvim-tree-lua;
         optional = true;
       }
       {

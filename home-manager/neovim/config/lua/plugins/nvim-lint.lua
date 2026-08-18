@@ -1,7 +1,7 @@
 require("lz.n").load({
   {
     "nvim-lint",
-    event = "BufRead",
+    event = "BufWritePost",
     after = function()
       local lint = require("lint")
 
@@ -20,7 +20,10 @@ require("lz.n").load({
       }
 
       vim.api.nvim_create_autocmd("BufWritePost", {
-        callback = function()
+        callback = function(args)
+          if vim.b[args.buf].bigfile then
+            return
+          end
           lint.try_lint()
         end,
       })

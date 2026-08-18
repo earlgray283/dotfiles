@@ -1,18 +1,20 @@
+vim.loader.enable()
+
 require("options")
 require("autocmds")
 require("keymaps")
 
 require("plugins.colorscheme")
+-- Before anything that resolves icons.
+require("plugins.mini")
 require("plugins.treesitter")
 require("plugins.lsp")
 require("plugins.blink-cmp")
 require("plugins.conform")
 require("plugins.nvim-lint")
 require("plugins.gitsigns")
-require("plugins.lualine")
 require("plugins.fzf-lua")
 require("plugins.which-key")
-require("plugins.claudecode")
-require("plugins.nvim-tree")
+require("plugins.oil")
 require("plugins.toggleterm")
 require("plugins.editor")

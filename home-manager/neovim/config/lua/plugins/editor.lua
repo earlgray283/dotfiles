@@ -1,62 +1,42 @@
 require("lz.n").load({
   {
-    "vim-illuminate",
-    event = "BufRead",
-    after = function()
-      require("illuminate").configure({
-        delay = 100,
-        large_file_cutoff = 2000,
-        providers = { "lsp", "treesitter", "regex" },
-      })
-    end,
-  },
-  {
-    "nvim-spectre",
-    cmd = { "Spectre" },
+    "grug-far.nvim",
+    cmd = { "GrugFar", "GrugFarWithin" },
     keys = {
       {
         "<leader>S",
         function()
-          require("spectre").toggle()
+          require("grug-far").open()
         end,
-        desc = "Toggle Spectre",
+        desc = "Search and replace",
       },
       {
         "<leader>sw",
         function()
-          require("spectre").open_visual({ select_word = true })
+          require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } })
         end,
         desc = "Search current word",
       },
       {
         "<leader>sw",
         function()
-          require("spectre").open_visual()
+          require("grug-far").with_visual_selection()
         end,
         mode = "v",
-        desc = "Search current word",
+        desc = "Search current selection",
       },
       {
         "<leader>sp",
         function()
-          require("spectre").open_file_search({ select_word = true })
+          require("grug-far").open({
+            prefills = { paths = vim.fn.expand("%"), search = vim.fn.expand("<cword>") },
+          })
         end,
         desc = "Search on current file",
       },
     },
     after = function()
-      require("spectre").setup({
-        replace_engine = {
-          sed = { cmd = "sed", args = { "-i", "", "-E" } },
-        },
-      })
-    end,
-  },
-  {
-    "nvim-autopairs",
-    event = "InsertEnter",
-    after = function()
-      require("nvim-autopairs").setup({})
+      require("grug-far").setup({})
     end,
   },
   {
@@ -75,6 +55,3 @@ require("lz.n").load({
     cmd = { "OpenInGHRepo", "OpenInGHFile", "OpenInGHFileLines" },
   },
 })
-
--- mini.comment is a start plugin (mini-nvim); set up directly
-require("mini.comment").setup({})

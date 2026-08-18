@@ -26,11 +26,9 @@ require("lz.n").load({
         },
       })
       wk.add({
-        { "<leader>c", group = "claude" },
         { "<leader>f", group = "find" },
         { "<leader>s", group = "search" },
         { "<leader>t", group = "terminal" },
-        { "<leader>r", group = "refresh" },
       })
     end,
   },

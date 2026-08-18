@@ -3,9 +3,7 @@ require("lz.n").load({
     "nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     after = function()
-      -- Load lspconfig to register default server configs (cmd, filetypes, root_markers)
-      require("lspconfig")
-
+      -- No require("lspconfig"): vim.lsp.enable reads lsp/<name>.lua off the runtimepath.
       vim.lsp.config("nixd", {
         settings = {
           nixd = {

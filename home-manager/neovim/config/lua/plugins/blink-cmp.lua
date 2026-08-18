@@ -17,32 +17,22 @@ require("lz.n").load({
               components = {
                 kind_icon = {
                   text = function(ctx)
-                    local icon = ctx.kind_icon
-                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
-                      if dev_icon then
-                        icon = dev_icon
-                      end
-                    else
-                      icon = require("lspkind").symbol_map[ctx.kind] or ""
-                    end
-                    return icon .. ctx.icon_gap
+                    local category = ctx.source_name == "Path" and "file" or "lsp"
+                    local key = ctx.source_name == "Path" and ctx.label or ctx.kind
+                    local icon = require("mini.icons").get(category, key)
+                    return (icon or ctx.kind_icon) .. ctx.icon_gap
                   end,
                   highlight = function(ctx)
-                    local hl = ctx.kind_hl
-                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local _, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-                      if dev_hl then
-                        hl = dev_hl
-                      end
-                    end
-                    return hl
+                    local category = ctx.source_name == "Path" and "file" or "lsp"
+                    local key = ctx.source_name == "Path" and ctx.label or ctx.kind
+                    local _, hl = require("mini.icons").get(category, key)
+                    return hl or ctx.kind_hl
                   end,
                 },
                 kind = {
                   highlight = function(ctx)
-                    local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
-                    return hl
+                    local _, hl = require("mini.icons").get("lsp", ctx.kind)
+                    return hl or ctx.kind_hl
                   end,
                 },
               },
@@ -64,7 +54,8 @@ require("lz.n").load({
         },
 
         fuzzy = {
-          implementation = "prefer_rust_with_warning",
+          -- nixpkgs ships the dylib; fail loudly rather than fall back to the Lua matcher.
+          implementation = "rust",
           sorts = { "exact", "score", "sort_text" },
         },
       })
