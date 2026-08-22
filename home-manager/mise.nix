@@ -19,6 +19,10 @@ let
     dprint = "0.55.2";
     fd = "10.4.2";
     fzf = "0.74.2";
+    "github:docker/docker-language-server" = "0.20.1";
+    "github:Feel-ix-343/markdown-oxide" = "0.25.12";
+    "github:quarylabs/sqruff" = "0.39.0";
+    "github:reteps/dockerfmt" = "0.5.4";
     gh = "2.97.0";
     gitleaks = "8.30.1";
     go = "1.26.5";
@@ -29,6 +33,9 @@ let
     lazygit = "0.64.1";
     lua-language-server = "3.18.2";
     node = "24.18.0";
+    "npm:@tailwindcss/language-server" = "0.14.29";
+    "npm:typescript-language-server" = "5.3.0";
+    "npm:yaml-language-server" = "1.24.0";
     oxlint = "1.75.0";
     "pre-commit" = "4.5.1";
     protolint = "0.56.4";

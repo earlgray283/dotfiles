@@ -71,8 +71,6 @@
     pkgs.luarocks
 
     # JavaScript/TypeScript
-    pkgs.typescript-language-server
-    pkgs.tailwindcss-language-server
 
     # nix
     pkgs.nixd # Nix Language Server
@@ -80,16 +78,12 @@
     pkgs.nixfmt-tree
 
     # YAML
-    pkgs.yaml-language-server
 
     # TOML
 
     # Markdown
-    pkgs.markdown-oxide # Markdown LSP
 
     # Docker
-    pkgs.docker-language-server
-    pkgs.dockerfmt
     # pkgs.cockroachdb            # Linux only - not available on macOS
 
     # Terraform
@@ -99,7 +93,6 @@
     # Linters/Formatters
 
     # DB/SQL
-    pkgs.sqruff # SQL linter
     pkgs.sqlfluff # SQL formatter
 
     # C/C++
