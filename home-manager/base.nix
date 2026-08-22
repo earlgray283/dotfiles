@@ -20,6 +20,7 @@
     ./codex.nix
     ./opencode.nix
     ./mcp.nix
+    ./mise.nix
     ./direnv.nix
     ./neovim
   ];
@@ -144,8 +145,6 @@
     pkgs.cue
 
     localPackages.hyperfine
-    localPackages.mise
-    localPackages.aqua
     pkgs.wget
   ];
 

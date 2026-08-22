@@ -1,9 +1,9 @@
-{ localPackages, ... }:
+{ mkMiseBin, ... }:
 
 {
   programs.starship = {
     enable = true;
-    package = localPackages.starship;
+    package = mkMiseBin { name = "starship"; };
     settings = {
       format = "$all$character";
 
