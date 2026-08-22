@@ -55,16 +55,12 @@
     # Shell/Terminal Tools
     pkgs.eza
     pkgs.skim
-    pkgs.tealdeer
     pkgs.google-cloud-sdk
     pkgs.cachix
-    pkgs._1password-cli
 
     # Git Tools
-    pkgs.pre-commit
 
     # Go
-    pkgs.go
     pkgs.gopls
     (lib.lowPrio pkgs.gotools) # Go tools including goimports
 
@@ -72,15 +68,11 @@
 
     # Lua
     pkgs.lua
-    pkgs.lua-language-server
     pkgs.luarocks
 
     # JavaScript/TypeScript
-    pkgs.nodejs
-    pkgs.bun
     pkgs.typescript-language-server
     pkgs.tailwindcss-language-server
-    pkgs.oxlint
 
     # nix
     pkgs.nixd # Nix Language Server
@@ -88,7 +80,6 @@
     pkgs.nixfmt-tree
 
     # YAML
-    pkgs.yamlfmt
     pkgs.yaml-language-server
 
     # TOML
@@ -98,20 +89,16 @@
 
     # Docker
     pkgs.docker-language-server
-    pkgs.hadolint
     pkgs.dockerfmt
     # pkgs.cockroachdb            # Linux only - not available on macOS
 
     # Terraform
-    pkgs.terraform
-    pkgs.terraform-ls
 
     # Protocol Buffers
 
     # Linters/Formatters
 
     # DB/SQL
-    pkgs.atlas
     pkgs.sqruff # SQL linter
     pkgs.sqlfluff # SQL formatter
 
@@ -119,7 +106,6 @@
     pkgs.clang-tools # includes clang-format
 
     # CUE
-    pkgs.cue
 
     pkgs.wget
   ];
