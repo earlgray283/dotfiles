@@ -1,8 +1,6 @@
 {
   pkgs,
   inputs,
-  lib,
-  localPackages,
   ...
 }:
 
@@ -20,6 +18,7 @@
     ./codex.nix
     ./opencode.nix
     ./mcp.nix
+    ./mise.nix
     ./direnv.nix
     ./neovim
   ];
@@ -53,99 +52,26 @@
 
   home.packages = [
     # Shell/Terminal Tools
-    localPackages.fd
-    localPackages.bat
-    localPackages.ripgrep
     pkgs.eza
-    localPackages.delta
-    localPackages.fzf
     pkgs.skim
-    pkgs.tealdeer
-    localPackages.xh
-    localPackages.television
-    localPackages.just
     pkgs.google-cloud-sdk
     pkgs.cachix
-    localPackages.tree-sitter
-    pkgs._1password-cli
-
-    # Git Tools
-    localPackages.lazygit
-    localPackages.gitleaks
-    localPackages.worktrunk # git worktree manager (wt)
-    pkgs.pre-commit
-
-    # Go
-    pkgs.go
-    pkgs.gopls
-    (lib.lowPrio pkgs.gotools) # Go tools including goimports
-    localPackages.golangci-lint
-
-    # Python
-    localPackages.uv
 
     # Lua
     pkgs.lua
-    pkgs.lua-language-server
-    localPackages.StyLua
     pkgs.luarocks
-
-    # JavaScript/TypeScript
-    pkgs.nodejs
-    pkgs.bun
-    pkgs.typescript-language-server
-    pkgs.tailwindcss-language-server
-    pkgs.oxlint
-    localPackages.biome
-    localPackages.dprint
 
     # nix
     pkgs.nixd # Nix Language Server
     pkgs.nixfmt
     pkgs.nixfmt-tree
 
-    # YAML
-    pkgs.yamlfmt
-    pkgs.yaml-language-server
-    localPackages.actionlint
-
-    # TOML
-    localPackages.taplo # TOML toolkit
-
-    # Markdown
-    pkgs.markdown-oxide # Markdown LSP
-
     # Docker
-    pkgs.docker-language-server
-    pkgs.hadolint
-    pkgs.dockerfmt
     # pkgs.cockroachdb            # Linux only - not available on macOS
-
-    # Terraform
-    pkgs.terraform
-    pkgs.terraform-ls
-
-    # Protocol Buffers
-    localPackages.buf
-    localPackages.protolint
-
-    # Linters/Formatters
-    localPackages.vale # Prose linter
-
-    # DB/SQL
-    pkgs.atlas
-    pkgs.sqruff # SQL linter
-    pkgs.sqlfluff # SQL formatter
 
     # C/C++
     pkgs.clang-tools # includes clang-format
 
-    # CUE
-    pkgs.cue
-
-    localPackages.hyperfine
-    localPackages.mise
-    localPackages.aqua
     pkgs.wget
   ];
 
