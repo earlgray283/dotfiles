@@ -30,7 +30,8 @@ let
     "go:golang.org/x/tools/gopls" = "0.23.0";
     golangci-lint = "2.12.2";
     hadolint = "2.14.0";
-    hyperfine = "1.20.0";
+    # registry (aqua) resolves hyperfine to the x86_64 asset; github: picks arm64
+    "github:sharkdp/hyperfine" = "1.20.0";
     just = "1.58.0";
     lazygit = "0.64.1";
     lua-language-server = "3.18.2";
