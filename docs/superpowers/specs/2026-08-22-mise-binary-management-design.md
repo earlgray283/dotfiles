@@ -10,7 +10,7 @@ CrowdStrike Falcon が動いている環境では `/nix` 配下がスキャン�
 
 現状 `packages/` 配下の 29 個の Nix 派生物が `bin2nix` によって生成されており、
 これらは GitHub Release のプリビルドバイナリを取得しているだけである。
-mise の `aqua:` / `ubi:` バックエンドはこれと同じことをするので、機能的に等価な置き換えになる。
+mise の `aqua:` / `github:` バックエンドはこれと同じことをするので、機能的に等価な置き換えになる。
 
 ## 目的
 
@@ -74,8 +74,8 @@ mkMiseBin =
 miseTools = {
   fd = "10.4.2";
   ripgrep = "14.1.1";
-  "ubi:Feel-ix-343/markdown-oxide" = "0.25.0";
-  "npm:typescript-language-server" = "4.4.0";
+  "github:Feel-ix-343/markdown-oxide" = "0.25.12";
+  "npm:typescript-language-server" = "5.3.0";
   # ...
 };
 ```
@@ -138,9 +138,13 @@ cue atlas oxlint tealdeer pre-commit 1password-cli
 レジストリ外（バックエンドを明示）:
 
 ```
-ubi:  markdown-oxide  docker-language-server  dockerfmt  sqruff
-npm:  typescript-language-server  yaml-language-server  @tailwindcss/language-server
+github:  Feel-ix-343/markdown-oxide  docker/docker-language-server
+         reteps/dockerfmt  quarylabs/sqruff
+npm:     typescript-language-server  yaml-language-server
+         @tailwindcss/language-server
 ```
+
+`ubi:` バックエンドは非推奨（mise 2027.1.0 で削除予定）なので `github:` を使う。
 
 ### `/nix` に残す
 
@@ -176,6 +180,10 @@ oxlint は `pkgs.oxlint` から来ている）ため、そのまま消えるだ�
 - `starship init zsh` は `current_exe()` で解決した**実パス**を `PROMPT` に焼き込む。
   したがって shim を挟んでもプロンプト再描画のたびにコストを払うことはなく、
   シェル起動時の `init` 1 回だけである
+- レジストリ外の 7 つ（`github:` 4 つ、`npm:` 3 つ）は実際にインストールして成功を確認した。
+  生成される shim 名は `markdown-oxide` `docker-language-server` `dockerfmt` `sqruff`
+  `typescript-language-server` `yaml-language-server` `tailwindcss-language-server` で、
+  neovim の conform / nvim-lint / `vim.lsp.enable` が名前で参照している実行ファイル名と一致する
 - mise のインストール先レイアウトはツールごとに異なる
   （`starship/1.26.0/starship`、`gh/2.98.0/gh_2.98.0_macOS_arm64/bin/gh`、
   `fd/10.4.2/fd-v10.4.2-aarch64-apple-darwin/fd`）。
@@ -185,9 +193,13 @@ oxlint は `pkgs.oxlint` から来ている）ため、そのまま消えるだ�
 
 **失うもの**
 
-- チェックサム固定。`mise.lock` は設定ファイルの隣に書かれるため、`config.toml` が
-  `/nix/store` 上にある構成では使えない。バージョン完全固定のみになる。
-  ただし bin2nix もハッシュを自前生成していたので、供給元を信頼している点は変わらない
+- ハッシュの記録。`mise.lock` は設定ファイルの隣に書かれるため、`config.toml` が
+  `/nix/store` 上にある構成では使えない。固定できるのはバージョンまでで、
+  「同じバージョンが同じ成果物であること」をローカルに記録した台帳は持てない。
+  ただし検証がなくなるわけではない。実測では `github:` バックエンドが
+  ダウンロードのたびに checksum・GitHub artifact attestation・SLSA provenance を
+  検証しており、`aqua:` バックエンドも checksum を検証する。
+  bin2nix の固定ハッシュより、供給元の署名に寄せた検証に変わる
 - `home-manager build` によるツール一覧の検証。何が入るかはビルド時にはわからず、
   activation 時にはじめて確定する
 - ロールバックの粒度。Nix 世代を戻してもすでにインストール済みの mise ツールは戻らない
