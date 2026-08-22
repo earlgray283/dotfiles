@@ -1,7 +1,6 @@
 {
   pkgs,
   inputs,
-  lib,
   ...
 }:
 
@@ -58,47 +57,20 @@
     pkgs.google-cloud-sdk
     pkgs.cachix
 
-    # Git Tools
-
-    # Go
-    pkgs.gopls
-    (lib.lowPrio pkgs.gotools) # Go tools including goimports
-
-    # Python
-
     # Lua
     pkgs.lua
     pkgs.luarocks
-
-    # JavaScript/TypeScript
 
     # nix
     pkgs.nixd # Nix Language Server
     pkgs.nixfmt
     pkgs.nixfmt-tree
 
-    # YAML
-
-    # TOML
-
-    # Markdown
-
     # Docker
     # pkgs.cockroachdb            # Linux only - not available on macOS
 
-    # Terraform
-
-    # Protocol Buffers
-
-    # Linters/Formatters
-
-    # DB/SQL
-    pkgs.sqlfluff # SQL formatter
-
     # C/C++
     pkgs.clang-tools # includes clang-format
-
-    # CUE
 
     pkgs.wget
   ];
