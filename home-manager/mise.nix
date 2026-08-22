@@ -7,8 +7,31 @@
 
 let
   miseTools = {
+    actionlint = "1.7.12";
+    bat = "0.26.1";
+    biome = "2.5.8";
+    buf = "1.72.0";
+    delta = "0.19.2";
+    dprint = "0.55.2";
+    fd = "10.4.2";
+    fzf = "0.74.2";
     gh = "2.97.0";
+    gitleaks = "8.30.1";
+    golangci-lint = "2.12.2";
+    hyperfine = "1.20.0";
+    just = "1.58.0";
+    lazygit = "0.64.1";
+    protolint = "0.56.4";
+    ripgrep = "15.2.0";
     starship = "1.26.0";
+    stylua = "2.5.2";
+    taplo = "0.10.0";
+    television = "0.15.9";
+    tree-sitter = "0.26.12";
+    uv = "0.12.4";
+    vale = "3.17.1";
+    worktrunk = "0.73.0";
+    xh = "0.26.2";
   };
 
   # nixpkgs' mise is not in any cache for aarch64-darwin and builds from source
