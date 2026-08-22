@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 実行ファイルの実体を `/nix/store` から `~/.local/share/mise/installs/` へ移し、`bin2nix` / `packages/` を廃止する。
+**Goal:** 実行ファイルの実体を `/nix/store` から `~/.local/share/mise/installs/` へ移し、`bin2nix` / `packages/` を廃止する。あわせて、洗い出しの過程で見つかった neovim の参照ずれ（有効なのに未インストールの LSP が 4 つ、インストール済みなのに未有効の LSP が 3 つ）を解消する。
 
 **Architecture:** Nix の attrset 1 つをツール宣言の単一ソースとし、そこから (1) `programs.mise.globalConfig.tools`、(2) activation 用の TOML の 2 つを生成する。`programs.*.package` を要求する 2 モジュール（gh / starship）へは、mise の shim を指すシンボリックリンクだけを含む派生物を渡す。通常の PATH は `mise activate zsh` が供給する。
 
@@ -14,11 +14,13 @@
 
 - 対象プロファイルは home-manager の `earlgray` のみ。nix-darwin 側は変更しない
 - バージョンは**すべて完全固定**で書く。`latest` は使わない
-- 固定値は「移行前に入っていたバージョン」に合わせる。この移行でツールを上げない（例外は Task 3 の表に明記した atlas のみ）。アップグレードは移行後に `mise outdated` で別 PR にする
+- 固定値は「移行前に入っていたバージョン」に合わせる。この移行でツールを上げない。アップグレードは移行後に `mise outdated` で別 PR にする
+  - 例外 1: `atlas` は mise の aqua レジストリにマイナー単位のタグしか無いため 1.2.3 → 1.3.0（Task 3）
+  - 例外 2: `goimports` `prettier` `vscode-langservers-extracted` は移行前に入っていないので、合わせる相手が無く検証済みの版を使う（Task 5）
 - `ubi:` バックエンドは使わない（非推奨、mise 2027.1.0 で削除）。`github:` を使う
 - Nix ファイルの整形は `just fmt`（treefmt / nixfmt）。未使用式の検出は `just lint`（deadnix）
 - 設定ファイルを追加したら **`git add` してからビルドする**。Nix は git 管理下のファイルしか参照しない
-- 各タスクの検証は `home-manager build --flake .#earlgray`。`switch` は Task 8 まで実行しない
+- 各タスクの検証は `home-manager build --flake .#earlgray`。`switch` は Task 10 まで実行しない
 - attrset はアルファベット順にソートされる。順序を保ちたい箇所ではリストを使う
 
 ---
@@ -229,7 +231,7 @@ oxlint は `pkgs.oxlint` 由来）ので含めない。`aqua` と `mise` も Tas
 `actionlint` `taplo` `buf` `protolint` `vale` `hyperfine`）。
 
 あわせて 5 行目の関数引数 `localPackages,` も削除する。残すと deadnix が未使用引数として
-検出する。`flake.nix` は Task 5 まで渡し続けるが、モジュールが受け取らないだけなので問題ない。
+検出する。`flake.nix` は Task 7 まで渡し続けるが、モジュールが受け取らないだけなので問題ない。
 
 - [ ] **Step 3: 削除漏れが無いことを確認する**
 
@@ -301,8 +303,7 @@ atlas だけは例外で、現在の nixpkgs は 1.2.3 だが mise の aqua レ�
 `pkgs.lua-language-server` `pkgs.yamlfmt` `pkgs.hadolint` `pkgs.cue` `pkgs.atlas`
 `pkgs.tealdeer` `pkgs.pre-commit` `pkgs._1password-cli`
 
-`pkgs.gopls` と `pkgs.gotools` は残す（gopls は mise だと `go:` バックエンドの
-ソースビルドになるため設計で除外した）。
+`pkgs.gopls` と `pkgs.gotools` はこのタスクでは残す。Task 5 で `go:` バックエンドへ移す。
 
 - [ ] **Step 3: 整形してビルドする**
 
@@ -334,7 +335,7 @@ minor tags for it; every other version matches what nixpkgs shipped."
 
 **Interfaces:**
 - Consumes: Task 3 の `miseTools`。
-- Produces: 移行対象 46 ツールがすべて `miseTools` に入った状態。
+- Produces: `miseTools` が 46 エントリになった状態。
 
 - [ ] **Step 1: `miseTools` に次の 7 エントリを追加する**
 
@@ -354,8 +355,6 @@ minor tags for it; every other version matches what nixpkgs shipped."
 
 削除対象: `pkgs.markdown-oxide` `pkgs.docker-language-server` `pkgs.dockerfmt` `pkgs.sqruff`
 `pkgs.typescript-language-server` `pkgs.yaml-language-server` `pkgs.tailwindcss-language-server`
-
-`pkgs.sqlfluff` は残す（mise は `pipx:` バックエンドのみで、設計で除外した）。
 
 - [ ] **Step 3: 整形してビルドする**
 
@@ -379,7 +378,141 @@ github: rather than ubi: — ubi is deprecated as of mise 2027.1.0."
 
 ---
 
-### Task 5: `packages/` と bin2nix の配線を削除する
+### Task 5: ソースビルド系と欠けている npm ツールを移す
+
+neovim が起動する linter / formatter / LSP を `/nix` から出しきる。`go:` と `pipx:` は
+ソースビルドになるが、実測で 3 つ合わせて 15.6 秒だったので activation に入れて問題ない。
+
+あわせて、参照されているのに入っていなかった `prettier` と
+`vscode-langservers-extracted`（`cssls` と `html` の実体）を追加する。
+
+**Files:**
+- Modify: `home-manager/mise.nix`（`miseTools` に 5 エントリ追加）
+- Modify: `home-manager/base.nix`（`home.packages` から 3 行削除）
+
+**Interfaces:**
+- Consumes: Task 4 の `miseTools`（46 エントリ）。
+- Produces: `miseTools` が 51 エントリになった状態。Task 6 が参照する shim
+  `gopls` `goimports` `sqlfluff` `prettier` `vscode-css-language-server`
+  `vscode-html-language-server` が揃う。
+
+- [ ] **Step 1: `miseTools` に次の 5 エントリを追加する**
+
+```nix
+    "go:golang.org/x/tools/cmd/goimports" = "0.42.0";
+    "go:golang.org/x/tools/gopls" = "0.23.0";
+    "npm:prettier" = "3.9.6";
+    "npm:vscode-langservers-extracted" = "4.10.0";
+    "pipx:sqlfluff" = "4.2.2";
+```
+
+`vscode-langservers-extracted` は 1 パッケージで `vscode-css-language-server`
+`vscode-html-language-server` `vscode-json-language-server`
+`vscode-eslint-language-server` の 4 つを提供する。使うのは前 2 つ。
+
+- [ ] **Step 2: `home-manager/base.nix` の `home.packages` から 3 行を削除する**
+
+削除対象: `pkgs.gopls` / `(lib.lowPrio pkgs.gotools)` / `pkgs.sqlfluff`
+
+`pkgs.gotools` は goimports 以外に `godoc` `deadcode` `present` `play` `callgraph` なども
+提供している。conform が使うのは goimports だけで、他は現状どこからも参照されていないため
+まとめて落とす。あとで必要になったら `go:` バックエンドで個別に足せる。
+
+削除の結果 `lib` が `base.nix` で未使用になる場合は、関数引数の `lib,` も削除する。
+
+- [ ] **Step 3: 整形してビルドする**
+
+```bash
+just fmt
+just lint
+home-manager build --flake .#earlgray
+```
+
+期待: ビルド成功。`lib` が未使用のまま残っていると deadnix が落ちる。
+
+- [ ] **Step 4: コミット**
+
+```bash
+git add -A
+git commit -m "home-manager: move gopls, goimports and sqlfluff to mise
+
+Source builds turned out to cost 15.6s for all three together, so the
+earlier reason for leaving them in /nix does not hold. gopls matters
+most: a 30MB process that starts on every Go session.
+
+Also adds prettier and vscode-langservers-extracted, which conform and
+vim.lsp.enable reference but nothing installed."
+```
+
+---
+
+### Task 6: neovim が参照するツールと入っているツールを揃える
+
+移行対象を洗い出す過程で見つかった既存の不整合を解消する。移行そのものとは独立だが、
+Task 5 までで実体が揃ったのでここで直す。
+
+**Files:**
+- Modify: `home-manager/neovim/config/lua/plugins/lsp.lua:28-40`
+
+**Interfaces:**
+- Consumes: Task 5 の shim 群。
+- Produces: なし。
+
+- [ ] **Step 1: `vim.lsp.enable` のリストを差し替える**
+
+`marksman` は入っていないので消し、すでに入っている `markdown_oxide` に切り替える。
+`docker_language_server` と `tailwindcss` は実体が入っているのに有効化されていなかったので足す。
+`cssls` と `html` は Task 5 で実体が入ったのでそのまま残す。
+
+```lua
+      vim.lsp.enable({
+        "biome",
+        "cssls",
+        "docker_language_server",
+        "gopls",
+        "html",
+        "lua_ls",
+        "markdown_oxide",
+        "nixd",
+        "tailwindcss",
+        "taplo",
+        "terraformls",
+        "ts_ls",
+        "yamlls",
+      })
+```
+
+`nvim-lspconfig` 2.11.0 に 5 つすべての定義があること、および各定義が期待する
+実行ファイル名が mise の shim 名と一致することは設計時に確認済み。
+
+- [ ] **Step 2: git に追加してビルドする**
+
+```bash
+git add home-manager/neovim/config/lua/plugins/lsp.lua
+just fmt
+just lint
+home-manager build --flake .#earlgray
+```
+
+期待: ビルド成功。stylua が lsp.lua を整形する。
+
+- [ ] **Step 3: コミット**
+
+```bash
+git add -A
+git commit -m "neovim: align enabled LSP servers with what is installed
+
+cssls, html and marksman were enabled but never installed, so they had
+been silently dead. markdown-oxide, docker-language-server and
+tailwindcss-language-server were installed but never enabled.
+
+Markdown goes to markdown_oxide rather than marksman: that is the one
+already installed."
+```
+
+---
+
+### Task 7: `packages/` と bin2nix の配線を削除する
 
 **Files:**
 - Delete: `packages/`（30 ファイル）
@@ -387,7 +520,7 @@ github: rather than ubi: — ubi is deprecated as of mise 2027.1.0."
 - Modify: `flake.nix:109`, `flake.nix:186`
 
 **Interfaces:**
-- Consumes: Task 4 の状態（`localPackages` の参照が 1 つも残っていないこと）。
+- Consumes: Task 6 の状態（`localPackages` の参照が 1 つも残っていないこと）。
 - Produces: `localPackages` が存在しない flake。
 
 - [ ] **Step 1: 参照が残っていないことを確認する**
@@ -397,7 +530,7 @@ rg -n "localPackages" --glob '!packages/**' --glob '!docs/**'
 ```
 
 期待: `flake.nix` の 2 行（`109` の定義と `186` の受け渡し）だけがヒットする。
-`home-manager/` 側にヒットが残っていたら Task 2〜4 の削除漏れなので先に直す。
+`home-manager/` 側にヒットが残っていたら Task 2〜5 の削除漏れなので先に直す。
 
 - [ ] **Step 2: `flake.nix` から 2 行を削除する**
 
@@ -440,13 +573,13 @@ so the generated derivations have no remaining consumers."
 
 ---
 
-### Task 6: `CLAUDE.md` を mise 運用に書き換える
+### Task 8: `CLAUDE.md` を mise 運用に書き換える
 
 **Files:**
 - Modify: `CLAUDE.md`
 
 **Interfaces:**
-- Consumes: Task 5 の状態。
+- Consumes: Task 7 の状態。
 - Produces: なし。
 
 - [ ] **Step 1: 「GitHub Release パッケージの管理（`packages/`）」節をまるごと置き換える**
@@ -494,15 +627,16 @@ git commit -m "docs: describe mise-based binary management in CLAUDE.md"
 
 ---
 
-### Task 7: 検証スクリプトを追加する
+### Task 9: 検証スクリプトを追加する
 
-`switch` の前に、46 ツールすべてが解決できることを確かめる手段を用意する。
+`switch` の前に、mise 管理下の実行ファイルがすべて `/nix` の外に解決されることを
+確かめる手段を用意する。
 
 **Files:**
 - Modify: `justfile`
 
 **Interfaces:**
-- Consumes: Task 6 の状態。
+- Consumes: Task 8 の状態。
 - Produces: `just verify-mise` タスク。
 
 - [ ] **Step 1: `justfile` に次のタスクを追加する**
@@ -521,12 +655,13 @@ verify-mise:
     mise reshim
     fail=0
     for b in actionlint atlas bat biome buf bun cue delta docker-language-server \
-             dockerfmt dprint fd fzf gh gitleaks go golangci-lint hadolint \
-             hyperfine just lazygit lua-language-server markdown-oxide node op \
-             oxlint pre-commit protolint rg sqruff starship stylua \
-             tailwindcss-language-server taplo terraform terraform-ls tldr \
-             tree-sitter tv typescript-language-server uv vale wt xh \
-             yaml-language-server yamlfmt; do
+             dockerfmt dprint fd fzf gh gitleaks go goimports golangci-lint \
+             gopls hadolint hyperfine just lazygit lua-language-server \
+             markdown-oxide node op oxlint pre-commit prettier protolint rg \
+             sqlfluff sqruff starship stylua tailwindcss-language-server taplo \
+             terraform terraform-ls tldr tree-sitter tv \
+             typescript-language-server uv vale vscode-css-language-server \
+             vscode-html-language-server wt xh yaml-language-server yamlfmt; do
       p=$(command -v "$b" || true)
       if [[ -z $p ]]; then
         echo "MISSING  $b"
@@ -541,9 +676,15 @@ verify-mise:
     exit $fail
 ```
 
-リストは 46 個で、`miseTools` の 46 エントリと 1 対 1 に対応する。
+リストは 52 個。`miseTools` の 51 エントリのうち
+`npm:vscode-langservers-extracted` だけが使う実行ファイルを 2 つ
+（`vscode-css-language-server` と `vscode-html-language-server`）提供するため、
+51 + 1 で 52 になる。
+
 実行ファイル名がツール名と異なるものは `op`（1password-cli）、`rg`（ripgrep）、
-`tv`（television）、`wt`（worktrunk）、`tldr`（tealdeer）。
+`tv`（television）、`wt`（worktrunk）、`tldr`（tealdeer）、
+`goimports`（`go:golang.org/x/tools/cmd/goimports`）、
+`gopls`（`go:golang.org/x/tools/gopls`）。
 tealdeer が入れる実行ファイルは `tldr` だけなので `tealdeer` は含めない。
 
 - [ ] **Step 2: コミット**
@@ -555,14 +696,14 @@ git commit -m "just: add verify-mise to check every tool resolves outside /nix"
 
 ---
 
-### Task 8: 適用して動作確認する
+### Task 10: 適用して動作確認する
 
 ここではじめて `switch` する。ここまでのタスクはすべて `build` 止まりだった。
 
 **Files:** なし（実行のみ）
 
 **Interfaces:**
-- Consumes: Task 7 までの全変更。
+- Consumes: Task 9 までの全変更。
 - Produces: 適用済みの環境。
 
 - [ ] **Step 1: 最終ビルドで差分を確認する**
@@ -580,7 +721,8 @@ nix store diff-closures ~/.local/state/nix/profiles/home-manager result
 just switch-home-manager
 ```
 
-期待: activation 中に `mise install` が走り、46 ツールがダウンロードされる。初回は数分かかる。
+期待: activation 中に `mise install` が走り、51 ツールがダウンロードされる。初回は数分かかる。
+うち gopls / goimports / sqlfluff はソースビルドになるが、実測で 3 つ合わせて 15.6 秒だった。
 ネットワークが無いと失敗するので、接続を確認してから実行する。
 
 - [ ] **Step 3: 新しいシェルを開いて検証タスクを走らせる**
@@ -609,16 +751,15 @@ readlink -f "$(rg -o -m1 '/nix/store/[^ "]*mise-starship[^ "]*/bin/starship' ~/.
 これは `mkMiseBin` が作ったシンボリックリンクであってバイナリではない。4 行目の `readlink -f` が
 `~/.local/share/mise/installs/starship/1.26.0/starship` を返せば、実体がホーム配下にあると確認できる。
 
-- [ ] **Step 5: neovim の LSP とフォーマッタを確認する**
+- [ ] **Step 5: neovim が起動するツールの解決先を確認する**
 
 ```bash
-nvim --headless '+lua print(vim.fn.exepath("gopls"), vim.fn.exepath("stylua"), vim.fn.exepath("biome"))' +qa
+nvim --headless '+lua for _,b in ipairs({"gopls","goimports","stylua","biome","sqlfluff","prettier","vscode-css-language-server","vscode-html-language-server","markdown-oxide","docker-language-server","tailwindcss-language-server","nixd"}) do print(b, vim.fn.exepath(b)) end' +qa
 ```
 
-期待: `stylua` と `biome` が `~/.local/share/mise/` 配下、`gopls` は `/nix/store` 配下
-（設計どおり gopls は Nix に残している）。
-
-実ファイルを開いて `:LspInfo` と保存時フォーマットも試す。
+期待: `nixd` だけが `/nix/store` 配下（Nix 自身の LSP なので正しい）。
+残り 11 個はすべて `~/.local/share/mise/installs/` 配下を指し、空文字のものが 1 つも無い。
+空文字が出たら Task 5 の `miseTools` か Task 9 の `mise reshim` が漏れている。
 
 ```bash
 nvim home-manager/neovim/config/lua/plugins/conform.lua
@@ -655,13 +796,20 @@ Falcon がホームディレクトリ配下を除外する一方 `/nix` をス�
   `programs.mise.globalConfig.tools` と activation 用 TOML の両方を生成する
 - `mkMiseBin` で mise の shim を指すシンボリックリンクだけの派生物を作り、
   `programs.gh.package` と `programs.starship.package` に渡す
-- 46 ツールを mise へ移し、`packages/`・`config.toml`・bin2nix を削除
-- `just verify-mise` で全ツールが `/nix` の外に解決されることを確認できる
+- 51 ツールを mise へ移し、`packages/`・`config.toml`・bin2nix を削除
+- neovim が参照する LSP と、実際に入っているツールのずれを解消
+  （`cssls` `html` `marksman` は有効なのに未インストール、`markdown-oxide`
+  `docker-language-server` `tailwindcss-language-server` はインストール済みなのに未有効だった）
+- `just verify-mise` で 52 個の実行ファイルが `/nix` の外に解決されることを確認できる
 
 ## 残るもの
 
 mise 自身（home-manager がビルド時に `mise completion bash` を実行するため）、
-Nix ツールチェーン、gopls / eza / sqlfluff（ソースビルドになるため除外）。
+Nix ツールチェーン、`eza`（cargo バックエンドのみ）、overlay 由来の LLM エージェント群。
+
+neovim が起動する linter / formatter / LSP で `/nix` に残るのは
+`nixd` `nixfmt` `nix` `clang-format` と rust 系だけで、いずれも Nix 自身か
+フォールバック経路なので `/nix` にあるのが正しい。
 
 設計は `docs/superpowers/specs/2026-08-22-mise-binary-management-design.md`。
 

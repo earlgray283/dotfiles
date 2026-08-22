@@ -141,23 +141,35 @@ cue atlas oxlint tealdeer pre-commit 1password-cli
 github:  Feel-ix-343/markdown-oxide  docker/docker-language-server
          reteps/dockerfmt  quarylabs/sqruff
 npm:     typescript-language-server  yaml-language-server
-         @tailwindcss/language-server
+         @tailwindcss/language-server  prettier
+         vscode-langservers-extracted
+go:      golang.org/x/tools/gopls  golang.org/x/tools/cmd/goimports
+pipx:    sqlfluff
 ```
 
 `ubi:` バックエンドは非推奨（mise 2027.1.0 で削除予定）なので `github:` を使う。
+
+`go:` と `pipx:` はソースビルドになるが、実測で 3 つ合わせて 15.6 秒だったので許容する
+（当初はビルドが重いと見積もって除外していたが、測ったら誤りだった）。
+gopls は Go を書くたびに起動する 30MB の常駐プロセスなので、移す価値が大きい。
 
 ### `/nix` に残す
 
 ```
 mise         Home Manager がビルド時に `mise completion bash` を実行するため実体が必要
 nixd nixfmt nixfmt-tree cachix home-manager   Nix ツールチェーン
-gopls        go: バックエンドはソースビルドになる
+nix          nvim-lint の nix linter が呼ぶ。Nix そのものなので移せない
+clang-format proto フォーマッタの buf フォールバック。clang-tools 由来
 eza          cargo: バックエンドのみ
-sqlfluff     pipx: バックエンドのみ
-google-cloud-sdk skim luarocks clang-tools wget gotools lua
+google-cloud-sdk skim luarocks wget lua
 llm-agents.codex / opencode / claude-code     overlay 由来
 pkgs.gh-poi  programs.gh.extensions 経由
+rustfmt clippy    rust-overlay 由来、プロジェクト単位のツールチェーン
 ```
+
+この結果、neovim が起動する linter / formatter / LSP のうち `/nix` に残るのは
+`nixd` `nixfmt` `nix` `clang-format` と rust 系だけになる。前 4 つは Nix 自身と
+フォールバック経路なので、`/nix` にあるのが正しい。
 
 ### 削除する
 
@@ -168,6 +180,33 @@ pkgs.gh-poi  programs.gh.extensions 経由
 
 `packages/codex.nix` と `packages/oxc.nix` は現時点で参照されていない（codex は overlay、
 oxlint は `pkgs.oxlint` から来ている）ため、そのまま消えるだけである。
+
+## neovim 設定の不整合の解消
+
+移行対象を洗い出す過程で、neovim が参照するツールと実際に入っているツールが
+ずれていることが判明した。移行のついでに揃える。
+
+**参照されているのに入っていない 4 つ**（`command -v` で MISSING）
+
+| 参照元 | 名前 | 対応 |
+|---|---|---|
+| `vim.lsp.enable` | `cssls` → `vscode-css-language-server` | `npm:vscode-langservers-extracted` を追加 |
+| `vim.lsp.enable` | `html` → `vscode-html-language-server` | 同上（同じパッケージが両方を提供する） |
+| `vim.lsp.enable` | `marksman` | 下記のとおり `markdown_oxide` へ切り替える |
+| conform | `prettier`（biome のフォールバック） | `npm:prettier` を追加 |
+
+**入っているのに参照されていない 3 つ**
+
+`markdown-oxide` `docker-language-server` `tailwindcss-language-server` はいずれも
+LSP であり他の用途を持たない。`vim.lsp.enable` に入れ忘れていたと判断し、有効化する。
+markdown については `marksman` を消して `markdown_oxide` を有効化する
+（すでに入っているほうに合わせる。marksman は入っていない）。
+
+`nvim-lspconfig` 2.11.0 に `markdown_oxide` `docker_language_server` `tailwindcss`
+`cssls` `html` の定義があることは確認済み。各定義が期待する実行ファイル名は
+`markdown-oxide` / `docker-language-server` / `tailwindcss-language-server` /
+`vscode-css-language-server` / `vscode-html-language-server` で、
+mise が生成する shim 名と一致する。
 
 ## 検証済みの事実
 
@@ -184,6 +223,11 @@ oxlint は `pkgs.oxlint` から来ている）ため、そのまま消えるだ�
   生成される shim 名は `markdown-oxide` `docker-language-server` `dockerfmt` `sqruff`
   `typescript-language-server` `yaml-language-server` `tailwindcss-language-server` で、
   neovim の conform / nvim-lint / `vim.lsp.enable` が名前で参照している実行ファイル名と一致する
+- `go:golang.org/x/tools/gopls@0.23.0`、`go:golang.org/x/tools/cmd/goimports@0.42.0`、
+  `pipx:sqlfluff@4.2.2` の 3 つを同時にインストールして 15.6 秒。ビルド後の
+  `gopls version` と `sqlfluff --version` も期待どおり動く。
+  `npm:vscode-langservers-extracted@4.10.0` と `npm:prettier@3.9.6` も成功し、
+  shim は `vscode-css-language-server` `vscode-html-language-server` `prettier` が生成された
 - mise のインストール先レイアウトはツールごとに異なる
   （`starship/1.26.0/starship`、`gh/2.98.0/gh_2.98.0_macOS_arm64/bin/gh`、
   `fd/10.4.2/fd-v10.4.2-aarch64-apple-darwin/fd`）。
