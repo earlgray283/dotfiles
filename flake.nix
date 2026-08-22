@@ -106,8 +106,6 @@
     let
       system = "aarch64-darwin";
 
-      localPackages = pkgs.callPackage ./packages { };
-
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
 
       pkgs = import nixpkgs {
@@ -183,7 +181,7 @@
           nix-index-database.homeModules.default
         ];
         extraSpecialArgs = {
-          inherit inputs localPackages;
+          inherit inputs;
           anthropic-skills = inputs.anthropic-skills;
           claude-code-guide-skills = inputs.claude-code-guide-skills;
           superpowers-skills = inputs.superpowers-skills;
