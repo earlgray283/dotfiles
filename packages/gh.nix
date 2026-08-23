@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation {
   pname = "gh";
-  version = "2.97.0";
+  version = "2.98.0";
 
   src = fetchurl {
-    url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_macOS_arm64.zip";
-    hash = "sha256-pYuP13tBejj0egtU0TcMWbD82zJMzJygArCZj3xMmZ4=";
+    url = "https://github.com/cli/cli/releases/download/v2.98.0/gh_2.98.0_macOS_arm64.zip";
+    hash = "sha256-jPsCfMUxBnXyuDDqyPmGXBFVpF/8+XV/aZ/dWiIEbKQ=";
   };
 
   nativeBuildInputs = [ unzip ];

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation {
   pname = "vale";
-  version = "3.17.1";
+  version = "3.18.0";
 
   src = fetchurl {
-    url = "https://github.com/vale-cli/vale/releases/download/v3.17.1/vale_3.17.1_macOS_arm64.tar.gz";
-    hash = "sha256-gMrPhe8j9Tz913NV7EGm75muwTbxXfs1F3I0gvNVk/k=";
+    url = "https://github.com/vale-cli/vale/releases/download/v3.18.0/vale_3.18.0_macOS_arm64.tar.gz";
+    hash = "sha256-TX3pvag3naFM1FBIUAGZxUlBMYdSbQkTODrYIoZq1D0=";
   };
 
   sourceRoot = ".";

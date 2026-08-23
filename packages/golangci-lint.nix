@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation {
   pname = "golangci-lint";
-  version = "2.12.2";
+  version = "2.13.1";
 
   src = fetchurl {
-    url = "https://github.com/golangci/golangci-lint/releases/download/v2.12.2/golangci-lint-2.12.2-darwin-arm64.tar.gz";
-    hash = "sha256-qcVEmHMbMSj3ngkL5hEPPl//zMYXsIFC7SRNQSbHPyk=";
+    url = "https://github.com/golangci/golangci-lint/releases/download/v2.13.1/golangci-lint-2.13.1-darwin-arm64.tar.gz";
+    hash = "sha256-DJgYuvb7itJsbS71G2jVoeJg7wdycDaxQxZHzERjfHw=";
   };
 
   sourceRoot = ".";
