@@ -18,6 +18,7 @@
     ./codex.nix
     ./opencode.nix
     ./mcp.nix
+    ./chezmoi.nix
     ./mise.nix
     ./direnv.nix
     ./neovim
@@ -68,9 +69,6 @@
 
     # Docker
     # pkgs.cockroachdb            # Linux only - not available on macOS
-
-    # C/C++
-    pkgs.clang-tools # includes clang-format
 
     pkgs.wget
   ];

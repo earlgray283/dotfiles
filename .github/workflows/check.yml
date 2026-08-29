@@ -30,6 +30,9 @@ jobs:
       - name: deadnix
         run: nix run .#just -- lint
 
+      - name: Test chezmoi Codex merge
+        run: nix run .#just -- test-chezmoi
+
       - name: Build home-manager configuration
         run: nix run .#just -- build-home-manager
 

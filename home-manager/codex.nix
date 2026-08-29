@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   config,
   claude-plugins-official,
@@ -27,25 +28,12 @@ in
 
     package = pkgs.llm-agents.codex;
 
-    enableMcpIntegration = true;
-
     plugins = aiExtensions.codexPlugins;
 
     skills = aiExtensions.skills;
-
-    settings = {
-      model = "gpt-5.6-sol";
-      model_provider = "openai";
-      model_reasoning_effort = "high";
-      approval_policy = "on-request";
-      approvals_reviewer = "auto_review";
-
-      # Required for ~/.codex/hooks.json to be read at all.
-      features.hooks = true;
-
-      projects."/Users/earlgray/dev/dotfiles".trust_level = "trusted";
-    };
   };
+
+  home.file.".codex/config.toml".enable = lib.mkForce false;
 
   home.file.".codex/AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/CLAUDE.md";

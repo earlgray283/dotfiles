@@ -24,11 +24,18 @@ build-home-manager:
 build-darwin:
     nix build --print-build-logs --no-link .#darwinConfigurations.makabeee-macbook-pro.system
 
+test-chezmoi:
+    nix shell .#chezmoi -c env CHEZMOI_BIN=chezmoi bash tests/chezmoi-codex-modify-test.sh
+
 # Everything CI runs (CI calls the recipes one by one, for per-step logs).
-check: flake-check lint build-home-manager build-darwin
+check: flake-check lint test-chezmoi build-home-manager build-darwin
 
 switch-home-manager:
     home-manager switch --flake .#earlgray
+
+apply-dotfiles:
+    just switch-home-manager
+    chezmoi apply
 
 # Confirm every tool declared in home-manager/mise.nix resolves outside /nix.
 # Run from an interactive zsh: this checks PATH, and `mise activate zsh` sets PATH.
@@ -38,11 +45,11 @@ verify-mise:
     mise install --yes
     mise reshim
     fail=0
-    for b in actionlint atlas bat biome buf bun cue delta docker-language-server \
+    for b in actionlint atlas bat biome buf bun clang clang-format clangd cue delta docker-language-server \
              dockerfmt dprint fd fzf gh gitleaks go goimports golangci-lint \
              gopls hadolint hyperfine just lazygit lua-language-server \
-             markdown-oxide node op oxlint pre-commit prettier protolint rg \
-             sqlfluff sqruff starship stylua tailwindcss-language-server taplo \
+             markdown-oxide node op oxlint pre-commit prettier protolint \
+             rg rustfmt sqlfluff sqruff starship stylua tailwindcss-language-server taplo \
              terraform terraform-ls tldr tree-sitter tv \
              typescript-language-server uv vale vscode-css-language-server \
              vscode-html-language-server wt xh yaml-language-server yamlfmt; do

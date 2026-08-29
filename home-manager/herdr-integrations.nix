@@ -1,9 +1,7 @@
 { pkgs }:
 
-# `herdr integration install <agent>` writes into ~/.claude/settings.json,
-# ~/.codex/config.toml and friends, which are read-only home-manager symlinks.
-# The hook payloads are plain assets in herdr's own source tree, so take them
-# from the same revision the binary is built from and wire them up declaratively.
+# The final Claude and Codex settings are mutable, but hook payloads remain
+# declarative assets from the same herdr revision as the installed binary.
 #
 # Copied out rather than symlinked in place: linking straight into
 # `pkgs.herdr.src` would pin its 33 MiB closure into the profile for three

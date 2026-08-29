@@ -3,13 +3,18 @@
 `CLAUDE.md` はあなたと User で共に育てていくものです。
 User の指摘で恒久的な改善が必要だとあなたが判断した場合、`CLAUDE.md` の更新を User に問うてください。
 
-> **`~/.claude` は Nix home-manager で管理されています。直接編集せず、`~/dev/dotfiles/home-manager/claude-code/` を編集してください。**
+> **Claude Code と Codex の最終設定だけが chezmoi、それ以外の AI クライアント構成は Nix home-manager で管理されています。正本以外を直接編集しないでください。**
 >
-> | `~/.claude` のパス | dotfiles での管理場所 |
-> |---|---|
-> | `~/.claude/CLAUDE.md` | `home-manager/claude-code/CLAUDE.md` |
-> | `~/.claude/settings.json` | `home-manager/claude-code/claude-code.nix` の `settings` |
-> | `~/.claude/hooks/` | `home-manager/claude-code/hooks/` |
+> | 実体 | 所有者 | dotfiles での正本・編集場所 |
+> |---|---|---|
+> | `~/.claude/settings.json`（Claude Code 最終設定） | chezmoi | `chezmoi/dot_claude/settings.json` |
+> | `~/.codex/config.toml`（Codex 最終設定） | chezmoi modify | `chezmoi/dot_codex/modify_config.toml` |
+> | `~/.claude/CLAUDE.md` | Home Manager | `home-manager/claude-code/CLAUDE.md` |
+> | `~/.claude/hooks/`、パッケージ、プラグイン、marketplace、skills | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/claude-code/hooks/`、`home-manager/ai-extensions.nix` |
+> | `~/.codex/AGENTS.md`、hooks、パッケージ、plugins、skills | Home Manager | `home-manager/codex.nix`、`home-manager/claude-code/CLAUDE.md`、`home-manager/ai-extensions.nix` |
+> | `~/.config/opencode/` の構成 | Home Manager | `home-manager/opencode.nix` |
+
+Claude Code が最終設定を書き換えたときは、`chezmoi diff` で確認してから `chezmoi re-add ~/.claude/settings.json` で正本へ取り込みます。Codex の可変設定は `just apply-dotfiles` が現在の `~/.codex/config.toml` から保持し、MCP 部分だけを更新するため、Codex 用の `re-add` は不要です。MCP のサーバー定義は `home-manager/mcp.nix` だけを編集し、生成された Codex 用 fragment は編集しません。
 
 # General Rules
 

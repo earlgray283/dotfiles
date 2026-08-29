@@ -133,6 +133,7 @@
       # would be the usual way to do that, but it registers every input by name
       # and `_1password-shell-plugins` is not a valid flake ID, so it errors out.
       packages.${system} = {
+        chezmoi = pkgs.chezmoi;
         deadnix = pkgs.deadnix;
         # CI runs the justfile recipes rather than duplicating the commands.
         just = pkgs.just;

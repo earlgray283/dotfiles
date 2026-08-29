@@ -2,3 +2,4 @@ result
 
 # Override global gitignore to track CLAUDE.md
 !home-manager/claude-code/CLAUDE.md
+chezmoi/.chezmoitemplates/nix/codex-mcp-servers.toml

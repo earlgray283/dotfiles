@@ -14,6 +14,9 @@ let
     biome = "2.5.10";
     buf = "1.72.0";
     bun = "1.4.0";
+    clang = "21.1.8";
+    clang-format = "21.1.8";
+    "conda:clang-tools" = "21.1.8";
     cue = "0.17.1";
     delta = "0.19.2";
     dprint = "0.56.1";
@@ -47,6 +50,7 @@ let
     "pre-commit" = "4.6.2";
     protolint = "0.57.0";
     ripgrep = "15.2.0";
+    rust = "1.98.0";
     starship = "1.26.0";
     stylua = "2.5.2";
     taplo = "0.10.0";
@@ -119,6 +123,7 @@ in
 
   home.activation.miseInstall = lib.hm.dag.entryBetween [ "migrateGhAccounts" ] [ "writeBoundary" ] ''
     export MISE_CONFIG_DIR=${activationConfigDir}
+    export PATH=${lib.makeBinPath [ pkgs.wget ]}:$PATH
     run ${lib.getExe misePackage} install --yes
     run ${lib.getExe misePackage} reshim
   '';
