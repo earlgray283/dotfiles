@@ -37,9 +37,9 @@ in
       [[ -n $ZPROF ]] && zmodload zsh/zprof
       export LANG=en_US.UTF-8
 
-      # tmux autostart
-      if [[ -z $TMUX && -z $ZED_TERM && -z $ZPROF && $- == *i* ]]; then
-        exec tmux new-session -A -s main
+      # herdr autostart
+      if [[ -z $HERDR_ENV && -z $ZED_TERM && -z $ZPROF && $- == *i* ]]; then
+        exec herdr
       fi
 
       source "${zsh-defer}"
@@ -71,12 +71,12 @@ in
 
       # Everything below only matters once the first prompt is up, so keep it
       # off the critical path. Order matches registration order.
-      zsh-defer source "${zsh-autosuggestions}"
-      zsh-defer source "${zsh-syntax-highlighting}"
+      zsh-defer -dmpr source "${zsh-autosuggestions}"
+      zsh-defer -dmpr source "${zsh-syntax-highlighting}"
       [[ -r ${config.home.homeDirectory}/.credentials/credentials.sh ]] \
-        && zsh-defer source ${config.home.homeDirectory}/.credentials/credentials.sh
-      zsh-defer -c 'export JAVA_HOME=$(/usr/libexec/java_home -v 25)'
-      zsh-defer -c 'eval "$(tv init zsh)"'
+        && zsh-defer -dmszpr source ${config.home.homeDirectory}/.credentials/credentials.sh
+      zsh-defer -dmszpr -c 'export JAVA_HOME=$(/usr/libexec/java_home -v 25)'
+      zsh-defer -dmszpr -c 'eval "$(tv init zsh)"'
     '';
 
     envExtra = ''

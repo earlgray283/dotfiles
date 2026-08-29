@@ -22,18 +22,16 @@ jobs:
         with:
           extra-conf: accept-flake-config = true
 
+      # Each step runs a justfile recipe so that `just check` locally and CI
+      # execute the same commands. .#just pins just to this flake's nixpkgs.
       - name: nix flake check
-        run: nix flake check --print-build-logs
+        run: nix run .#just -- flake-check
 
       - name: deadnix
-        run: nix run .#deadnix -- --fail .
+        run: nix run .#just -- lint
 
       - name: Build home-manager configuration
-        run: |
-          nix build --print-build-logs --no-link \
-            .#homeConfigurations.earlgray.activationPackage
+        run: nix run .#just -- build-home-manager
 
       - name: Build nix-darwin configuration
-        run: |
-          nix build --print-build-logs --no-link \
-            .#darwinConfigurations.makabeee-macbook-air.system
+        run: nix run .#just -- build-darwin

@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+let
+  herdrIntegrations = import ./herdr-integrations.nix { inherit pkgs; };
+in
 {
   programs.opencode = {
     enable = true;
@@ -72,17 +75,6 @@
           "mcp__playwright__browser_navigate:*"
           "mcp__playwright__browser_resize:*"
           "mcp__playwright__browser_take_screenshot:*"
-          "mcp__serena__check_onboarding_performed"
-          "mcp__serena__find_file"
-          "mcp__serena__find_symbol"
-          "mcp__serena__get_symbols_overview"
-          "mcp__serena__list_dir"
-          "mcp__serena__onboarding"
-          "mcp__serena__replace_symbol_body"
-          "mcp__serena__search_for_pattern"
-          "mcp__serena__think_about_collected_information"
-          "mcp__serena__think_about_whether_you_are_done"
-          "mcp__serena__write_memory"
         ];
         deny = [
           "Bash(rm:*)"
@@ -105,4 +97,6 @@
     source = ./claude-code/hooks;
     recursive = true;
   };
+
+  home.file.".config/opencode/plugins/herdr-agent-state.js".source = herdrIntegrations.opencodePlugin;
 }

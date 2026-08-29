@@ -1,9 +1,9 @@
-{ pkgs, localPackages, ... }:
+{ pkgs, mkMiseBin, ... }:
 
 {
   programs.gh = {
     enable = true;
-    package = localPackages.gh;
+    package = mkMiseBin { name = "gh"; };
     extensions = [ pkgs.gh-poi ];
   };
 }

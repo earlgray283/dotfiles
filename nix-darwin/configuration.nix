@@ -7,6 +7,13 @@
 
   system.primaryUser = "earlgray";
 
+  programs.zsh = {
+    enable = true;
+    enableGlobalCompInit = false;
+    enableBashCompletion = false;
+    promptInit = "";
+  };
+
   # macOS system defaults
   system.defaults = {
     NSGlobalDomain = {
@@ -107,8 +114,6 @@
     ];
 
     brews = [
-      "ios-deploy"
-      "xcodegen"
       "felixkratz/formulae/borders"
       "openjdk"
     ];
@@ -116,17 +121,15 @@
     casks = [
       "1password"
       "discord"
-      "firefox"
       "font-jetbrains-mono-nerd-font"
       "ghostty"
       "google-drive"
       "hot"
       "karabiner-elements"
-      "orbstack"
       "slack"
       "android-studio"
       "insta360-studio"
-      "sigmaos"
+      "nikitabobko/tap/aerospace"
     ];
 
     onActivation = {

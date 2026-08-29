@@ -40,6 +40,7 @@ require("lz.n").load({
           },
           documentation = {
             auto_show = true,
+            auto_show_delay_ms = 50,
             window = { border = "single" },
           },
         },
@@ -50,6 +51,7 @@ require("lz.n").load({
 
         signature = {
           enabled = true,
+          trigger = { show_on_insert = true },
           window = { border = "single" },
         },
 

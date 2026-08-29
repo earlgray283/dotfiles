@@ -21,7 +21,7 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
 
 # Tools & Workflow
 
-- Primary Tools: You **MUST USE** `serena` and `context7` for specialized tasks.
+- Primary Tool: You **MUST USE** `context7` for specialized tasks.
 - Required CLI Tools:
     - **ALWAYS use `fd` instead of `find`. NEVER use `find`.**
     - **ALWAYS use `rg` instead of `grep`. NEVER use `grep`.**

@@ -9,7 +9,6 @@
       "CLAUDE.md"
       ".mc.json"
       "AGENTS.md"
-      ".serena"
       ".mcp.json"
       ".zed"
       ".vscode"

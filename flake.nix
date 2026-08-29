@@ -106,8 +106,6 @@
     let
       system = "aarch64-darwin";
 
-      localPackages = pkgs.callPackage ./packages { };
-
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
 
       pkgs = import nixpkgs {
@@ -131,18 +129,22 @@
       # `nix fmt`
       formatter.${system} = treefmtEval.config.build.wrapper;
 
-      # Pins the linter to this flake's nixpkgs. `--inputs-from .` would be the
-      # usual way to do that, but it registers every input by name and
-      # `_1password-shell-plugins` is not a valid flake ID, so it errors out.
-      packages.${system}.deadnix = pkgs.deadnix;
+      # Pins the tools CI invokes to this flake's nixpkgs. `--inputs-from .`
+      # would be the usual way to do that, but it registers every input by name
+      # and `_1password-shell-plugins` is not a valid flake ID, so it errors out.
+      packages.${system} = {
+        deadnix = pkgs.deadnix;
+        # CI runs the justfile recipes rather than duplicating the commands.
+        just = pkgs.just;
+      };
 
       # `nix flake check`. The configurations themselves are built in CI rather
       # than here, so that a plain `nix flake check` stays cheap.
       checks.${system}.formatting = treefmtEval.config.build.check self;
 
       # Build darwin flake using:
-      # $ darwin-rebuild build --flake .#makabeee-macbook-air
-      darwinConfigurations."makabeee-macbook-air" = nix-darwin.lib.darwinSystem {
+      # $ darwin-rebuild build --flake .#makabeee-macbook-pro
+      darwinConfigurations."makabeee-macbook-pro" = nix-darwin.lib.darwinSystem {
         modules = [
           ./nix-darwin/configuration.nix
           {
@@ -183,7 +185,7 @@
           nix-index-database.homeModules.default
         ];
         extraSpecialArgs = {
-          inherit inputs localPackages;
+          inherit inputs;
           anthropic-skills = inputs.anthropic-skills;
           claude-code-guide-skills = inputs.claude-code-guide-skills;
           superpowers-skills = inputs.superpowers-skills;

@@ -8,7 +8,7 @@ macOS environment managed entirely with Nix (nix-darwin + home-manager).
 
 **2. nix-darwin**
 ```sh
-sudo nix run nix-darwin -- switch --flake .#makabeee-macbook-air
+sudo nix run nix-darwin -- switch --flake .#makabeee-macbook-pro
 ```
 
 **3. home-manager**
@@ -22,12 +22,17 @@ nix run home-manager/master -- switch --flake .#earlgray
 just switch-darwin-rebuild    # nix-darwin (requires sudo)
 just switch-home-manager      # home-manager
 just fmt                      # format (treefmt)
-just lint                     # lint (deadnix)
+just lint                     # lint (deadnix, report only)
+just lint-fix                 # lint and rewrite the sources
+just check                    # everything CI runs
 ```
+
+CI invokes the same recipes via `nix run .#just`, so `just check` passing locally
+means CI runs the identical commands.
 
 Dry-run before applying:
 ```sh
-darwin-rebuild build --flake .#makabeee-macbook-air
+darwin-rebuild build --flake .#makabeee-macbook-pro
 home-manager build --flake .#earlgray
 ```
 
