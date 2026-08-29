@@ -11,7 +11,7 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
 > | `~/.codex/config.toml`（Codex 最終設定） | chezmoi modify | `chezmoi/dot_codex/modify_config.toml` |
 > | `~/.claude/CLAUDE.md` | Home Manager | `home-manager/claude-code/CLAUDE.md` |
 > | `~/.claude/hooks/`、パッケージ、プラグイン、marketplace、skills | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/claude-code/hooks/`、`home-manager/ai-extensions.nix` |
-> | `~/.codex/AGENTS.md`、hooks、パッケージ、plugins、skills | Home Manager | `home-manager/codex.nix`、`home-manager/claude-code/CLAUDE.md`、`home-manager/ai-extensions.nix` |
+> | `~/.codex/AGENTS.md`、hooks、パッケージ、skills | Home Manager | `home-manager/codex.nix`、`home-manager/claude-code/CLAUDE.md`、`home-manager/ai-extensions.nix` |
 > | `~/.config/opencode/` の構成 | Home Manager | `home-manager/opencode.nix` |
 
 Claude Code が最終設定を書き換えたときは、`chezmoi diff` で確認してから `chezmoi re-add ~/.claude/settings.json` で正本へ取り込みます。Codex の可変設定は `just apply-dotfiles` が現在の `~/.codex/config.toml` から保持し、MCP 部分だけを更新するため、Codex 用の `re-add` は不要です。MCP のサーバー定義は `home-manager/mcp.nix` だけを編集し、生成された Codex 用 fragment は編集しません。

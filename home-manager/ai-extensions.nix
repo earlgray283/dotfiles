@@ -1,15 +1,16 @@
 {
   pkgs,
-  claude-plugins-official,
+  claude-plugins-official ? null,
   superpowers-skills,
   claude-mem,
   google-skills,
+  github-skills ? null,
 }:
 
 let
   inherit (pkgs) lib;
 
-  wrappedPlugins = {
+  wrappedPlugins = lib.optionalAttrs (claude-plugins-official != null) {
     frontend-design = claude-plugins-official + "/plugins/frontend-design";
     code-review = claude-plugins-official + "/plugins/code-review";
     code-simplifier = claude-plugins-official + "/plugins/code-simplifier";
@@ -30,35 +31,38 @@ let
     claude-mem = claude-mem;
   };
 
-  mkCodexPlugin =
-    name: source:
-    let
-      hasSkills = builtins.pathExists (source + "/skills");
-      manifest = {
-        inherit name;
-        version = "0.0.0";
-        description = "Codex wrapper for ${name}.";
-        author.name = "Home Manager";
-        interface = {
-          displayName = name;
-          shortDescription = "Managed by Home Manager.";
-          developerName = "Home Manager";
-          category = "Productivity";
-        };
-      }
-      // lib.optionalAttrs hasSkills { skills = "./skills"; };
-    in
-    pkgs.runCommand "codex-plugin-${name}"
-      {
-        pname = name;
-      }
-      ''
-        install -Dm644 ${pkgs.writeText "plugin.json" (builtins.toJSON manifest)} "$out/.codex-plugin/plugin.json"
-        ${lib.optionalString hasSkills ''ln -s ${source}/skills "$out/skills"''}
-      '';
+  codexGithubSkillNames = [
+    "git-commit"
+    "github-issues"
+    "github-release"
+    "premium-frontend-ui"
+    "security-review"
+    "refactor"
+    "breakdown-feature-implementation"
+  ];
+
+  codexGithubSkillLinks = lib.optionals (github-skills != null) (
+    map (name: {
+      inherit name;
+      value = github-skills + "/skills/" + name;
+    }) codexGithubSkillNames
+  );
+
+  mkSkillLinks =
+    source:
+    lib.mapAttrsToList (name: _: {
+      inherit name;
+      value = source + "/" + name;
+    }) (lib.filterAttrs (_: type: type == "directory") (builtins.readDir source));
+
+  codexSkills = lib.listToAttrs (
+    mkSkillLinks "${superpowers-skills}/skills"
+    ++ mkSkillLinks "${google-skills}/skills/cloud"
+    ++ codexGithubSkillLinks
+  );
 in
 {
   claudePlugins = wrappedPlugins // nativePlugins;
-  codexPlugins = lib.mapAttrsToList mkCodexPlugin wrappedPlugins ++ lib.attrValues nativePlugins;
   skills = "${google-skills}/skills/cloud";
+  inherit codexSkills;
 }

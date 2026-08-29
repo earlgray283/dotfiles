@@ -2,10 +2,10 @@
   lib,
   pkgs,
   config,
-  claude-plugins-official,
   superpowers-skills,
   claude-mem,
   google-skills,
+  github-skills,
   ...
 }:
 
@@ -14,10 +14,10 @@ let
   aiExtensions = import ./ai-extensions.nix {
     inherit
       pkgs
-      claude-plugins-official
       superpowers-skills
       claude-mem
       google-skills
+      github-skills
       ;
   };
   herdrIntegrations = import ./herdr-integrations.nix { inherit pkgs; };
@@ -28,9 +28,7 @@ in
 
     package = pkgs.llm-agents.codex;
 
-    plugins = aiExtensions.codexPlugins;
-
-    skills = aiExtensions.skills;
+    skills = aiExtensions.codexSkills;
   };
 
   home.file.".codex/config.toml".enable = lib.mkForce false;

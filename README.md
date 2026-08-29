@@ -54,6 +54,8 @@ home-manager build --flake .#earlgray
 
 Claude Code が最終設定を書き換えた場合は、まず `chezmoi diff` で差分を確認し、採用する変更だけを `chezmoi re-add ~/.claude/settings.json` で `chezmoi/` の正本へ戻す。その後 `git diff` を確認してから `just apply-dotfiles` を実行する。Codex の可変設定（hook trust と plugin 状態を含む）は現在の `~/.codex/config.toml` から保持され、`just apply-dotfiles` は Home Manager が生成した MCP 部分だけを更新するため、Codex 用の `re-add` は不要である。
 
+Codex のGit・GitHubワークフローSkillは、GitHub公式の `github/awesome-copilot` をflake inputとして固定し、Home Managerから配布する。Skillの候補調査には `gh skill search` と `gh skill preview` を使うが、実体のインストール先はNix管理下とする。
+
 ## Package management (`packages/`)
 
 Managed by `bin2nix` — do not edit manually. Add packages to `config.toml`, then run:

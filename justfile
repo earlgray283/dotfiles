@@ -27,8 +27,11 @@ build-darwin:
 test-chezmoi:
     nix shell .#chezmoi -c env CHEZMOI_BIN=chezmoi bash tests/chezmoi-codex-modify-test.sh
 
+test-codex-skills:
+    bash tests/codex-skills-test.sh
+
 # Everything CI runs (CI calls the recipes one by one, for per-step logs).
-check: flake-check lint test-chezmoi build-home-manager build-darwin
+check: flake-check lint test-chezmoi test-codex-skills build-home-manager build-darwin
 
 switch-home-manager:
     home-manager switch --flake .#earlgray

@@ -33,6 +33,9 @@ jobs:
       - name: Test chezmoi Codex merge
         run: nix run .#just -- test-chezmoi
 
+      - name: Test Codex skills
+        run: nix run .#just -- test-codex-skills
+
       - name: Build home-manager configuration
         run: nix run .#just -- build-home-manager
 

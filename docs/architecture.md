@@ -14,7 +14,7 @@
 | Claude Code の最終設定 | chezmoi | `chezmoi/dot_claude/settings.json` | Claude Code 自身が書き換える設定 |
 | Codex の最終設定 | chezmoi modify | `chezmoi/dot_codex/modify_config.toml` | 現在の可変設定を保持し、MCP 部分だけを HM 生成 template で置換 |
 
-Claude Code の `CLAUDE.md`、hooks、パッケージ、plugins、marketplaces、skills と、Codex の `AGENTS.md`、hooks、パッケージ、plugins、skills は Home Manager 所有である。最終設定との境界を越えて同じファイルを二重管理しない。
+Claude Code の `CLAUDE.md`、hooks、パッケージ、plugins、marketplaces、skills と、Codex の `AGENTS.md`、hooks、パッケージ、skills は Home Manager 所有である。Claude専用pluginをCodexへwrapperとして配布せず、CodexにはAgent Skills仕様に対応したSkillだけを配布する。最終設定との境界を越えて同じファイルを二重管理しない。
 
 ## MCP の配布
 
@@ -45,4 +45,4 @@ chezmoi re-add ~/.claude/settings.json  # Claude Code の変更を採用する�
 git diff
 ```
 
-Codex の hook trust や plugin 状態などの可変設定は `just apply-dotfiles` により現在の `~/.codex/config.toml` から自動的に保持され、MCP 部分だけが置換される。Codex 用の `chezmoi re-add` は不要である。採用しない Claude Code の差分は `re-add` せず、正本を編集した場合も `chezmoi diff` で適用結果を確認する。
+Codex の hook trust などの可変設定は `just apply-dotfiles` により現在の `~/.codex/config.toml` から自動的に保持され、MCP 部分だけが置換される。Codex 用の `chezmoi re-add` は不要である。採用しない Claude Code の差分は `re-add` せず、正本を編集した場合も `chezmoi diff` で適用結果を確認する。

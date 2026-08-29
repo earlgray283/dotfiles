@@ -91,6 +91,11 @@
       url = "github:google/skills";
       flake = false;
     };
+
+    github-skills = {
+      url = "github:github/awesome-copilot";
+      flake = false;
+    };
   };
 
   outputs =
@@ -193,6 +198,7 @@
           claude-plugins-official = inputs.claude-plugins-official;
           claude-mem = inputs.claude-mem;
           google-skills = inputs.google-skills;
+          github-skills = inputs.github-skills;
         };
       };
     };
