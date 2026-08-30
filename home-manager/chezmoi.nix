@@ -22,6 +22,15 @@ let
       ];
     }
   ) config.programs.mcp.servers;
+  codexPlugins = lib.listToAttrs (
+    map (
+      plugin:
+      let
+        manifest = builtins.fromJSON (builtins.readFile (plugin + "/.codex-plugin/plugin.json"));
+      in
+      lib.nameValuePair "${manifest.name}@home-manager" { enabled = true; }
+    ) config.programs.codex.plugins
+  );
 in
 {
   home.packages = [ pkgs.chezmoi ];
@@ -33,4 +42,15 @@ in
   home.file."dev/dotfiles/chezmoi/.chezmoitemplates/nix/codex-mcp-servers.toml".source =
     tomlFormat.generate "codex-mcp-servers.toml"
       { mcp_servers = codexMcpServers; };
+
+  home.file."dev/dotfiles/chezmoi/.chezmoitemplates/nix/codex-plugins.toml".source =
+    tomlFormat.generate "codex-plugins.toml"
+      {
+        features.plugins = true;
+        plugins = codexPlugins;
+      };
+
+  home.activation.chezmoiApply = lib.hm.dag.entryAfter [ "linkGeneration" "miseInstall" ] ''
+    run ${lib.getExe pkgs.chezmoi} apply
+  '';
 }

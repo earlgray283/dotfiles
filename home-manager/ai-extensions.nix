@@ -5,6 +5,9 @@
   claude-mem,
   google-skills,
   github-skills ? null,
+  ponytail ? null,
+  go-modern-guidelines ? null,
+  caveman ? null,
 }:
 
 let
@@ -23,12 +26,18 @@ let
     claude-code-setup = claude-plugins-official + "/plugins/claude-code-setup";
     gopls-lsp = claude-plugins-official + "/plugins/gopls-lsp";
     rust-analyzer-lsp = claude-plugins-official + "/plugins/rust-analyzer-lsp";
-    context7 = claude-plugins-official + "/external_plugins/context7";
   };
 
   nativePlugins = {
     superpowers = superpowers-skills;
     claude-mem = claude-mem;
+  }
+  // lib.optionalAttrs (ponytail != null) { inherit ponytail; }
+  // lib.optionalAttrs (go-modern-guidelines != null) {
+    modern-go-guidelines = go-modern-guidelines + "/plugin";
+  }
+  // lib.optionalAttrs (caveman != null) {
+    inherit caveman;
   };
 
   codexGithubSkillNames = [
@@ -60,9 +69,14 @@ let
     ++ mkSkillLinks "${google-skills}/skills/cloud"
     ++ codexGithubSkillLinks
   );
+
+  codexPlugins =
+    lib.optionals (ponytail != null) [ ponytail ]
+    ++ lib.optionals (go-modern-guidelines != null) [ (go-modern-guidelines + "/plugin") ]
+    ++ lib.optionals (caveman != null) [ (caveman + "/plugins/caveman") ];
 in
 {
   claudePlugins = wrappedPlugins // nativePlugins;
   skills = "${google-skills}/skills/cloud";
-  inherit codexSkills;
+  inherit codexPlugins codexSkills;
 }

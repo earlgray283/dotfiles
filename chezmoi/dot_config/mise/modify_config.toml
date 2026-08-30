@@ -1,0 +1,11 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- $current := .chezmoi.stdin -}}
+{{- $config := dict -}}
+{{- if ne $current "" -}}
+  {{- $config = fromToml $current -}}
+{{- end -}}
+{{- $nix := includeTemplate "nix/mise-tools.toml" | fromToml -}}
+{{- $currentTools := dig "tools" (dict) $config -}}
+{{- $nixTools := dig "tools" (dict) $nix -}}
+{{- $_ := set $config "tools" (mergeOverwrite $currentTools $nixTools) -}}
+{{- $config | toToml -}}

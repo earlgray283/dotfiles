@@ -6,6 +6,9 @@
   claude-mem,
   google-skills,
   github-skills,
+  ponytail,
+  go-modern-guidelines,
+  caveman,
   ...
 }:
 
@@ -18,6 +21,9 @@ let
       claude-mem
       google-skills
       github-skills
+      ponytail
+      go-modern-guidelines
+      caveman
       ;
   };
   herdrIntegrations = import ./herdr-integrations.nix { inherit pkgs; };
@@ -29,6 +35,13 @@ in
     package = pkgs.llm-agents.codex;
 
     skills = aiExtensions.codexSkills;
+
+    plugins = aiExtensions.codexPlugins;
+
+    settings = {
+      approval_policy = "on-request";
+      approvals_reviewer = "auto_review";
+    };
   };
 
   home.file.".codex/config.toml".enable = lib.mkForce false;

@@ -96,6 +96,21 @@
       url = "github:github/awesome-copilot";
       flake = false;
     };
+
+    ponytail = {
+      url = "github:DietrichGebert/ponytail";
+      flake = false;
+    };
+
+    go-modern-guidelines = {
+      url = "github:JetBrains/go-modern-guidelines";
+      flake = false;
+    };
+
+    caveman = {
+      url = "github:JuliusBrussee/caveman";
+      flake = false;
+    };
   };
 
   outputs =
@@ -199,6 +214,9 @@
           claude-mem = inputs.claude-mem;
           google-skills = inputs.google-skills;
           github-skills = inputs.github-skills;
+          ponytail = inputs.ponytail;
+          go-modern-guidelines = inputs.go-modern-guidelines;
+          caveman = inputs.caveman;
         };
       };
     };

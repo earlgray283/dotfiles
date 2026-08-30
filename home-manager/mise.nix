@@ -6,6 +6,7 @@
 }:
 
 let
+  tomlFormat = pkgs.formats.toml { };
   miseTools = {
     "1password-cli" = "2.39.0";
     actionlint = "1.7.12";
@@ -108,7 +109,7 @@ let
   # and shims still land in ~/.local/share/mise.
   activationConfigDir = pkgs.runCommand "mise-activation-config" { } ''
     mkdir -p $out
-    cp ${(pkgs.formats.toml { }).generate "mise-config.toml" { tools = miseTools; }} $out/config.toml
+    cp ${tomlFormat.generate "mise-config.toml" { tools = miseTools; }} $out/config.toml
   '';
 in
 {
@@ -120,6 +121,12 @@ in
     enableZshIntegration = true;
     globalConfig.tools = miseTools;
   };
+
+  xdg.configFile."mise/config.toml".enable = lib.mkForce false;
+
+  home.file."dev/dotfiles/chezmoi/.chezmoitemplates/nix/mise-tools.toml".source =
+    tomlFormat.generate "mise-tools.toml"
+      { tools = miseTools; };
 
   home.activation.miseInstall = lib.hm.dag.entryBetween [ "migrateGhAccounts" ] [ "writeBoundary" ] ''
     export MISE_CONFIG_DIR=${activationConfigDir}

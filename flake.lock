@@ -70,6 +70,22 @@
         "type": "github"
       }
     },
+    "caveman": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788039956,
+        "narHash": "sha256-KuOJYB+HH/vhQLEDOuHEETNUNtHSHdDuxvb5xFjk7Jc=",
+        "owner": "JuliusBrussee",
+        "repo": "caveman",
+        "rev": "df2ccd85c94ec3c8289cb62ac020d241ccfb0c60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JuliusBrussee",
+        "repo": "caveman",
+        "type": "github"
+      }
+    },
     "claude-code-guide-skills": {
       "flake": false,
       "locked": {
@@ -193,6 +209,22 @@
       "original": {
         "owner": "github",
         "repo": "awesome-copilot",
+        "type": "github"
+      }
+    },
+    "go-modern-guidelines": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788028788,
+        "narHash": "sha256-OL1ATsqoNUht4M28j2tZKPzxeaMhyWQJ9gGIoMbKARo=",
+        "owner": "JetBrains",
+        "repo": "go-modern-guidelines",
+        "rev": "ae7766cc2e59e2dba182c18fe8d799c799a0d841",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JetBrains",
+        "repo": "go-modern-guidelines",
         "type": "github"
       }
     },
@@ -334,21 +366,40 @@
         "type": "github"
       }
     },
+    "ponytail": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786139041,
+        "narHash": "sha256-bGdXvzhWPwGdz3T2Yh2h6lf+3PBRFAfdBxP5pESmCHI=",
+        "owner": "DietrichGebert",
+        "repo": "ponytail",
+        "rev": "2ed6c52c9d7e5e56942508591085fd45dea277d3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "DietrichGebert",
+        "repo": "ponytail",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "_1password-shell-plugins": "_1password-shell-plugins",
         "anthropic-skills": "anthropic-skills",
+        "caveman": "caveman",
         "claude-code-guide-skills": "claude-code-guide-skills",
         "claude-mem": "claude-mem",
         "claude-plugins-official": "claude-plugins-official",
         "ghostty": "ghostty",
         "github-skills": "github-skills",
+        "go-modern-guidelines": "go-modern-guidelines",
         "google-skills": "google-skills",
         "home-manager": "home-manager_2",
         "llm-agents": "llm-agents",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
+        "ponytail": "ponytail",
         "rust-overlay": "rust-overlay",
         "superpowers-skills": "superpowers-skills",
         "tree-sitter": "tree-sitter",

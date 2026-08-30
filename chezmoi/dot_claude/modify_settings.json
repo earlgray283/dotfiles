@@ -1,0 +1,20 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- $current := .chezmoi.stdin -}}
+{{- if eq $current "" -}}
+  {{- $current = includeTemplate "claude-baseline.json" -}}
+{{- end -}}
+{{- $config := fromJson $current -}}
+{{- $nix := includeTemplate "nix/claude-settings.json" | fromJson -}}
+{{- $currentAllow := dig "permissions" "allow" (list) $config -}}
+{{- $currentDeny := dig "permissions" "deny" (list) $config -}}
+{{- $currentAsk := dig "permissions" "ask" (list) $config -}}
+{{- $nixAllow := dig "permissions" "allow" (list) $nix -}}
+{{- $nixDeny := dig "permissions" "deny" (list) $nix -}}
+{{- $nixAsk := dig "permissions" "ask" (list) $nix -}}
+{{- $config = mergeOverwrite $config $nix -}}
+{{- $permissions := dig "permissions" (dict) $config -}}
+{{- $_ := set $permissions "allow" (concat $currentAllow $nixAllow | uniq) -}}
+{{- $_ = set $permissions "deny" (concat $currentDeny $nixDeny | uniq) -}}
+{{- $_ = set $permissions "ask" (concat $currentAsk $nixAsk | uniq) -}}
+{{- $_ = set $config "permissions" $permissions -}}
+{{- $config | toPrettyJson }}

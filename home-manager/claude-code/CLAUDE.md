@@ -3,18 +3,21 @@
 `CLAUDE.md` はあなたと User で共に育てていくものです。
 User の指摘で恒久的な改善が必要だとあなたが判断した場合、`CLAUDE.md` の更新を User に問うてください。
 
-> **Claude Code と Codex の最終設定だけが chezmoi、それ以外の AI クライアント構成は Nix home-manager で管理されています。正本以外を直接編集しないでください。**
+> **Claude Code、Codex、mise の最終設定は chezmoi modify、それらへ合成する宣言的 fragment とその他の AI クライアント構成は Nix Home Manager で管理されています。正本以外を直接編集しないでください。**
 >
 > | 実体 | 所有者 | dotfiles での正本・編集場所 |
 > |---|---|---|
-> | `~/.claude/settings.json`（Claude Code 最終設定） | chezmoi | `chezmoi/dot_claude/settings.json` |
+> | `~/.claude/settings.json`（Claude Code 最終設定） | chezmoi modify | `chezmoi/dot_claude/modify_settings.json`、`home-manager/claude-code/claude-code.nix` |
 > | `~/.codex/config.toml`（Codex 最終設定） | chezmoi modify | `chezmoi/dot_codex/modify_config.toml` |
+> | `~/.config/mise/config.toml`（mise 最終設定） | chezmoi modify | `chezmoi/dot_config/mise/modify_config.toml`、`home-manager/mise.nix` |
 > | `~/.claude/CLAUDE.md` | Home Manager | `home-manager/claude-code/CLAUDE.md` |
 > | `~/.claude/hooks/`、パッケージ、プラグイン、marketplace、skills | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/claude-code/hooks/`、`home-manager/ai-extensions.nix` |
-> | `~/.codex/AGENTS.md`、hooks、パッケージ、skills | Home Manager | `home-manager/codex.nix`、`home-manager/claude-code/CLAUDE.md`、`home-manager/ai-extensions.nix` |
+> | `~/.codex/AGENTS.md`、hooks、パッケージ、native plugins、skills | Home Manager | `home-manager/codex.nix`、`home-manager/claude-code/CLAUDE.md`、`home-manager/ai-extensions.nix` |
 > | `~/.config/opencode/` の構成 | Home Manager | `home-manager/opencode.nix` |
 
-Claude Code が最終設定を書き換えたときは、`chezmoi diff` で確認してから `chezmoi re-add ~/.claude/settings.json` で正本へ取り込みます。Codex の可変設定は `just apply-dotfiles` が現在の `~/.codex/config.toml` から保持し、MCP 部分だけを更新するため、Codex 用の `re-add` は不要です。MCP のサーバー定義は `home-manager/mcp.nix` だけを編集し、生成された Codex 用 fragment は編集しません。
+Claude Code、Codex、mise の可変設定は modify template が現在値から保持するため、`re-add` は不要です。宣言的設定は各 Home Manager module を編集し、生成 fragment は編集しません。MCP のサーバー定義は `home-manager/mcp.nix` だけを編集します。
+
+npmで配布されるstdio MCPを`home-manager/mcp.nix`へ追加するときは、mise配下の`bunx`を優先してパッケージのバージョンを固定します。外部plugin内の`npx`は一律変換せず、互換性を確認できたものだけ変更します。HTTP MCPと単独バイナリのMCPは対象外です。
 
 # General Rules
 

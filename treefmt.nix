@@ -23,6 +23,7 @@
     "packages/*.nix"
     # Chezmoi executes this as a Go template; it is not literal TOML.
     "chezmoi/dot_codex/modify_config.toml"
+    "chezmoi/dot_config/mise/modify_config.toml"
     "flake.lock"
     "*.md"
     "LICENSE"

@@ -3,3 +3,6 @@ result
 # Override global gitignore to track CLAUDE.md
 !home-manager/claude-code/CLAUDE.md
 chezmoi/.chezmoitemplates/nix/codex-mcp-servers.toml
+chezmoi/.chezmoitemplates/nix/codex-plugins.toml
+chezmoi/.chezmoitemplates/nix/claude-settings.json
+chezmoi/.chezmoitemplates/nix/mise-tools.toml
