@@ -30,7 +30,9 @@
   # Enable overlays
   nixpkgs.overlays = [
     (_final: prev: {
-      llm-agents = inputs.llm-agents.packages.${prev.system};
+      llm-agents = {
+        inherit (inputs.llm-agents.packages.${prev.system}) claude-code;
+      };
     })
   ];
 

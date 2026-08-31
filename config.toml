@@ -1,0 +1,11 @@
+[codex]
+repo = "openai/codex"
+asset_prefix = "codex-aarch64-apple-darwin"
+binary_name = "codex"
+archive_binary = "codex-aarch64-apple-darwin"
+
+[opencode]
+repo = "anomalyco/opencode"
+asset_prefix = "opencode-darwin-arm64"
+binary_name = "opencode"
+archive_binary = "opencode"

@@ -8,8 +8,9 @@
 |---|---|---|
 | macOS defaults、Homebrew、ホスト設定 | nix-darwin | `nix-darwin/configuration.nix` |
 | ユーザーパッケージ、シェル、エディタ | Home Manager | `home-manager/` |
-| Claude Codeの最終設定・plugins・skills・hooks | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/ai-extensions.nix` |
+| Claude Codeの最終設定・package・plugins・skills・hooks | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/ai-extensions.nix` |
 | Codexの最終設定・plugins・skills・hooks | Home Manager | `home-manager/codex.nix`、`home-manager/ai-extensions.nix` |
+| Codex・OpenCodeのpackage | bin2nix / Home Manager | `config.toml`、`packages/` |
 | OpenCodeの設定 | Home Manager | `home-manager/opencode.nix` |
 | 共有MCPサーバー | Home Manager | `home-manager/mcp.nix` |
 | 開発用CLIとランタイム | mise | `home-manager/mise.nix`の`miseTools` |
@@ -92,3 +93,9 @@ Home Manager / miseの変更 -> just switch-home-manager
 ```
 
 通常は`just switch-home-manager`だけでよい。`just apply-dotfiles`は互換用aliasである。
+
+## AI CLIの供給元
+
+CodexとOpenCodeは`bin2nix`が公式GitHub ReleaseのURLとhashを`packages/`へ生成し、Home Managerがそのパッケージを配置する。Numtideのbinary cacheには依存しない。
+
+Claude CodeはGitHub Releaseを提供していないためbin2nixの対象外とする。`llm-agents.nix`のClaude Code packageだけを使い、Anthropic公式配布バイナリを取得する。Numtideのsubstituterと公開鍵は登録しない。

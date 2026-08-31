@@ -5,12 +5,10 @@
     extra-substituters = [
       "https://earlgray.cachix.org"
       "https://nix-community.cachix.org"
-      "https://cache.numtide.com"
     ];
     extra-trusted-public-keys = [
       "earlgray.cachix.org-1:nPH/5e9Boe2TqskXQkrRLmRVJIsVIhQkPhxOghlm0v4="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
     ];
   };
 
@@ -148,6 +146,7 @@
       # and `_1password-shell-plugins` is not a valid flake ID, so it errors out.
       packages.${system} = {
         chezmoi = pkgs.chezmoi;
+        inherit (import ./packages { inherit pkgs; }) codex opencode;
         deadnix = pkgs.deadnix;
         # CI runs the justfile recipes rather than duplicating the commands.
         just = pkgs.just;
@@ -175,12 +174,10 @@
             nix.settings.trusted-substituters = [
               "https://earlgray.cachix.org"
               "https://nix-community.cachix.org"
-              "https://cache.numtide.com"
             ];
             nix.settings.trusted-public-keys = [
               "earlgray.cachix.org-1:nPH/5e9Boe2TqskXQkrRLmRVJIsVIhQkPhxOghlm0v4="
               "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-              "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
             ];
 
             # Set Git commit hash for darwin-version.

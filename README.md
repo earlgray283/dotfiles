@@ -13,6 +13,10 @@ macOS environment managed by nix-darwin, Home Manager, mise and chezmoi.
 
 Claude CodeとCodexにはchezmoiによるmerge処理を設けない。`~/.claude/settings.json`と`~/.codex/config.toml`はHome Managerが生成するNix storeへのsymlinkであり、恒久的な変更は対応するNix moduleへ記述する。
 
+### miseツールの変更
+
+開発ツールの追加・更新・削除は`home-manager/mise.nix`の`miseTools`を編集し、`just switch-home-manager`で反映する。activationが`mise install`と`mise reshim`を実行するため、手動の`mise install`や`mise up`は不要。
+
 ## MCP
 
 MCPサーバーの唯一の正本は`home-manager/mcp.nix`の`programs.mcp.servers`。Home ManagerのMCP統合がClaude Code、Codex、OpenCodeの最終設定へ直接配布する。
@@ -66,8 +70,11 @@ Codex のGit・GitHubワークフローSkillは、GitHub公式の `github/awesom
 
 ## Package management (`packages/`)
 
-Managed by `bin2nix` — do not edit manually. Add packages to `config.toml`, then run:
+CodexとOpenCodeは`bin2nix`で公式GitHub Releaseから生成する。`packages/`は直接編集せず、`config.toml`を変更してから実行する。
+
 ```sh
 bin2nix update          # refresh all packages
 bin2nix add <owner/repo>
 ```
+
+Claude CodeはGitHub Releaseを提供していないため、`llm-agents.nix`がAnthropic公式バイナリを取得する例外とする。Numtideのbinary cacheは使用しない。

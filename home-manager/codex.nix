@@ -29,7 +29,7 @@ in
   programs.codex = {
     enable = true;
 
-    package = pkgs.llm-agents.codex;
+    package = (import ../packages { inherit pkgs; }).codex;
 
     enableMcpIntegration = true;
 

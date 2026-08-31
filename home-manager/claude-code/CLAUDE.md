@@ -9,6 +9,7 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
 > |---|---|---|
 > | `~/.claude/settings.json`（Claude Code 最終設定） | Home Manager | `home-manager/claude-code/claude-code.nix` |
 > | `~/.codex/config.toml`（Codex 最終設定） | Home Manager | `home-manager/codex.nix` |
+> | Codex・OpenCodeのpackage | bin2nix / Home Manager | `config.toml`、`packages/` |
 > | `~/.config/mise/config.toml`（mise 最終設定） | chezmoi modify | `chezmoi/dot_config/mise/modify_config.toml`、`home-manager/mise.nix` |
 > | `~/.claude/CLAUDE.md` | Home Manager | `home-manager/claude-code/CLAUDE.md` |
 > | `~/.claude/hooks/`、パッケージ、プラグイン、marketplace、skills | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/claude-code/hooks/`、`home-manager/ai-extensions.nix` |
