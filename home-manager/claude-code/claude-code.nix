@@ -1,10 +1,8 @@
 {
-  lib,
   pkgs,
-  config,
   claude-plugins-official,
+  anthropic-skills,
   superpowers-skills,
-  claude-mem,
   google-skills,
   ponytail,
   go-modern-guidelines,
@@ -13,9 +11,11 @@
 }:
 
 let
-  dotfilesDir = "${config.home.homeDirectory}/dev/dotfiles/home-manager/claude-code";
-  jsonFormat = pkgs.formats.json { };
   claudeSettings = {
+    agentPushNotifEnabled = true;
+    effortLevel = "medium";
+    includeCoAuthoredBy = true;
+    model = "sonnet";
     env = {
       CLAUDE_CODE_NO_FLICKER = "1";
       DISABLE_AUTOUPDATER = "1";
@@ -117,8 +117,8 @@ let
     inherit
       pkgs
       claude-plugins-official
+      anthropic-skills
       superpowers-skills
-      claude-mem
       google-skills
       ponytail
       go-modern-guidelines
@@ -135,9 +135,12 @@ in
 
     enableMcpIntegration = true;
 
+    settings = claudeSettings;
+
+    context = ./CLAUDE.md;
+
     marketplaces = {
       claude-plugins-official = claude-plugins-official;
-      claude-mem = claude-mem;
       inherit ponytail;
       inherit go-modern-guidelines;
       inherit caveman;
@@ -145,18 +148,10 @@ in
 
     plugins = aiExtensions.claudePlugins;
 
-    skills = aiExtensions.skills;
+    skills = aiExtensions.claudeSkills;
 
     hooksDir = ./hooks;
   };
-
-  home.file."${config.home.homeDirectory}/.claude/settings.json".enable = lib.mkForce false;
-
-  home.file."dev/dotfiles/chezmoi/.chezmoitemplates/nix/claude-settings.json".source =
-    jsonFormat.generate "claude-settings.json" claudeSettings;
-
-  home.file.".claude/CLAUDE.md".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/CLAUDE.md";
 
   home.file.".claude/hooks/herdr-agent-state.sh".source = herdrIntegrations.claudeHook;
 }

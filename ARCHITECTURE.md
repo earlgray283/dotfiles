@@ -1,127 +1,94 @@
 # dotfiles アーキテクチャ
 
-このリポジトリは、システム設定・宣言的なユーザー環境・開発ツール・アプリケーションの最終設定を、それぞれ適した管理者に分けるハイブリッド構成である。
+このリポジトリは、再現性を優先する設定をNix、ホームディレクトリ配下へ置く開発ツールをmise、miseの可変設定をchezmoiで管理する。
 
 ## 判断基準と編集場所
 
-| 対象 | 管理者 | 正本・編集場所 | 判断基準 |
-|---|---|---|---|
-| macOS の defaults、Homebrew、ホスト設定 | nix-darwin | `nix-darwin/configuration.nix` | ユーザーをまたぐシステム状態、または macOS 固有の設定 |
-| ユーザーパッケージ、シェル、エディタ、AI クライアントのパッケージ・プラグイン・skills・hooks | Home Manager | `home-manager/` | 宣言的に再現したいユーザー環境 |
-| AI クライアントの共有 MCP サーバー | Home Manager | `home-manager/mcp.nix` の `programs.mcp.servers` | MCP 定義の唯一の正本 |
-| 開発用 CLI とランタイム | Nix fragment + chezmoi modify | `home-manager/mise.nix` の `miseTools`、`chezmoi/dot_config/mise/modify_config.toml` | Nix 宣言ツールを現在の mise 設定へ合成し、バイナリを `$HOME` 配下へ置くもの |
-| Nix 固有のツール | Home Manager / Nix | `home-manager/base.nix` | `nixd`、`nixfmt`、`nixfmt-tree` のように Nix 環境が必要な例外 |
-| Claude Code の最終設定 | chezmoi modify | `chezmoi/dot_claude/modify_settings.json` | 現在値を保持し、HM 生成の宣言的設定を合成 |
-| Codex の最終設定 | chezmoi modify | `chezmoi/dot_codex/modify_config.toml` | 現在の可変設定を保持し、MCPとNix管理pluginをHM生成templateから反映 |
-| mise の最終設定 | chezmoi modify | `chezmoi/dot_config/mise/modify_config.toml` | 現在の追加設定を保持し、HM 生成の tools fragment を合成 |
+| 対象 | 管理者 | 正本・編集場所 |
+|---|---|---|
+| macOS defaults、Homebrew、ホスト設定 | nix-darwin | `nix-darwin/configuration.nix` |
+| ユーザーパッケージ、シェル、エディタ | Home Manager | `home-manager/` |
+| Claude Codeの最終設定・plugins・skills・hooks | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/ai-extensions.nix` |
+| Codexの最終設定・plugins・skills・hooks | Home Manager | `home-manager/codex.nix`、`home-manager/ai-extensions.nix` |
+| OpenCodeの設定 | Home Manager | `home-manager/opencode.nix` |
+| 共有MCPサーバー | Home Manager | `home-manager/mcp.nix` |
+| 開発用CLIとランタイム | mise | `home-manager/mise.nix`の`miseTools` |
+| miseの最終設定 | chezmoi modify | `chezmoi/dot_config/mise/modify_config.toml` |
+| Nix固有のツール | Home Manager / Nix | `home-manager/base.nix` |
 
-Claude Code の `CLAUDE.md`、hooks、パッケージ、plugins、marketplaces、skills と、Codex の `AGENTS.md`、hooks、パッケージ、native plugins、skills は Home Manager 所有である。Claude専用pluginをCodexへwrapperとして配布せず、PonytailのようにCodex native manifestを持つpluginと、Agent Skills仕様に対応したskillだけを配布する。最終設定との境界を越えて同じファイルを二重管理しない。
+Claude CodeとCodexの最終設定はNix storeへのsymlinkになる。chezmoiのsource stateやmodify templateは介在しない。CLI内で設定を書き換えられない、または書き換えても次回switchで失われる制約を受け入れ、単一の宣言的な正本を優先する。
 
-## MCP の配布
+## MCPの配布
 
-`home-manager/mcp.nix` の `programs.mcp.servers` が MCP の唯一の正本である。Home Manager は同じ定義を次の 3 クライアントへ配布する。
-
-1. Claude Code: Home Manager の Claude Code MCP 統合。
-2. OpenCode: Home Manager の OpenCode MCP 統合。
-3. Codex: `home-manager/chezmoi.nix` が `lib.hm.mcp` で TOML fragment を生成し、`modify_config.toml` が現在の TOML を読み込んで `mcp_servers` だけを置換する。対象が無いか空の場合は `codex-baseline.toml` から初期設定を生成する。
-
-Claude Code は Home Manager 生成の JSON fragment を現在値へ再帰的に合成し、permission 配列を和集合にする。mise は `miseTools` の TOML fragment を現在の `tools` と合成し、Nix 宣言のバージョンを優先する。どちらも未知の設定を保持する。
-
-生成された `chezmoi/.chezmoitemplates/nix/codex-mcp-servers.toml` は Home Manager の出力なので直接編集しない。サーバーを追加・変更するときは `home-manager/mcp.nix` だけを編集して、Home Manager を再適用する。
-
-npmで配布されるstdio MCPを自分で定義する場合は、mise配下の`bunx`を優先し、パッケージのバージョンを固定する。外部plugin内の実行コマンドは一律変換せず、互換性を確認できたものだけ変更する。HTTP MCPと単独バイナリのMCPは対象外である。
-
-### MCP を変更したときの反映経路
-
-MCP サーバーを追加・変更・削除するときは、`home-manager/mcp.nix` の `programs.mcp.servers` だけを編集する。
+`home-manager/mcp.nix`の`programs.mcp.servers`が唯一の正本である。Home Managerの各moduleがクライアント固有形式へ変換する。
 
 ```text
 home-manager/mcp.nix
         ↓ just switch-home-manager
 Home Manager
-├─ Claude Code用の共有MCP設定を生成
-│  └─ ~/.config/mcp/mcp.json
-├─ OpenCode用設定を生成
-└─ Codex用TOML fragmentを生成
-   └─ chezmoi/.chezmoitemplates/nix/codex-mcp-servers.toml
-            ↓ chezmoi apply
-      ~/.codex/config.toml の mcp_servers を置換
+├─ Claude Code MCP plugin
+├─ Codex ~/.codex/config.toml
+└─ OpenCode ~/.config/opencode/opencode.json
 ```
 
-Claude Code の MCP は Home Manager の MCP 統合から読み込まれるため、`~/.claude/settings.json` へ同じ定義を複製しない。Codex はクライアント固有の形式へ変換し、`headers` を `http_headers`、無効状態を `enabled`、stdio の引数と環境変数を Codex の TOML 形式へ変換する。
+Codexでは`headers`が`http_headers`へ変換され、stdio MCPのenv fileは必要に応じてwrapperへ変換される。変換はHome Manager moduleの`enableMcpIntegration`へ任せ、独自fragmentは生成しない。
 
-通常は次の1コマンドで、fragment生成から両クライアントへの反映まで完了する。
+npmで配布されるstdio MCPを追加するときはmise配下の`bunx`を優先し、パッケージのバージョンを固定する。HTTP MCPと単独バイナリのMCPは対象外である。
 
-```sh
-just switch-home-manager
-```
+## Claude Code・Codexの設定変更
 
-## Claude Code・Codexが設定を書き換えた後のマージ
+マージ処理は行わない。現在の最終設定を入力として読むことも、CLIによる差分をNixへ逆流させることもない。恒久的な変更はNixの正本へ記述する。
 
-git の conflict 解消は行わない。chezmoi の modify template が、現在の最終設定を入力として読み、Nix が所有する部分だけを決められた規則で合成する。
-
-### Claude Code
-
-```text
-現在の ~/.claude/settings.json
-        +
-Nix生成の claude-settings.json
-        ↓ chezmoi modify
-更新後の ~/.claude/settings.json
-```
-
-| 設定 | マージ規則 |
+| 変更対象 | 編集場所 |
 |---|---|
-| `permissions.allow`、`deny`、`ask` | 現在値とNix値の和集合。Claude Codeが追加したpermissionを保持 |
-| `env`などのオブジェクト | 再帰マージ。競合するキーはNix値を優先 |
-| `hooks`、`sandbox`などNix宣言部分 | Nix値を反映 |
-| `model`、`effortLevel`、未知のキー | 現在値を保持 |
+| Claude Code settings・permissions・hooks | `home-manager/claude-code/claude-code.nix` |
+| Codex model・approval・project trust・hook trust | `home-manager/codex.nix` |
+| 両クライアントのplugins・skills | `home-manager/ai-extensions.nix` |
+| MCPサーバー | `home-manager/mcp.nix` |
 
-たとえばClaude Codeがpermissionを追加した後にNix側でhookを変更しても、次回switchではpermissionを残したままhookだけが更新される。
-
-### Codex
+Codex pluginのhook hashが更新された場合も、CLIに記録させるのではなく`home-manager/codex.nix`の`hooks.state`を更新する。
 
 ```text
-現在の ~/.codex/config.toml
-        +
-Nix生成の codex-mcp-servers.toml
-        ↓ chezmoi modify
-更新後の ~/.codex/config.toml
+Nix moduleを編集
+        ↓ just switch-home-manager
+Home Managerが新しい最終設定を生成
+        ↓
+~/.claude/settings.json / ~/.codex/config.toml のsymlinkを更新
 ```
 
-Codexでは`mcp_servers`セクション全体をNix生成値で置換する。それ以外のmodel、approval設定、project trust、hook trustなどは現在値をそのまま保持する。したがって、Codexがhook trustを更新した後にMCPサーバーを変更してswitchしても、hook trustは失われない。
+CLIが設定変更を要求した場合は、その変更内容を対応するNix moduleへ移してswitchする。Git conflictの解消や3-way mergeは発生しない。
 
-Codex native pluginは、Home Managerがplugin cacheとpersonal marketplaceを生成し、`codex-plugins.toml` fragmentが対応する`plugins.<name>@home-manager.enabled`を最終設定へmergeする。Nix管理外のplugin状態は削除しない。
+## pluginsとskills
+
+Claude専用pluginをCodex向けwrapperへ変換しない。PonytailのようにCodex native manifestを持つpluginと、Agent Skills仕様のskillだけをCodexへ配布する。
 
 ```text
-pin済みplugin source
-├─ Claude Code
-│  ├─ marketplace
-│  └─ ~/.claude/skills/<plugin>
+pin済みsource
+├─ Claude Code: ~/.claude/skills
 └─ Codex
+   ├─ ~/.codex/skills
    ├─ ~/.agents/plugins/marketplace.json
-   ├─ ~/.codex/plugins/cache/home-manager/<plugin>/<version>
-   └─ codex-plugins.toml
-      └─ ~/.codex/config.toml へmerge
+   └─ ~/.codex/plugins/cache/home-manager
 ```
 
-どちらも最終ファイルをHome Managerのsymlinkにしないため、アプリは通常どおり書き込める。modify templateが現在値を直接読むので、変更後の`chezmoi re-add`は不要である。
+拡張の選択と配布先は`home-manager/ai-extensions.nix`を正本とする。
+
+- Anthropic公式skillsはClaude Codeだけへ配布する。既存のClaude公式pluginと名前が衝突するskillは重複配布しない。
+- Google Cloud skillsはCloud Run、Firebase、Spannerと主要なGKE運用skillだけをClaude CodeとCodexへ配布する。
+- OpenAI公式拡張は`openai/plugins`からCodex native pluginとして配布する。現在はFigma、Linear、Notion、Codex Security、OpenAI Developersを選択している。
+- GitHubは`home-manager/mcp.nix`の共有MCPと`github/awesome-copilot` skillsを使用する。独自MCPを同梱するOpenAI GitHub pluginは重複を避けるため配布しない。
+
+## miseとchezmoi
+
+miseだけはハイブリッド管理を維持する。Home Managerが`miseTools` fragmentを生成し、chezmoi modifyが現在の`~/.config/mise/config.toml`へ合成する。Nix宣言のtool versionが優先され、それ以外のmise設定は保持される。このmerge処理はClaude CodeとCodexには適用しない。
 
 ## 適用フロー
 
 ```text
-nix-darwin の変更          -> just switch-darwin-rebuild (必要時)
-Home Manager / mise の変更 -> just switch-home-manager
-                              └─ Home Manager activation
-                                 └─ chezmoi apply
+nix-darwinの変更          -> just switch-darwin-rebuild
+Home Manager / miseの変更 -> just switch-home-manager
+                              ├─ Claude Code・Codexを直接配置
+                              └─ chezmoi applyでmiseを合成
 ```
 
-Home Manager activation は fragment の link 後に `chezmoi apply` を実行する。これにより、通常は `just switch-home-manager` だけで最終設定まで更新される。`just apply-dotfiles` は互換用の alias である。
-
-modify template の適用差分は次のコマンドで確認できる。
-
-```sh
-chezmoi diff
-```
-
-Claude Code の permission、Codex の hook trust、mise の未宣言ツールなどの可変設定は現在の最終設定から保持される。Nix 宣言と競合する値は Nix 側を優先する。いずれも `chezmoi re-add` は不要である。
+通常は`just switch-home-manager`だけでよい。`just apply-dotfiles`は互換用aliasである。

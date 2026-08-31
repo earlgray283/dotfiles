@@ -1,13 +1,14 @@
 {
   pkgs,
   claude-plugins-official ? null,
+  anthropic-skills ? null,
   superpowers-skills,
-  claude-mem,
   google-skills,
   github-skills ? null,
   ponytail ? null,
   go-modern-guidelines ? null,
   caveman ? null,
+  openai-plugins ? null,
 }:
 
 let
@@ -15,12 +16,9 @@ let
 
   wrappedPlugins = lib.optionalAttrs (claude-plugins-official != null) {
     frontend-design = claude-plugins-official + "/plugins/frontend-design";
-    code-review = claude-plugins-official + "/plugins/code-review";
     code-simplifier = claude-plugins-official + "/plugins/code-simplifier";
     skill-creator = claude-plugins-official + "/plugins/skill-creator";
-    feature-dev = claude-plugins-official + "/plugins/feature-dev";
     claude-md-management = claude-plugins-official + "/plugins/claude-md-management";
-    ralph-loop = claude-plugins-official + "/plugins/ralph-loop";
     security-guidance = claude-plugins-official + "/plugins/security-guidance";
     commit-commands = claude-plugins-official + "/plugins/commit-commands";
     claude-code-setup = claude-plugins-official + "/plugins/claude-code-setup";
@@ -30,7 +28,6 @@ let
 
   nativePlugins = {
     superpowers = superpowers-skills;
-    claude-mem = claude-mem;
   }
   // lib.optionalAttrs (ponytail != null) { inherit ponytail; }
   // lib.optionalAttrs (go-modern-guidelines != null) {
@@ -57,6 +54,28 @@ let
     }) codexGithubSkillNames
   );
 
+  googleSkillNames = [
+    "cloud-run-basics"
+    "firebase-basics"
+    "gke-basics"
+    "gke-cluster-creation"
+    "gke-manifest-generation"
+    "gke-networking"
+    "gke-storage"
+    "gke-upgrades"
+    "gke-workload-scaling"
+    "gke-workload-security"
+    "gke-workload-troubleshooting"
+    "spanner-basics"
+  ];
+
+  mkSelectedSkillLinks =
+    source: names:
+    (map (name: {
+      inherit name;
+      value = source + "/" + name;
+    }) names);
+
   mkSkillLinks =
     source:
     lib.mapAttrsToList (name: _: {
@@ -64,19 +83,43 @@ let
       value = source + "/" + name;
     }) (lib.filterAttrs (_: type: type == "directory") (builtins.readDir source));
 
+  googleSkillLinks = mkSelectedSkillLinks "${google-skills}/skills/cloud" googleSkillNames;
+
+  anthropicSkillLinks = lib.optionals (anthropic-skills != null) (
+    lib.filter (
+      skill:
+      !(builtins.elem skill.name [
+        "frontend-design"
+        "skill-creator"
+      ])
+    ) (mkSkillLinks "${anthropic-skills}/skills")
+  );
+
+  claudeSkills = lib.listToAttrs (googleSkillLinks ++ anthropicSkillLinks);
+
   codexSkills = lib.listToAttrs (
-    mkSkillLinks "${superpowers-skills}/skills"
-    ++ mkSkillLinks "${google-skills}/skills/cloud"
-    ++ codexGithubSkillLinks
+    mkSkillLinks "${superpowers-skills}/skills" ++ googleSkillLinks ++ codexGithubSkillLinks
+  );
+
+  openaiPluginNames = [
+    "codex-security"
+    "figma"
+    "linear"
+    "notion"
+    "openai-developers"
+  ];
+
+  codexOpenaiPlugins = lib.optionals (openai-plugins != null) (
+    map (name: openai-plugins + "/plugins/" + name) openaiPluginNames
   );
 
   codexPlugins =
     lib.optionals (ponytail != null) [ ponytail ]
     ++ lib.optionals (go-modern-guidelines != null) [ (go-modern-guidelines + "/plugin") ]
-    ++ lib.optionals (caveman != null) [ (caveman + "/plugins/caveman") ];
+    ++ lib.optionals (caveman != null) [ (caveman + "/plugins/caveman") ]
+    ++ codexOpenaiPlugins;
 in
 {
   claudePlugins = wrappedPlugins // nativePlugins;
-  skills = "${google-skills}/skills/cloud";
-  inherit codexPlugins codexSkills;
+  inherit claudeSkills codexPlugins codexSkills;
 }

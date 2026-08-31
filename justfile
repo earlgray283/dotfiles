@@ -25,8 +25,10 @@ build-darwin:
     nix build --print-build-logs --no-link .#darwinConfigurations.makabeee-macbook-pro.system
 
 test-chezmoi:
-    nix shell .#chezmoi -c env CHEZMOI_BIN=chezmoi bash tests/chezmoi-codex-modify-test.sh
     nix shell .#chezmoi -c env CHEZMOI_BIN=chezmoi bash tests/chezmoi-managed-configs-test.sh
+
+test-declarative-agent-configs:
+    bash tests/declarative-agent-configs-test.sh
 
 test-codex-skills:
     bash tests/codex-skills-test.sh
@@ -41,7 +43,7 @@ test-caveman-plugin:
     bash tests/caveman-plugin-test.sh
 
 # Everything CI runs (CI calls the recipes one by one, for per-step logs).
-check: flake-check lint test-chezmoi test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin build-home-manager build-darwin
+check: flake-check lint test-chezmoi test-declarative-agent-configs test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin build-home-manager build-darwin
 
 switch-home-manager:
     home-manager switch --flake .#earlgray

@@ -69,8 +69,6 @@ in
           "Bash(mkdir:*)"
           "Bash(nix eval:*)"
           "Bash(rg:*)"
-          "mcp__context7__get-library-docs"
-          "mcp__context7__resolve-library-id"
           "mcp__playwright__browser_evaluate:*"
           "mcp__playwright__browser_navigate:*"
           "mcp__playwright__browser_resize:*"

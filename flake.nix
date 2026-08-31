@@ -54,7 +54,6 @@
 
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     tree-sitter = {
@@ -67,11 +66,6 @@
       flake = false;
     };
 
-    claude-code-guide-skills = {
-      url = "github:zebbern/claude-code-guide";
-      flake = false;
-    };
-
     superpowers-skills = {
       url = "github:obra/superpowers";
       flake = false;
@@ -79,11 +73,6 @@
 
     claude-plugins-official = {
       url = "github:anthropics/claude-plugins-official";
-      flake = false;
-    };
-
-    claude-mem = {
-      url = "github:thedotmack/claude-mem";
       flake = false;
     };
 
@@ -109,6 +98,11 @@
 
     caveman = {
       url = "github:JuliusBrussee/caveman";
+      flake = false;
+    };
+
+    openai-plugins = {
+      url = "github:openai/plugins";
       flake = false;
     };
   };
@@ -208,15 +202,14 @@
         extraSpecialArgs = {
           inherit inputs;
           anthropic-skills = inputs.anthropic-skills;
-          claude-code-guide-skills = inputs.claude-code-guide-skills;
           superpowers-skills = inputs.superpowers-skills;
           claude-plugins-official = inputs.claude-plugins-official;
-          claude-mem = inputs.claude-mem;
           google-skills = inputs.google-skills;
           github-skills = inputs.github-skills;
           ponytail = inputs.ponytail;
           go-modern-guidelines = inputs.go-modern-guidelines;
           caveman = inputs.caveman;
+          openai-plugins = inputs.openai-plugins;
         };
       };
     };

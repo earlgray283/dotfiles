@@ -3,19 +3,19 @@
 `CLAUDE.md` はあなたと User で共に育てていくものです。
 User の指摘で恒久的な改善が必要だとあなたが判断した場合、`CLAUDE.md` の更新を User に問うてください。
 
-> **Claude Code、Codex、mise の最終設定は chezmoi modify、それらへ合成する宣言的 fragment とその他の AI クライアント構成は Nix Home Manager で管理されています。正本以外を直接編集しないでください。**
+> **Claude CodeとCodexの最終設定はNix Home Manager、miseの最終設定はchezmoi modifyで管理されています。正本以外を直接編集しないでください。**
 >
 > | 実体 | 所有者 | dotfiles での正本・編集場所 |
 > |---|---|---|
-> | `~/.claude/settings.json`（Claude Code 最終設定） | chezmoi modify | `chezmoi/dot_claude/modify_settings.json`、`home-manager/claude-code/claude-code.nix` |
-> | `~/.codex/config.toml`（Codex 最終設定） | chezmoi modify | `chezmoi/dot_codex/modify_config.toml` |
+> | `~/.claude/settings.json`（Claude Code 最終設定） | Home Manager | `home-manager/claude-code/claude-code.nix` |
+> | `~/.codex/config.toml`（Codex 最終設定） | Home Manager | `home-manager/codex.nix` |
 > | `~/.config/mise/config.toml`（mise 最終設定） | chezmoi modify | `chezmoi/dot_config/mise/modify_config.toml`、`home-manager/mise.nix` |
 > | `~/.claude/CLAUDE.md` | Home Manager | `home-manager/claude-code/CLAUDE.md` |
 > | `~/.claude/hooks/`、パッケージ、プラグイン、marketplace、skills | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/claude-code/hooks/`、`home-manager/ai-extensions.nix` |
 > | `~/.codex/AGENTS.md`、hooks、パッケージ、native plugins、skills | Home Manager | `home-manager/codex.nix`、`home-manager/claude-code/CLAUDE.md`、`home-manager/ai-extensions.nix` |
 > | `~/.config/opencode/` の構成 | Home Manager | `home-manager/opencode.nix` |
 
-Claude Code、Codex、mise の可変設定は modify template が現在値から保持するため、`re-add` は不要です。宣言的設定は各 Home Manager module を編集し、生成 fragment は編集しません。MCP のサーバー定義は `home-manager/mcp.nix` だけを編集します。
+Claude CodeとCodexの設定にはchezmoi modifyやmerge処理を使いません。最終ファイルを直接編集せず、変更は各Home Manager moduleへ記述して`just switch-home-manager`で反映します。CLI内からの変更は書き込みに失敗するか、次回switchで上書きされます。miseの可変設定だけはmodify templateが現在値から保持します。MCPのサーバー定義は`home-manager/mcp.nix`だけを編集します。
 
 npmで配布されるstdio MCPを`home-manager/mcp.nix`へ追加するときは、mise配下の`bunx`を優先してパッケージのバージョンを固定します。外部plugin内の`npx`は一律変換せず、互換性を確認できたものだけ変更します。HTTP MCPと単独バイナリのMCPは対象外です。
 
@@ -29,7 +29,6 @@ npmで配布されるstdio MCPを`home-manager/mcp.nix`へ追加するときは�
 
 # Tools & Workflow
 
-- Primary Tool: You **MUST USE** `context7` for specialized tasks.
 - Required CLI Tools:
     - **ALWAYS use `fd` instead of `find`. NEVER use `find`.**
     - **ALWAYS use `rg` instead of `grep`. NEVER use `grep`.**

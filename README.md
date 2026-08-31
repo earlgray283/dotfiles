@@ -5,19 +5,23 @@ macOS environment managed by nix-darwin, Home Manager, mise and chezmoi.
 ## 管理方針
 
 - **nix-darwin**: macOS のシステム設定、Homebrew、ホスト全体に必要なものを管理する。
-- **Home Manager**: ユーザー環境のパッケージ、各 AI クライアントのパッケージ・プラグイン・スキル・フック、共有設定を管理する。
+- **Home Manager**: ユーザー環境と、Claude Code・Codex・OpenCodeの最終設定、パッケージ、プラグイン、skills、hooksを宣言的に管理する。
 - **mise**: 開発用 CLI とランタイムのバージョンを `home-manager/mise.nix` の `miseTools` で管理する。Nix が必要な `nixd`、`nixfmt`、`nixfmt-tree` は例外として Nix のままにする。
-- **chezmoi**: Claude Code、Codex、mise の可変な最終設定を modify template で管理する。Home Manager が生成した fragment と現在値を合成し、同じファイルを Home Manager で重複管理しない。
+- **chezmoi**: miseの可変な最終設定をmodify templateで管理する。Home Managerが生成したtools fragmentと現在値を合成する。
 
-編集場所の判断に迷ったら、システム全体なら `nix-darwin/`、宣言的なユーザー環境なら `home-manager/`、開発ツールのバージョンなら `home-manager/mise.nix`、アプリが実行時に更新する最終設定なら `chezmoi/` を編集する。
+編集場所の判断に迷ったら、システム全体なら`nix-darwin/`、Claude Code・Codexを含む宣言的なユーザー環境なら`home-manager/`、開発ツールのバージョンなら`home-manager/mise.nix`、miseの可変設定なら`chezmoi/`を編集する。
+
+Claude CodeとCodexにはchezmoiによるmerge処理を設けない。`~/.claude/settings.json`と`~/.codex/config.toml`はHome Managerが生成するNix storeへのsymlinkであり、恒久的な変更は対応するNix moduleへ記述する。
 
 ## MCP
 
-MCP サーバーの唯一の正本は `home-manager/mcp.nix` の `programs.mcp.servers`。ここから Claude Code と OpenCode へ Home Manager の MCP 統合で配布し、Codex へは `home-manager/chezmoi.nix` が生成する `.chezmoitemplates/nix/codex-mcp-servers.toml` を `chezmoi/dot_codex/modify_config.toml` が取り込んで配布する。生成 fragment は編集しない。
+MCPサーバーの唯一の正本は`home-manager/mcp.nix`の`programs.mcp.servers`。Home ManagerのMCP統合がClaude Code、Codex、OpenCodeの最終設定へ直接配布する。
 
 ## AI extensions
 
 Claude Code と Codex の拡張は `home-manager/ai-extensions.nix` で選択する。Ponytailのように両クライアントのnative manifestを持つpluginは、同じpin済みflake inputから双方へ配布する。Claude Code専用pluginはCodexへ変換せず、Codexにはnative pluginまたはAgent Skills仕様のskillだけを配布する。
+
+Anthropic公式skillsはClaude Codeだけへ配布する。Google Cloud skillsはCloud Run、Firebase、Spannerと主要なGKE運用skillに限定する。CodexのOpenAI公式拡張は旧`openai/skills`ではなく`openai/plugins`のnative pluginを利用する。GitHub pluginは共有GitHub MCPと重複するため導入せず、既存のGitHub MCPと`github/awesome-copilot` skillsを使う。
 
 ## Install
 
@@ -54,9 +58,9 @@ darwin-rebuild build --flake .#makabeee-macbook-pro
 home-manager build --flake .#earlgray
 ```
 
-通常のユーザー環境は `just switch-home-manager` で反映する。Home Manager activation が fragment の生成後に `chezmoi apply` まで実行する。`just apply-dotfiles` は互換用の alias として残す。macOS システム設定を変更した場合は、必要に応じて先に `just switch-darwin-rebuild` を実行する。
+通常のユーザー環境は`just switch-home-manager`で反映する。Home ManagerがClaude Code・Codexの最終設定を生成して直接配置し、activation内の`chezmoi apply`がmise設定だけを合成する。`just apply-dotfiles`は互換用のaliasとして残す。
 
-Claude Code、Codex、mise の可変設定は現在の最終設定から保持される。Home Manager の再適用では、Claude Code の宣言的設定、Codex の MCP、mise の tools だけを Nix 生成 fragment から更新するため、`re-add` は不要である。
+Claude CodeとCodexのCLI内で設定を書き換える運用は行わない。書き込みに失敗するか、書き込めても次回switchでNix宣言へ戻る。恒久的な変更は`home-manager/claude-code/claude-code.nix`または`home-manager/codex.nix`へ記述する。miseの可変設定だけは引き続き保持される。
 
 Codex のGit・GitHubワークフローSkillは、GitHub公式の `github/awesome-copilot` をflake inputとして固定し、Home Managerから配布する。Skillの候補調査には `gh skill search` と `gh skill preview` を使うが、実体のインストール先はNix管理下とする。
 

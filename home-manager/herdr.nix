@@ -81,6 +81,10 @@ in
       keys = {
         prefix = "ctrl+a";
         split_vertical = [
+          "prefix+|"
+          "prefix+pipe"
+          "prefix+bar"
+          "prefix+shift+backslash"
           "prefix+backslash"
           "prefix+v"
         ];
