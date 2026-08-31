@@ -18,6 +18,8 @@ User の指摘で恒久的な改善が必要だとあなたが判断した場合
 
 Claude CodeとCodexの設定にはchezmoi modifyやmerge処理を使いません。最終ファイルを直接編集せず、変更は各Home Manager moduleへ記述して`just switch-home-manager`で反映します。CLI内からの変更は書き込みに失敗するか、次回switchで上書きされます。miseの可変設定だけはmodify templateが現在値から保持します。MCPのサーバー定義は`home-manager/mcp.nix`だけを編集します。
 
+`home-manager/`には設定値とHome Manager optionへの割当だけを置きます。変換関数とpackage・shim・assetの生成処理は`lib/`へ置いてください。
+
 npmで配布されるstdio MCPを`home-manager/mcp.nix`へ追加するときは、mise配下の`bunx`を優先してパッケージのバージョンを固定します。外部plugin内の`npx`は一律変換せず、互換性を確認できたものだけ変更します。HTTP MCPと単独バイナリのMCPは対象外です。
 
 # General Rules

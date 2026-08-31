@@ -7,13 +7,16 @@ actual="$(nix eval --impure --raw --expr '
   let
     flake = builtins.getFlake (toString ./.);
     pkgs = flake.inputs.nixpkgs.legacyPackages.aarch64-darwin;
-    extensions = import ./home-manager/ai-extensions.nix {
-      inherit pkgs;
-      claude-plugins-official = flake.inputs.claude-plugins-official;
-      superpowers-skills = flake.inputs.superpowers-skills;
-      google-skills = flake.inputs.google-skills;
-      github-skills = flake.inputs.github-skills;
-      ponytail = flake.inputs.ponytail;
+    extensions = import ./lib/ai-extensions.nix {
+      inherit (pkgs) lib;
+      config = import ./home-manager/ai-extensions.nix;
+      sources = {
+        claudePluginsOfficial = flake.inputs.claude-plugins-official;
+        superpowersSkills = flake.inputs.superpowers-skills;
+        googleSkills = flake.inputs.google-skills;
+        githubSkills = flake.inputs.github-skills;
+        ponytail = flake.inputs.ponytail;
+      };
     };
     claudeSource = extensions.claudePlugins.ponytail;
     codexSource = builtins.head extensions.codexPlugins;

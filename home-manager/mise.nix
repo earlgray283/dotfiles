@@ -6,7 +6,6 @@
 }:
 
 let
-  tomlFormat = pkgs.formats.toml { };
   miseTools = {
     "1password-cli" = "2.39.0";
     actionlint = "1.7.12";
@@ -66,72 +65,35 @@ let
     xh = "0.26.2";
     yamlfmt = "0.21.0";
   };
-
-  # nixpkgs' mise is not in any cache for aarch64-darwin and builds from source
-  # (Rust, 1.2GiB vendor dir); the upstream release tarball costs nothing.
-  misePackage = pkgs.stdenv.mkDerivation {
-    pname = "mise";
-    version = "2026.8.5";
-
-    src = pkgs.fetchurl {
+  mise = import ../lib/mise.nix {
+    inherit
+      config
+      lib
+      miseTools
+      pkgs
+      ;
+    release = {
+      version = "2026.8.5";
       url = "https://github.com/jdx/mise/releases/download/v2026.8.5/mise-v2026.8.5-macos-arm64.tar.gz";
       hash = "sha256-hZg6m4jja6MhG8tLLl+B6o0ncIUn2RAM3oZekvSKPsI=";
     };
-
-    sourceRoot = ".";
-
-    installPhase = ''
-      install -Dm755 "$(find . -type f -perm -u+x -name mise | sort | head -n 1)" $out/bin/mise
-    '';
-
-    meta.mainProgram = "mise";
   };
-
-  # Only a symlink lands in /nix/store; the Mach-O binary stays under $HOME,
-  # which is what keeps it out of Falcon's scan scope.
-  mkMiseBin =
-    {
-      name,
-      bins ? [ name ],
-      mainProgram ? name,
-    }:
-    pkgs.runCommand "mise-${name}" { meta = { inherit mainProgram; }; } ''
-      mkdir -p $out/bin
-      ${lib.concatMapStringsSep "\n" (
-        b: "ln -s ${config.home.homeDirectory}/.local/share/mise/shims/${b} $out/bin/${b}"
-      ) bins}
-    '';
-
-  # miseInstall runs before linkGeneration, so ~/.config/mise/config.toml is still
-  # the previous generation's. MISE_GLOBAL_CONFIG_FILE only moves mise's write
-  # target -- it keeps loading ~/.config/mise/config.toml, and that one wins -- so
-  # relocate the whole config dir instead. MISE_DATA_DIR is untouched, so installs
-  # and shims still land in ~/.local/share/mise.
-  activationConfigDir = pkgs.runCommand "mise-activation-config" { } ''
-    mkdir -p $out
-    cp ${tomlFormat.generate "mise-config.toml" { tools = miseTools; }} $out/config.toml
-  '';
 in
 {
-  _module.args.mkMiseBin = mkMiseBin;
+  _module.args.mkMiseBin = mise.mkBin;
 
   programs.mise = {
     enable = true;
-    package = misePackage;
+    package = mise.package;
     enableZshIntegration = true;
     globalConfig.tools = miseTools;
   };
 
   xdg.configFile."mise/config.toml".enable = lib.mkForce false;
 
-  home.file."dev/dotfiles/chezmoi/.chezmoitemplates/nix/mise-tools.toml".source =
-    tomlFormat.generate "mise-tools.toml"
-      { tools = miseTools; };
+  home.file."dev/dotfiles/chezmoi/.chezmoitemplates/nix/mise-tools.toml".source = mise.toolsFragment;
 
-  home.activation.miseInstall = lib.hm.dag.entryBetween [ "migrateGhAccounts" ] [ "writeBoundary" ] ''
-    export MISE_CONFIG_DIR=${activationConfigDir}
-    export PATH=${lib.makeBinPath [ pkgs.wget ]}:$PATH
-    run ${lib.getExe misePackage} install --yes
-    run ${lib.getExe misePackage} reshim
-  '';
+  home.activation.miseInstall =
+    lib.hm.dag.entryBetween [ "migrateGhAccounts" ] [ "writeBoundary" ]
+      mise.activationScript;
 }

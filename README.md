@@ -6,10 +6,11 @@ macOS environment managed by nix-darwin, Home Manager, mise and chezmoi.
 
 - **nix-darwin**: macOS のシステム設定、Homebrew、ホスト全体に必要なものを管理する。
 - **Home Manager**: ユーザー環境と、Claude Code・Codex・OpenCodeの最終設定、パッケージ、プラグイン、skills、hooksを宣言的に管理する。
+- **lib**: Home Managerが利用する変換関数とartifact生成処理を管理する。
 - **mise**: 開発用 CLI とランタイムのバージョンを `home-manager/mise.nix` の `miseTools` で管理する。Nix が必要な `nixd`、`nixfmt`、`nixfmt-tree` は例外として Nix のままにする。
 - **chezmoi**: miseの可変な最終設定をmodify templateで管理する。Home Managerが生成したtools fragmentと現在値を合成する。
 
-編集場所の判断に迷ったら、システム全体なら`nix-darwin/`、Claude Code・Codexを含む宣言的なユーザー環境なら`home-manager/`、開発ツールのバージョンなら`home-manager/mise.nix`、miseの可変設定なら`chezmoi/`を編集する。
+編集場所の判断に迷ったら、システム全体なら`nix-darwin/`、宣言的なユーザー設定なら`home-manager/`、その変換・生成ロジックなら`lib/`、開発ツールのバージョンなら`home-manager/mise.nix`、miseの可変設定なら`chezmoi/`を編集する。
 
 Claude CodeとCodexにはchezmoiによるmerge処理を設けない。`~/.claude/settings.json`と`~/.codex/config.toml`はHome Managerが生成するNix storeへのsymlinkであり、恒久的な変更は対応するNix moduleへ記述する。
 

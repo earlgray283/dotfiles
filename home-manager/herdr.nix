@@ -1,20 +1,7 @@
 { pkgs, ... }:
 
 let
-  # herdr has no per-event sound switch: `ui.sound.enabled` is all-or-nothing and
-  # only the *file* is per-event. A custom file that plays successfully replaces
-  # the built-in sound instead of falling back to it, so silence for `done` is
-  # spelled as a silent file.
-  silentSound =
-    pkgs.runCommand "herdr-silent.mp3"
-      {
-        nativeBuildInputs = [ pkgs.ffmpeg-headless ];
-      }
-      ''
-        ffmpeg -nostdin -loglevel error \
-          -f lavfi -i anullsrc=r=8000:cl=mono -t 0.05 \
-          -f mp3 -c:a libmp3lame "$out"
-      '';
+  silentSound = import ../lib/herdr.nix { inherit pkgs; };
 in
 {
   programs.herdr = {

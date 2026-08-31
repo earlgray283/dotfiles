@@ -11,19 +11,19 @@
 }:
 
 let
-  aiExtensions = import ./ai-extensions.nix {
-    inherit
-      pkgs
-      superpowers-skills
-      google-skills
-      github-skills
-      ponytail
-      go-modern-guidelines
-      caveman
-      openai-plugins
-      ;
+  aiExtensions = import ../lib/ai-extensions.nix {
+    inherit (pkgs) lib;
+    config = import ./ai-extensions.nix;
+    sources = {
+      superpowersSkills = superpowers-skills;
+      googleSkills = google-skills;
+      githubSkills = github-skills;
+      inherit ponytail caveman;
+      goModernGuidelines = go-modern-guidelines;
+      openaiPlugins = openai-plugins;
+    };
   };
-  herdrIntegrations = import ./herdr-integrations.nix { inherit pkgs; };
+  herdrIntegrations = import ../lib/herdr-integrations.nix { inherit pkgs; };
 in
 {
   programs.codex = {

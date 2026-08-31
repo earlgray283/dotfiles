@@ -1,11 +1,5 @@
 { pkgs }:
 
-# The final Claude and Codex settings are mutable, but hook payloads remain
-# declarative assets from the same herdr revision as the installed binary.
-#
-# Copied out rather than symlinked in place: linking straight into
-# `pkgs.herdr.src` would pin its 33 MiB closure into the profile for three
-# small scripts.
 let
   assets =
     pkgs.runCommand "herdr-integration-assets"

@@ -113,19 +113,19 @@ let
       enableWeakerNetworkIsolation = true;
     };
   };
-  aiExtensions = import ../ai-extensions.nix {
-    inherit
-      pkgs
-      claude-plugins-official
-      anthropic-skills
-      superpowers-skills
-      google-skills
-      ponytail
-      go-modern-guidelines
-      caveman
-      ;
+  aiExtensions = import ../../lib/ai-extensions.nix {
+    inherit (pkgs) lib;
+    config = import ../ai-extensions.nix;
+    sources = {
+      claudePluginsOfficial = claude-plugins-official;
+      anthropicSkills = anthropic-skills;
+      superpowersSkills = superpowers-skills;
+      googleSkills = google-skills;
+      inherit ponytail caveman;
+      goModernGuidelines = go-modern-guidelines;
+    };
   };
-  herdrIntegrations = import ../herdr-integrations.nix { inherit pkgs; };
+  herdrIntegrations = import ../../lib/herdr-integrations.nix { inherit pkgs; };
 in
 {
   programs.claude-code = {

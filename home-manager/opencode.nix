@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  herdrIntegrations = import ./herdr-integrations.nix { inherit pkgs; };
+  herdrIntegrations = import ../lib/herdr-integrations.nix { inherit pkgs; };
 in
 {
   programs.opencode = {

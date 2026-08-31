@@ -30,6 +30,9 @@ test-chezmoi:
 test-declarative-agent-configs:
     bash tests/declarative-agent-configs-test.sh
 
+test-home-manager-boundaries:
+    bash tests/home-manager-boundaries-test.sh
+
 test-binary-sources:
     bash tests/binary-sources-test.sh
 
@@ -46,7 +49,7 @@ test-caveman-plugin:
     bash tests/caveman-plugin-test.sh
 
 # Everything CI runs (CI calls the recipes one by one, for per-step logs).
-check: flake-check lint test-chezmoi test-declarative-agent-configs test-binary-sources test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin build-home-manager build-darwin
+check: flake-check lint test-chezmoi test-declarative-agent-configs test-home-manager-boundaries test-binary-sources test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin build-home-manager build-darwin
 
 switch-home-manager:
     home-manager switch --flake .#earlgray

@@ -13,11 +13,14 @@
 | Codex・OpenCodeのpackage | bin2nix / Home Manager | `config.toml`、`packages/` |
 | OpenCodeの設定 | Home Manager | `home-manager/opencode.nix` |
 | 共有MCPサーバー | Home Manager | `home-manager/mcp.nix` |
+| Home Manager向けの変換・生成ロジック | Nix library | `lib/` |
 | 開発用CLIとランタイム | mise | `home-manager/mise.nix`の`miseTools` |
 | miseの最終設定 | chezmoi modify | `chezmoi/dot_config/mise/modify_config.toml` |
 | Nix固有のツール | Home Manager / Nix | `home-manager/base.nix` |
 
 Claude CodeとCodexの最終設定はNix storeへのsymlinkになる。chezmoiのsource stateやmodify templateは介在しない。CLI内で設定を書き換えられない、または書き換えても次回switchで失われる制約を受け入れ、単一の宣言的な正本を優先する。
+
+`home-manager/`には設定値とHome Manager optionへの割当だけを置く。plugin・skillの変換、package・shim・assetの生成は`lib/`へ分離する。
 
 ## MCPの配布
 
