@@ -9,6 +9,7 @@
     ./starship.nix
     ./ghostty.nix
     ./aerospace.nix
+    ./karabiner.nix
     ./gh.nix
     ./git.nix
     ./zsh.nix
