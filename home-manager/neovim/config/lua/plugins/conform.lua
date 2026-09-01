@@ -23,31 +23,18 @@ require("lz.n").load({
           typescriptreact = { "biome", "prettier", stop_after_first = true },
           yaml = { "yamlfmt" },
         },
+        format_after_save = function(bufnr)
+          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+            return
+          end
+          return {
+            timeout_ms = 2000,
+            lsp_format = "fallback",
+          }
+        end,
       })
 
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-
-      -- immediate :wq can race this async job and skip the reformat
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern = "*",
-        callback = function(args)
-          if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then
-            return
-          end
-          require("conform").format({
-            bufnr = args.buf,
-            timeout_ms = 2000,
-            lsp_format = "fallback",
-            async = true,
-          }, function(err, did_edit)
-            if not err and did_edit and vim.api.nvim_buf_is_valid(args.buf) then
-              vim.api.nvim_buf_call(args.buf, function()
-                vim.cmd("silent! noautocmd write")
-              end)
-            end
-          end)
-        end,
-      })
 
       vim.api.nvim_create_user_command("ConformDisable", function(args)
         if args.bang then
