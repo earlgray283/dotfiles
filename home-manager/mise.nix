@@ -55,7 +55,6 @@ let
     stylua = "2.5.2";
     taplo = "0.10.0";
     tealdeer = "1.8.1";
-    television = "0.15.9";
     terraform = "1.15.9";
     terraform-ls = "0.39.0";
     tree-sitter = "0.26.12";

@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   # Ghostty terminal emulator
@@ -9,6 +9,7 @@
     settings = {
       theme = "Catppuccin Frappe";
       shell-integration = "zsh";
+      command = "direct:${config.programs.herdr.package}/bin/herdr";
 
       font-family = [
         "JetBrainsMonoNL Nerd Font Mono"

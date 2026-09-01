@@ -7,5 +7,6 @@
 {{- $nix := includeTemplate "nix/mise-tools.toml" | fromToml -}}
 {{- $currentTools := dig "tools" (dict) $config -}}
 {{- $nixTools := dig "tools" (dict) $nix -}}
+{{- $_ := unset $currentTools "television" -}}
 {{- $_ := set $config "tools" (mergeOverwrite $currentTools $nixTools) -}}
 {{- $config | toToml -}}

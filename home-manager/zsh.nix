@@ -1,19 +1,40 @@
-{ pkgs, config, ... }:
-
-let
-  # Plugins previously fetched by sheldon from GitHub HEAD. Pinning them to
-  # nixpkgs keeps them in flake.lock and removes sheldon's mutable lock file,
-  # which nix cannot invalidate: files in the store always carry mtime 1970,
-  # so sheldon never noticed a changed plugins.toml and kept serving a stale
-  # script (that is how a full compinit ran on every shell start for months).
-  zsh-defer = "${pkgs.zsh-defer}/share/zsh-defer/zsh-defer.plugin.zsh";
-  zsh-autosuggestions = "${pkgs.zsh-autosuggestions}/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh";
-  zsh-syntax-highlighting = "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
-  zsh-completions = "${pkgs.zsh-completions}/share/zsh/site-functions";
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+
+{
+  home.packages = [ pkgs.zsh-completions ];
+
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.local/share/mise/shims"
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+    "/opt/homebrew/opt/openjdk/bin"
+    "${config.home.homeDirectory}/.local/bin"
+    "${config.home.homeDirectory}/.cargo/bin"
+  ];
+
+  home.sessionVariables = {
+    LANG = "en_US.UTF-8";
+    XDG_CONFIG_HOME = config.xdg.configHome;
+    SSH_AUTH_SOCK = "${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+    HOMEBREW_PREFIX = "/opt/homebrew";
+    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
+    HOMEBREW_REPOSITORY = "/opt/homebrew";
+    MANPATH = "/opt/homebrew/share/man\${MANPATH+:$MANPATH}:";
+    INFOPATH = "/opt/homebrew/share/info:\${INFOPATH:-}";
+    JAVA_HOME = "/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home";
+  };
+
   programs.zsh = {
     enable = true;
+    envExtra = "export NOSYSZSHRC=1";
+
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
 
     history.ignoreAllDups = true; # setopt HIST_IGNORE_ALL_DUPS
 
@@ -23,95 +44,37 @@ in
 
     shellAliases = {
       ls = "eza --icons=auto";
-      fd = "fd -I --no-ignore-vcs";
+      fd = "fd -I";
       mv = "mv -v";
-      gitroot = "cd `git rev-parse --show-superproject-working-tree --show-toplevel | head -1`";
-      sed = "gsed";
-      xargs = "gxargs";
+      gitroot = "cd \"$(git rev-parse --show-superproject-working-tree --show-toplevel | head -1)\"";
+      sed = lib.getExe pkgs.gnused;
+      xargs = "${lib.getBin pkgs.findutils}/bin/xargs";
     };
 
-    # Completion is initialised by hand below, after fpath is complete.
-    completionInit = "";
-
-    initContent = ''
-      [[ -n $ZPROF ]] && zmodload zsh/zprof
-      export LANG=en_US.UTF-8
-
-      # herdr autostart
-      if [[ -z $HERDR_ENV && -z $ZED_TERM && -z $ZPROF && $- == *i* ]]; then
-        exec herdr
-      fi
-
-      source "${zsh-defer}"
-
-      # Completion search path. Earlier entries win; $fpath already holds the
-      # per-profile site-functions added at the top of this file.
-      fpath=(
-        ${config.home.homeDirectory}/.zfunc
-        /opt/homebrew/share/zsh/site-functions
-        ${config.home.homeDirectory}/.nix-profile/share/zsh/site-functions
-        ${config.home.homeDirectory}/.bun
-        ${zsh-completions}
-        $fpath
-      )
-
+    completionInit = ''
+      fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
       autoload -Uz compinit
       () {
         emulate -L zsh
         setopt extended_glob
-        # A full compinit walks every fpath entry and rewrites the dump, which
-        # costs ~800ms here; reusing the dump with -C costs ~64ms. Rebuild at
-        # most once a day.
+        # Rebuild a stale completion dump at most once a day.
         if [[ -n $HOME/.zcompdump(#qN.mh+24) ]]; then
           compinit
         else
           compinit -C
         fi
       }
-
-      # Everything below only matters once the first prompt is up, so keep it
-      # off the critical path. Order matches registration order.
-      zsh-defer -dmpr source "${zsh-autosuggestions}"
-      zsh-defer -dmpr source "${zsh-syntax-highlighting}"
-      [[ -r ${config.home.homeDirectory}/.credentials/credentials.sh ]] \
-        && zsh-defer -dmszpr source ${config.home.homeDirectory}/.credentials/credentials.sh
-      zsh-defer -dmszpr -c 'export JAVA_HOME=$(/usr/libexec/java_home -v 25)'
-      zsh-defer -dmszpr -c 'eval "$(tv init zsh)"'
-    '';
-
-    envExtra = ''
-      export XDG_CONFIG_HOME="$HOME/.config"
-      export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-
-      export HOMEBREW_PREFIX="/opt/homebrew"
-      export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
-      export HOMEBREW_REPOSITORY="/opt/homebrew"
-      export MANPATH="/opt/homebrew/share/man''${MANPATH+:$MANPATH}:"
-      export INFOPATH="/opt/homebrew/share/info:''${INFOPATH:-}"
-
-      path=(
-        /opt/homebrew/bin(N-/)
-        /opt/homebrew/sbin(N-/)
-        /opt/homebrew/opt/openjdk/bin(N-/)
-        /opt/homebrew/opt/make/libexec/gnubin(N-/)
-        /opt/homebrew/opt/gnu-sed/libexec/gnubin(N-/)
-        /opt/homebrew/opt/findutils/libexec/gnubin(N-/)
-        $HOME/.local/bin(N-/)
-        /usr/local/flutter/bin(N-/)
-        $HOME/.cargo/bin(N-/)
-        $path
-      )
     '';
 
     # siteFunctions is auto-loaded via `autoload -Uz`
     siteFunctions.gotestcov = ''
-      TMPDIR=$(mktemp -d)
-      PROFILE_OUT="''${TMPDIR}/cover.out"
-      HTML_OUT="''${TMPDIR}/cover.html"
-      chmod +w ''${TMPDIR}
-      go test -shuffle on -race -v -cover -coverprofile=''${PROFILE_OUT} -p 1 $1 \
-      && go tool cover -html=''${PROFILE_OUT} -o ''${HTML_OUT} \
-      && open ''${HTML_OUT}
+      local tmpdir profile_out html_out
+      tmpdir=$(mktemp -d) || return
+      profile_out=$tmpdir/cover.out
+      html_out=$tmpdir/cover.html
+      go test -shuffle on -race -v -coverprofile="$profile_out" -p 1 "''${1:-.}" \
+      && go tool cover -html="$profile_out" -o "$html_out" \
+      && open "$html_out"
     '';
   };
 }
