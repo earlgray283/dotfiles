@@ -49,10 +49,34 @@ jobs:
           cargo install --git https://github.com/earlgray283/bin2nix
 
       - name: nix flake update
-        run: nix flake update
+        id: flake-update
+        run: |
+          nix flake update 2>&1 | tee /tmp/flake-update.log
+          diff=$(grep -A2 --no-group-separator '^•' /tmp/flake-update.log || true)
+          {
+            echo "diff<<EOF"
+            echo "$diff"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: bin2nix update
-        run: bin2nix update --target aarch64-apple-darwin
+        id: bin2nix-update
+        run: |
+          bin2nix update --target aarch64-apple-darwin
+          diff=""
+          for f in packages/*.nix; do
+            old=$(git show HEAD:"$f" 2>/dev/null | grep -oP 'version = "\K[^"]+' || true)
+            new=$(grep -oP 'version = "\K[^"]+' "$f" || true)
+            if [ -n "$new" ] && [ "$old" != "$new" ]; then
+              diff="${diff}- \`$(basename "$f" .nix)\`: ${old:-none} → ${new}
+"
+            fi
+          done
+          {
+            echo "diff<<EOF"
+            echo "$diff"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -70,7 +94,10 @@ jobs:
           body: |
             Automated weekly update.
 
-            - `nix flake update`: updated flake inputs
-            - `bin2nix update`: updated GitHub Release packages
+            **Flake inputs:**
+            ${{ steps.flake-update.outputs.diff }}
+
+            **bin2nix packages:**
+            ${{ steps.bin2nix-update.outputs.diff }}
           labels: dependencies
           delete-branch: true

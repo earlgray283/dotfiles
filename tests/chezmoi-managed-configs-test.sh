@@ -39,7 +39,7 @@ HOME="$home_dir" XDG_CONFIG_HOME="$home_dir/.config" \
   "$chezmoi_bin" --source "$source_dir" --destination "$home_dir" apply \
   "$home_dir/.config/mise/config.toml"
 
-rg -F 'node = "nix-version"' "$home_dir/.config/mise/config.toml"
-rg -F 'bun = "nix-version"' "$home_dir/.config/mise/config.toml"
-rg -F 'runtime-only = "1.0"' "$home_dir/.config/mise/config.toml"
-rg -F 'experimental = true' "$home_dir/.config/mise/config.toml"
+grep -F 'node = "nix-version"' "$home_dir/.config/mise/config.toml"
+grep -F 'bun = "nix-version"' "$home_dir/.config/mise/config.toml"
+grep -F 'runtime-only = "1.0"' "$home_dir/.config/mise/config.toml"
+grep -F 'experimental = true' "$home_dir/.config/mise/config.toml"
