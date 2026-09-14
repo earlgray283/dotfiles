@@ -68,8 +68,7 @@ jobs:
             old=$(git show HEAD:"$f" 2>/dev/null | grep -oP 'version = "\K[^"]+' || true)
             new=$(grep -oP 'version = "\K[^"]+' "$f" || true)
             if [ -n "$new" ] && [ "$old" != "$new" ]; then
-              diff="${diff}- \`$(basename "$f" .nix)\`: ${old:-none} → ${new}
-"
+              diff="${diff}- \`$(basename "$f" .nix)\`: ${old:-none} → ${new}"$'\n'
             fi
           done
           {
