@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation {
   pname = "codex";
-  version = "0.154.0";
+  version = "0.157.1";
 
   src = fetchurl {
-    url = "https://github.com/openai/codex/releases/download/rust-v0.154.0/codex-aarch64-apple-darwin.tar.gz";
-    hash = "sha256-NEMQoKWRwbGS4E/v8wQyGmmQfJSYuqrDMcp+FuvO+dc=";
+    url = "https://github.com/openai/codex/releases/download/rust-v0.157.1/codex-aarch64-apple-darwin.tar.gz";
+    hash = "sha256-PEWxYrenb1EyUBWx0KgRLHMhm3qbWc1XYsN8m6VYlPo=";
   };
 
   sourceRoot = ".";
