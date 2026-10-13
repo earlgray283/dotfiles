@@ -14,6 +14,7 @@
     "/opt/homebrew/sbin"
     "/opt/homebrew/opt/openjdk/bin"
     "${config.home.homeDirectory}/.local/bin"
+    "${config.home.homeDirectory}/go/bin"
     "${config.home.homeDirectory}/.cargo/bin"
   ];
 
@@ -46,6 +47,7 @@
       ls = "eza --icons=auto";
       fd = "fd -I";
       mv = "mv -v";
+      claude = "claude --chrome";
       gitroot = "cd \"$(git rev-parse --show-superproject-working-tree --show-toplevel | head -1)\"";
       sed = lib.getExe pkgs.gnused;
       xargs = "${lib.getBin pkgs.findutils}/bin/xargs";
