@@ -30,8 +30,14 @@ jobs:
       - name: deadnix
         run: nix run .#just -- lint
 
-      - name: Test chezmoi Codex merge
-        run: nix run .#just -- test-chezmoi
+      - name: Test declarative agent configurations
+        run: nix run .#just -- test-declarative-agent-configs
+
+      - name: Test Home Manager boundaries
+        run: nix run .#just -- test-home-manager-boundaries
+
+      - name: Test AI CLI binary sources
+        run: nix run .#just -- test-binary-sources
 
       - name: Test Codex skills
         run: nix run .#just -- test-codex-skills

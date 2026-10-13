@@ -24,14 +24,14 @@ build-home-manager:
 build-darwin:
     nix build --print-build-logs --no-link .#darwinConfigurations.makabeee-macbook-pro.system
 
-test-chezmoi:
-    nix shell .#chezmoi -c env CHEZMOI_BIN=chezmoi bash tests/chezmoi-managed-configs-test.sh
-
 test-declarative-agent-configs:
     bash tests/declarative-agent-configs-test.sh
 
 test-home-manager-boundaries:
     bash tests/home-manager-boundaries-test.sh
+
+test-mise:
+    bash tests/mise-config-test.sh
 
 test-binary-sources:
     bash tests/binary-sources-test.sh
@@ -49,13 +49,22 @@ test-caveman-plugin:
     bash tests/caveman-plugin-test.sh
 
 # Everything CI runs (CI calls the recipes one by one, for per-step logs).
-check: flake-check lint test-chezmoi test-declarative-agent-configs test-home-manager-boundaries test-binary-sources test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin build-home-manager build-darwin
+check: flake-check lint test-declarative-agent-configs test-home-manager-boundaries test-mise test-binary-sources test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin build-home-manager build-darwin
 
 switch-home-manager:
     home-manager switch --flake .#earlgray
 
 apply-dotfiles:
     just switch-home-manager
+
+# Install every tool pinned by the tracked mise configuration.
+install-mise:
+    mise --cd "{{justfile_directory()}}/mise" install --locked --yes
+
+# Upgrade mise tool pins and refresh their lock metadata.
+update-mise:
+    mise --cd "{{justfile_directory()}}/mise" upgrade --bump --yes
+    mise --cd "{{justfile_directory()}}/mise" lock --platform macos-arm64 --yes
 
 # Confirm every tool declared in home-manager/mise.nix resolves outside /nix.
 # Run from an interactive zsh: this checks PATH, and `mise activate zsh` sets PATH.

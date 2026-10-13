@@ -19,7 +19,6 @@
     ./codex.nix
     ./opencode.nix
     ./mcp.nix
-    ./chezmoi.nix
     ./mise.nix
     ./direnv.nix
     ./neovim
