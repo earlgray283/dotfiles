@@ -1,7 +1,0 @@
-{ ... }:
-
-{
-  programs.cashix = {
-    enable = true;
-  };
-}

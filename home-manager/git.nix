@@ -1,8 +1,9 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.git = {
     enable = true;
+    package = pkgs.gitMinimal;
     ignores = [
       "**/.claude/settings.local.json"
       ".claude"

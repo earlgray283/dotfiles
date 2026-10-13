@@ -30,28 +30,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    _1password-shell-plugins = {
-      url = "github:1Password/shell-plugins";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    tree-sitter = {
-      url = "github:tree-sitter/tree-sitter";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -189,7 +169,6 @@
             nixpkgs.hostPlatform = "aarch64-darwin";
           }
         ];
-        specialArgs = { inherit inputs; };
       };
 
       homeConfigurations."earlgray" = home-manager.lib.homeManagerConfiguration {
