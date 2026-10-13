@@ -11,7 +11,7 @@ in
 
     enableMcpIntegration = true;
 
-    context = ./claude-code/CLAUDE.md;
+    context = ./ai/instructions.md;
 
     settings = {
       env = {
@@ -92,7 +92,7 @@ in
 
   # hooks ディレクトリを home-manager で管理
   home.file.".config/opencode/hooks" = {
-    source = ./claude-code/hooks;
+    source = ./ai/hooks;
     recursive = true;
   };
 

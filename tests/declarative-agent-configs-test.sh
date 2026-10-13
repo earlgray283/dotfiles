@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-generation=$(nix build --no-link --print-out-paths .#homeConfigurations.earlgray.activationPackage)
+generation=$(nix build --no-link --print-out-paths path:.#homeConfigurations.earlgray.activationPackage)
 claude_config="$generation/home-files/.claude/settings.json"
 codex_config="$generation/home-files/.codex/config.toml"
 claude_mcp="$generation/home-files/.claude/skills/claude-code-home-manager/.mcp.json"
@@ -16,6 +16,7 @@ test -L "$codex_config"
 jq -e '
   .model == "sonnet"
   and .effortLevel == "medium"
+  and .autoUpdatesChannel == "latest"
   and .includeCoAuthoredBy == true
   and .permissions.defaultMode == "auto"
   and (.hooks.SessionStart | length == 1)
@@ -67,3 +68,5 @@ for skill in cli-creator figma-use gh-address-comments gh-fix-ci linear \
 done
 
 test -e "$codex_skills/security-review/SKILL.md"
+test -e "$claude_skills/ai-management/SKILL.md"
+test -e "$codex_skills/ai-management/SKILL.md"

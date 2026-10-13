@@ -5,8 +5,6 @@
 { pkgs }:
 {
 
-  codex = pkgs.callPackage ./codex.nix { };
-
   opencode = pkgs.callPackage ./opencode.nix { };
 
 }

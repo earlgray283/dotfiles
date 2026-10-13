@@ -50,10 +50,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    llm-agents = {
-      url = "github:numtide/llm-agents.nix";
-    };
-
     tree-sitter = {
       url = "github:tree-sitter/tree-sitter";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -81,6 +77,11 @@
 
     github-skills = {
       url = "github:github/awesome-copilot";
+      flake = false;
+    };
+
+    shadcn-ui = {
+      url = "github:shadcn-ui/ui";
       flake = false;
     };
 
@@ -141,12 +142,13 @@
       # `nix fmt`
       formatter.${system} = treefmtEval.config.build.wrapper;
 
-      # Pins the tools CI invokes to this flake's nixpkgs. `--inputs-from .`
-      # would be the usual way to do that, but it registers every input by name
-      # and `_1password-shell-plugins` is not a valid flake ID, so it errors out.
+      # Pins the tools CI invokes to this flake's nixpkgs.
       packages.${system} = {
-        chezmoi = pkgs.chezmoi;
-        inherit (import ./packages { inherit pkgs; }) codex opencode;
+        inherit (import ./packages { inherit pkgs; }) opencode;
+        inherit (import ./lib/official-ai-installers.nix { inherit pkgs; })
+          claude-code-installer
+          codex-installer
+          ;
         deadnix = pkgs.deadnix;
         # CI runs the justfile recipes rather than duplicating the commands.
         just = pkgs.just;
@@ -197,12 +199,12 @@
           nix-index-database.homeModules.default
         ];
         extraSpecialArgs = {
-          inherit inputs;
           anthropic-skills = inputs.anthropic-skills;
           superpowers-skills = inputs.superpowers-skills;
           claude-plugins-official = inputs.claude-plugins-official;
           google-skills = inputs.google-skills;
           github-skills = inputs.github-skills;
+          shadcn-ui = inputs.shadcn-ui;
           ponytail = inputs.ponytail;
           go-modern-guidelines = inputs.go-modern-guidelines;
           caveman = inputs.caveman;

@@ -1,6 +1,5 @@
 {
   pkgs,
-  inputs,
   ...
 }:
 
@@ -15,10 +14,8 @@
     ./zsh.nix
     ./ssh.nix
     ./herdr.nix
-    ./claude-code/claude-code.nix
-    ./codex.nix
+    ./ai
     ./opencode.nix
-    ./mcp.nix
     ./mise.nix
     ./direnv.nix
     ./neovim
@@ -26,15 +23,6 @@
 
   # Allow unfree packages (e.g. terraform)
   nixpkgs.config.allowUnfree = true;
-
-  # Enable overlays
-  nixpkgs.overlays = [
-    (_final: prev: {
-      llm-agents = {
-        inherit (inputs.llm-agents.packages.${prev.system}) claude-code;
-      };
-    })
-  ];
 
   home.username = "earlgray";
   home.homeDirectory = "/Users/earlgray";

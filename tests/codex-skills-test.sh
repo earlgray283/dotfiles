@@ -1,23 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-expected='{"claudeKept":[true,true,true,true,true,true,true,true,true],"claudeRemoved":[true,true,true,true],"claudeSkills":[true,true,true,true],"codexRemoved":[true,true,true,true],"codexSkills":[true,true,true,true,true,true,true,true,true,true,true],"inputs":[true,true,true]}'
+expected='{"claudeKept":[true,true,true,true,true,true,true,true,true],"claudeRemoved":[true,true,true,true],"claudeSkills":[true,true,true,true,true],"codexRemoved":[true,true,true,true],"codexSkills":[true,true,true,true,true,true,true,true,true,true,true,true],"filteredSource":true,"inputs":[true,true,true],"localOverrides":[true,true]}'
 actual="$(nix eval --impure --raw --expr '
   let
     flake = builtins.getFlake (toString ./.);
     pkgs = flake.inputs.nixpkgs.legacyPackages.aarch64-darwin;
-    extensions = import ./lib/ai-extensions.nix {
-      inherit (pkgs) lib;
-      config = import ./home-manager/ai-extensions.nix;
-      sources = {
-        claudePluginsOfficial = flake.inputs.claude-plugins-official;
-        anthropicSkills = flake.inputs.anthropic-skills;
-        superpowersSkills = flake.inputs.superpowers-skills;
-        googleSkills = flake.inputs.google-skills;
-        githubSkills = flake.inputs.github-skills;
-        openaiPlugins = flake.inputs.openai-plugins;
-      };
+    sources = {
+      claudePluginsOfficial = flake.inputs.claude-plugins-official;
+      anthropicSkills = flake.inputs.anthropic-skills;
+      superpowersSkills = flake.inputs.superpowers-skills;
+      googleSkills = flake.inputs.google-skills;
+      githubSkills = flake.inputs.github-skills;
+      openaiPlugins = flake.inputs.openai-plugins;
     };
+    mkExtensions = localSkills: import ./lib/ai-extensions.nix {
+      inherit (pkgs) lib;
+      config = import ./home-manager/ai/extensions.nix;
+      sources = sources // { inherit localSkills; };
+    };
+    extensions = mkExtensions ./home-manager/ai/skills;
+    overridden = mkExtensions ./tests/fixtures/ai-skills;
     codexSkillNames = [
       "git-commit"
       "github-issues"
@@ -30,12 +33,14 @@ actual="$(nix eval --impure --raw --expr '
       "firebase-basics"
       "gke-basics"
       "spanner-basics"
+      "ai-management"
     ];
     claudeSkillNames = [
       "academy-guide"
       "mcp-builder"
       "gke-basics"
       "spanner-basics"
+      "ai-management"
     ];
     codexRemovedNames = [
       "academy-guide"
@@ -67,12 +72,17 @@ actual="$(nix eval --impure --raw --expr '
       claudeSkills = map (name: builtins.pathExists ((builtins.getAttr name extensions.claudeSkills) + "/SKILL.md")) claudeSkillNames;
       codexSkills = map (name: builtins.pathExists ((builtins.getAttr name extensions.codexSkills) + "/SKILL.md")) codexSkillNames;
       codexRemoved = map (name: !(builtins.hasAttr name extensions.codexSkills)) codexRemovedNames;
-      inputs = [
+        filteredSource = extensions.codexSkills.git-commit != flake.inputs.github-skills + "/skills/git-commit";
+        inputs = [
         (builtins.hasAttr "openai-plugins" flake.inputs)
         (!(builtins.hasAttr "openai-skills" flake.inputs))
-        (!(builtins.hasAttr "claude-code-guide-skills" flake.inputs))
-      ];
-    }
+          (!(builtins.hasAttr "claude-code-guide-skills" flake.inputs))
+        ];
+        localOverrides = [
+          (overridden.claudeSkills.gke-basics == "${./tests/fixtures/ai-skills}/gke-basics")
+          (overridden.codexSkills.gke-basics == "${./tests/fixtures/ai-skills}/gke-basics")
+        ];
+      }
 ')"
 
 if [[ "$actual" != "$expected" ]]; then

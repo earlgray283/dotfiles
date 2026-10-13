@@ -1,9 +1,7 @@
 {
   pkgs,
+  aiExtensions,
   claude-plugins-official,
-  anthropic-skills,
-  superpowers-skills,
-  google-skills,
   ponytail,
   go-modern-guidelines,
   caveman,
@@ -13,12 +11,12 @@
 let
   claudeSettings = {
     agentPushNotifEnabled = true;
+    autoUpdatesChannel = "latest";
     effortLevel = "medium";
     includeCoAuthoredBy = true;
     model = "sonnet";
     env = {
       CLAUDE_CODE_NO_FLICKER = "1";
-      DISABLE_AUTOUPDATER = "1";
     };
     permissions = {
       allow = [
@@ -113,31 +111,19 @@ let
       enableWeakerNetworkIsolation = true;
     };
   };
-  aiExtensions = import ../../lib/ai-extensions.nix {
-    inherit (pkgs) lib;
-    config = import ../ai-extensions.nix;
-    sources = {
-      claudePluginsOfficial = claude-plugins-official;
-      anthropicSkills = anthropic-skills;
-      superpowersSkills = superpowers-skills;
-      googleSkills = google-skills;
-      inherit ponytail caveman;
-      goModernGuidelines = go-modern-guidelines;
-    };
-  };
   herdrIntegrations = import ../../lib/herdr-integrations.nix { inherit pkgs; };
 in
 {
   programs.claude-code = {
     enable = true;
 
-    package = pkgs.llm-agents.claude-code;
+    package = null;
 
     enableMcpIntegration = true;
 
     settings = claudeSettings;
 
-    context = ./CLAUDE.md;
+    context = ./instructions.md;
 
     marketplaces = {
       claude-plugins-official = claude-plugins-official;

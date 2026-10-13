@@ -41,6 +41,10 @@
     "spanner-basics"
   ];
 
+  shadcnSkillNames = [
+    "shadcn"
+  ];
+
   openaiPluginNames = [
     "codex-security"
     "figma"

@@ -9,7 +9,7 @@ actual="$(nix eval --impure --raw --expr '
     pkgs = flake.inputs.nixpkgs.legacyPackages.aarch64-darwin;
     extensions = import ./lib/ai-extensions.nix {
       inherit (pkgs) lib;
-      config = import ./home-manager/ai-extensions.nix;
+      config = import ./home-manager/ai/extensions.nix;
       sources = {
         claudePluginsOfficial = flake.inputs.claude-plugins-official;
         superpowersSkills = flake.inputs.superpowers-skills;

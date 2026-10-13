@@ -48,6 +48,9 @@ test-go-modern-guidelines-plugin:
 test-caveman-plugin:
     bash tests/caveman-plugin-test.sh
 
+# Test Claude Code and Codex configuration, extensions, and installers.
+test-ai: test-declarative-agent-configs test-binary-sources test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin
+
 # Everything CI runs (CI calls the recipes one by one, for per-step logs).
 check: flake-check lint test-declarative-agent-configs test-home-manager-boundaries test-mise test-binary-sources test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin build-home-manager build-darwin
 
@@ -56,6 +59,28 @@ switch-home-manager:
 
 apply-dotfiles:
     just switch-home-manager
+
+# Install or update Claude Code through Anthropic's official latest-channel installer.
+install-claude-code:
+    nix run .#claude-code-installer -- latest
+
+# Install or update Codex through OpenAI's official standalone installer.
+install-codex:
+    nix run .#codex-installer
+
+# Install or update both AI CLIs through their official installers.
+install-ai: install-claude-code install-codex
+
+# Update Claude Code through its native updater.
+update-claude-code:
+    claude update
+
+# Update Codex through its native updater.
+update-codex:
+    codex update
+
+# Update both installed AI CLIs without rebuilding their static configuration.
+update-ai: update-claude-code update-codex
 
 # Install every tool pinned by the tracked mise configuration.
 install-mise:
