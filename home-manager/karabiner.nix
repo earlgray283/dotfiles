@@ -24,6 +24,7 @@
               ];
             }
             {
+              disable_built_in_keyboard_if_exists = true;
               identifiers = {
                 is_keyboard = true;
                 product_id = 33;
