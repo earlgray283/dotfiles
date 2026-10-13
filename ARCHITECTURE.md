@@ -1,6 +1,6 @@
 # dotfiles アーキテクチャ
 
-このリポジトリは、再現性を優先する設定をNix、ホームディレクトリ配下へ置く開発ツールをmise、miseの可変設定をchezmoiで管理する。
+このリポジトリは、再現性を優先する設定をNix、ホームディレクトリ配下へ置く開発ツールをmiseで管理する。
 
 ## 判断基準と編集場所
 
@@ -8,26 +8,30 @@
 |---|---|---|
 | macOS defaults、Homebrew、ホスト設定 | nix-darwin | `nix-darwin/configuration.nix` |
 | ユーザーパッケージ、シェル、エディタ | Home Manager | `home-manager/` |
-| Claude Codeの最終設定・package・plugins・skills・hooks | Home Manager | `home-manager/claude-code/claude-code.nix`、`home-manager/ai-extensions.nix` |
-| Codexの最終設定・plugins・skills・hooks | Home Manager | `home-manager/codex.nix`、`home-manager/ai-extensions.nix` |
-| Codex・OpenCodeのpackage | bin2nix / Home Manager | `config.toml`、`packages/` |
+| Claude Codeの静的設定・plugins・skills・hooks | Home Manager | `home-manager/ai/claude.nix`、`home-manager/ai/extensions.nix` |
+| Codexの最終設定・plugins・skills・hooks | Home Manager | `home-manager/ai/codex.nix`、`home-manager/ai/extensions.nix` |
+| Claude Code・CodexのCLI本体 | 公式installer | `lib/official-ai-installers.nix`、`justfile` |
+| Claude Code・Codexのruntime state | 各アプリ | dotfiles管理外 |
+| OpenCodeのpackage | bin2nix / Home Manager | `config.toml`、`packages/` |
 | OpenCodeの設定 | Home Manager | `home-manager/opencode.nix` |
-| 共有MCPサーバー | Home Manager | `home-manager/mcp.nix` |
+| 共有MCPサーバー | Home Manager | `home-manager/ai/mcp.nix` |
 | Home Manager向けの変換・生成ロジック | Nix library | `lib/` |
-| 開発用CLIとランタイム | mise | `home-manager/mise.nix`の`miseTools` |
-| miseの最終設定 | chezmoi modify | `chezmoi/dot_config/mise/modify_config.toml` |
+| 開発用CLIとランタイム | mise | `mise/mise.toml`、`mise/mise.lock` |
+| mise本体とglobal config symlink | Home Manager | `home-manager/mise.nix` |
 | Nix固有のツール | Home Manager / Nix | `home-manager/base.nix` |
 
-Claude CodeとCodexの最終設定はNix storeへのsymlinkになる。chezmoiのsource stateやmodify templateは介在しない。CLI内で設定を書き換えられない、または書き換えても次回switchで失われる制約を受け入れ、単一の宣言的な正本を優先する。
+Claude CodeとCodexの最終設定はNix storeへのsymlinkになる。CLI内で設定を書き換えられない、または書き換えても次回switchで失われる制約を受け入れ、単一の宣言的な正本を優先する。
+
+CLI本体は公式installerが`~/.local/bin`へ配置し、Nix storeには置かない。認証、履歴、session、DB、cacheなどのruntime stateは各アプリに書き込みを許可し、Nixには取り込まない。
 
 `home-manager/`には設定値とHome Manager optionへの割当だけを置く。plugin・skillの変換、package・shim・assetの生成は`lib/`へ分離する。
 
 ## MCPの配布
 
-`home-manager/mcp.nix`の`programs.mcp.servers`が唯一の正本である。Home Managerの各moduleがクライアント固有形式へ変換する。
+`home-manager/ai/mcp.nix`の`programs.mcp.servers`が唯一の正本である。Home Managerの各moduleがクライアント固有形式へ変換する。
 
 ```text
-home-manager/mcp.nix
+home-manager/ai/mcp.nix
         ↓ just switch-home-manager
 Home Manager
 ├─ Claude Code MCP plugin
@@ -45,12 +49,13 @@ npmで配布されるstdio MCPを追加するときはmise配下の`bunx`を優�
 
 | 変更対象 | 編集場所 |
 |---|---|
-| Claude Code settings・permissions・hooks | `home-manager/claude-code/claude-code.nix` |
-| Codex model・approval・project trust・hook trust | `home-manager/codex.nix` |
-| 両クライアントのplugins・skills | `home-manager/ai-extensions.nix` |
-| MCPサーバー | `home-manager/mcp.nix` |
+| Claude Code settings・permissions・hooks | `home-manager/ai/claude.nix` |
+| Codex model・approval・project trust・hook trust | `home-manager/ai/codex.nix` |
+| 両クライアントのplugins・skills | `home-manager/ai/extensions.nix` |
+| MCPサーバー | `home-manager/ai/mcp.nix` |
+| ローカルSkill | `home-manager/ai/skills/<name>/SKILL.md` |
 
-Codex pluginのhook hashが更新された場合も、CLIに記録させるのではなく`home-manager/codex.nix`の`hooks.state`を更新する。
+Codex pluginのhook hashが更新された場合も、CLIに記録させるのではなく`home-manager/ai/codex.nix`の`hooks.state`を更新する。
 
 ```text
 Nix moduleを編集
@@ -75,30 +80,32 @@ pin済みsource
    └─ ~/.codex/plugins/cache/home-manager
 ```
 
-拡張の選択と配布先は`home-manager/ai-extensions.nix`を正本とする。
+拡張の選択と配布先は`home-manager/ai/extensions.nix`を正本とする。ローカルSkillは`home-manager/ai/skills/`を正本とし、同名の外部Skillより優先する。
 
 - Anthropic公式skillsはClaude Codeだけへ配布する。既存のClaude公式pluginと名前が衝突するskillは重複配布しない。
 - Google Cloud skillsはCloud Run、Firebase、Spannerと主要なGKE運用skillだけをClaude CodeとCodexへ配布する。
 - OpenAI公式拡張は`openai/plugins`からCodex native pluginとして配布する。現在はFigma、Linear、Notion、Codex Security、OpenAI Developersを選択している。
-- GitHubは`home-manager/mcp.nix`の共有MCPと`github/awesome-copilot` skillsを使用する。独自MCPを同梱するOpenAI GitHub pluginは重複を避けるため配布しない。
+- GitHubは`home-manager/ai/mcp.nix`の共有MCPと`github/awesome-copilot` skillsを使用する。独自MCPを同梱するOpenAI GitHub pluginは重複を避けるため配布しない。
 
-## miseとchezmoi
+## mise
 
-miseだけはハイブリッド管理を維持する。Home Managerが`miseTools` fragmentを生成し、chezmoi modifyが現在の`~/.config/mise/config.toml`へ合成する。Nix宣言のtool versionが優先され、それ以外のmise設定は保持される。このmerge処理はClaude CodeとCodexには適用しない。
+`mise/mise.toml`がtool selectorとmise設定、`mise/mise.lock`が解決済みURLとchecksumの正本である。Home Managerは`pkgs.mise`を導入し、これらをglobal configへlinkするだけで、activation中にtoolをinstallしない。`just install-mise`がlock済みtoolを導入し、`just update-mise`がpinとlock metadataを更新する。Goの`GOBIN`はmiseに設定させず、`~/go/bin`をstableなinstall先として使う。
 
 ## 適用フロー
 
 ```text
-nix-darwinの変更          -> just switch-darwin-rebuild
-Home Manager / miseの変更 -> just switch-home-manager
-                              ├─ Claude Code・Codexを直接配置
-                              └─ chezmoi applyでmiseを合成
+nix-darwinの変更       -> just switch-darwin-rebuild
+Home Managerの変更    -> just switch-home-manager
+mise toolの導入       -> just install-mise
+mise toolのpin更新    -> just update-mise
+AI CLIの初回導入・復旧 -> just install-ai
+AI CLIの通常更新       -> just update-ai
 ```
 
-通常は`just switch-home-manager`だけでよい。`just apply-dotfiles`は互換用aliasである。
+初回・Nix管理からの移行時は両installerを実行してから`just switch-home-manager`する。以後の静的設定変更はswitchだけでよい。`just apply-dotfiles`は互換用aliasである。
 
 ## AI CLIの供給元
 
-CodexとOpenCodeは`bin2nix`が公式GitHub ReleaseのURLとhashを`packages/`へ生成し、Home Managerがそのパッケージを配置する。Numtideのbinary cacheには依存しない。
+OpenCodeは`bin2nix`が公式GitHub ReleaseのURLとhashを`packages/`へ生成し、Home Managerがそのパッケージを配置する。
 
-Claude CodeはGitHub Releaseを提供していないためbin2nixの対象外とする。`llm-agents.nix`のClaude Code packageだけを使い、Anthropic公式配布バイナリを取得する。Numtideのsubstituterと公開鍵は登録しない。
+Claude CodeとCodexは`nix run`を明示したときに公式installerを取得・起動する。installerが配置したCLI本体とnative updaterは各vendorが所有する。Home Manager moduleは`package = null`として、静的設定だけを生成する。
