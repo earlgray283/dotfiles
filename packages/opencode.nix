@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation {
   pname = "opencode";
-  version = "1.19.0";
+  version = "1.19.4";
 
   src = fetchurl {
-    url = "https://github.com/anomalyco/opencode/releases/download/v1.19.0/opencode-darwin-arm64.zip";
-    hash = "sha256-DV9RGUjW+/7fm7FnU8CsQmE9zI3nXZ3rfo0M9YTI+6Y=";
+    url = "https://github.com/anomalyco/opencode/releases/download/v1.19.4/opencode-darwin-arm64.zip";
+    hash = "sha256-xACi+MirfplHin9N0aRmtXvzOIjlINhcVXgKVGTEtok=";
   };
 
   nativeBuildInputs = [ unzip ];
