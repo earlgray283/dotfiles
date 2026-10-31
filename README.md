@@ -11,7 +11,7 @@ macOS environment managed by nix-darwin, Home Manager and mise.
 
 何が Nix 管理で何が管理外かは [ARCHITECTURE.md の「Nix管理の境界」](ARCHITECTURE.md#nix管理の境界) にまとめている。
 
-macOS 上のアプリと CLI の導入経路は、公式 installer（Claude Code、Codex）、Homebrew（nix-darwin の `homebrew.casks` / `brews`）、mise、Nix の4つに限る。それ以外で入れたものは、これらのいずれかへ移す。バイナリは原則 mise・公式 installer・Homebrew で入れ、Nix は設定ファイルの生成に使う。mise 本体は公式 installer（`just install-mise-cli`、`~/.local/bin/mise`）、AeroSpace は Homebrew、git は Xcode Command Line Tools、zsh は macOS 標準の `/bin/zsh` を使う。Home Manager module が本体を要求する場合は `package = null` か、`mkMiseBin` で mise の shim を渡す（gh、starship、direnv）。neovim は plugin を Nix で組み込むため、現状は Nix のままにする。
+macOS 上のアプリと CLI の導入経路は、公式 installer（Claude Code、Codex）、Homebrew（nix-darwin の `homebrew.casks` / `brews`）、mise、Nix の4つに限る。それ以外で入れたものは、これらのいずれかへ移す。バイナリは原則 mise・公式 installer・Homebrew で入れ、Nix は設定ファイルの生成に使う。mise 本体は公式 installer（`just install-mise-cli`、`~/.local/bin/mise`）、AeroSpace は Homebrew、zsh は macOS 標準の `/bin/zsh` を使う。Home Manager module が本体を要求する場合は `package = null` か、`mkMiseBin` で mise の shim を渡す（gh、starship、direnv）。git と neovim は Nix のままにする（git は mise に無く、Xcode 同梱版は更新が遅い。neovim は plugin を Nix で組み込む）。
 
 編集場所の判断に迷ったら、システム全体なら`nix-darwin/`、宣言的なユーザー設定なら`home-manager/`、その変換・生成ロジックなら`lib/`、開発ツールのバージョンなら`mise/mise.toml`を編集する。
 

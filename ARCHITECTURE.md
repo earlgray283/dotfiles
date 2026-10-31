@@ -45,7 +45,7 @@ Nixが「何を入れるか」を宣言していても、導入・更新は別�
 |---|---|
 | Nix本体・daemon・`/etc/nix/nix.conf` | [NixOS/nix-installer](https://github.com/NixOS/nix-installer)（`nix.enable = false`でnix-darwinに管理させない） |
 | Homebrew本体 | 公式installerで手動導入 |
-| Xcode Command Line Tools（`/usr/bin/git`） | `xcode-select --install` |
+| Xcode Command Line Tools（初回のflake取得に使う`/usr/bin/git`。以後のgitはHome Managerの`pkgs.git`） | `xcode-select --install` |
 | zsh本体とlogin shell | macOS標準の`/bin/zsh` |
 | Claude Code・Codexの認証・履歴・session | 各アプリ |
 | `~/.config/opencode`の`node_modules`、`package.json`、`opencode.jsonc` | OpenCode |

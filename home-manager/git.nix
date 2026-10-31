@@ -3,8 +3,7 @@
 {
   programs.git = {
     enable = true;
-    # Xcode Command Line Tools provides /usr/bin/git.
-    package = null;
+    package = pkgs.git;
     ignores = [
       "**/.claude/settings.local.json"
       ".claude"
