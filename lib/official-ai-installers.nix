@@ -37,4 +37,9 @@ in
       export CODEX_NON_INTERACTIVE=1
     '';
   };
+
+  muse-code-installer = mkInstaller {
+    name = "muse-code-installer";
+    url = "https://dev.meta.ai/install.sh";
+  };
 }

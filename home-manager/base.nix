@@ -16,6 +16,7 @@
     ./herdr.nix
     ./ai
     ./opencode.nix
+    ./muse.nix
     ./editable-configs.nix
     ./mise.nix
     ./direnv.nix
@@ -39,19 +40,12 @@
   home.stateVersion = "25.11"; # Please read the comment before changing.
 
   home.packages = [
-    # Not installable via mise
-    pkgs.cachix
-    pkgs.luarocks
-
     # nix
     pkgs.nixd # Nix Language Server
     pkgs.nixfmt
-    pkgs.nixfmt-tree
 
     # Docker
     # pkgs.cockroachdb            # Linux only - not available on macOS
-
-    pkgs.wget
   ];
 
   # Let Home Manager install and manage itself.

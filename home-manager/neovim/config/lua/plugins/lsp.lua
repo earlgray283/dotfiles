@@ -34,6 +34,7 @@ require("lz.n").load({
         "lua_ls",
         "markdown_oxide",
         "nixd",
+        "sqruff",
         "tailwindcss",
         "taplo",
         "terraformls",

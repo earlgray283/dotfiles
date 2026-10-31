@@ -10,11 +10,13 @@ let
   claudeSettings = "${home}/.claude/settings.json";
   codexConfig = ".codex/config.toml";
   opencodeConfig = "opencode/opencode.json";
+  museConfig = "muse/settings.json";
 in
 {
   home.file.${claudeSettings}.enable = false;
   home.file.${codexConfig}.enable = false;
   xdg.configFile.${opencodeConfig}.enable = false;
+  xdg.configFile.${museConfig}.enable = false;
 
   home.activation =
     import ../lib/editable-configs.nix
@@ -35,6 +37,10 @@ in
         "opencode.json" = {
           inherit (config.xdg.configFile.${opencodeConfig}) source;
           target = "${config.xdg.configHome}/${opencodeConfig}";
+        };
+        "muse-settings.json" = {
+          inherit (config.xdg.configFile.${museConfig}) source;
+          target = "${config.xdg.configHome}/${museConfig}";
         };
       };
 }

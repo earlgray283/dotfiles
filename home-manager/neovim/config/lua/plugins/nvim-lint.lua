@@ -12,10 +12,6 @@ require("lz.n").load({
         nix = { "nix" },
         proto = { "protolint", "buf_lint" },
         rust = { "clippy" },
-        sql = { "sqlruff" },
-        typescript = { "oxlint" },
-        typescriptreact = { "oxlint" },
-        javascript = { "oxlint" },
         ["yaml.ghaction"] = { "actionlint" },
       }
 

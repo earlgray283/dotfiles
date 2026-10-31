@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-expected='{"claudeExternal":true,"codexExternal":true,"gitMinimal":true,"numtideDisabled":true,"opencodeExternal":true}'
+expected='{"claudeExternal":true,"codexExternal":true,"gitExternal":true,"numtideDisabled":true,"opencodeExternal":true}'
 actual="$(nix eval --impure --json --expr '
   let
     flake = builtins.getFlake ("path:" + toString ./.);
-    system = "aarch64-darwin";
-    pkgs = flake.inputs.nixpkgs.legacyPackages.${system};
     home = flake.homeConfigurations.earlgray.config;
     darwin = flake.darwinConfigurations.makabeee-macbook-pro.config;
   in {
     claudeExternal = home.programs.claude-code.package == null;
     codexExternal = home.programs.codex.package == null;
-    gitMinimal = home.programs.git.package.drvPath == pkgs.gitMinimal.drvPath;
+    gitExternal = home.programs.git.package == null;
     opencodeExternal = home.programs.opencode.package == null;
     numtideDisabled = !(builtins.elem "https://cache.numtide.com" darwin.nix.settings.trusted-substituters);
   }

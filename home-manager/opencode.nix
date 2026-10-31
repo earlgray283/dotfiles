@@ -14,86 +14,45 @@ in
     context = ./ai/instructions.md;
 
     settings = {
-      env = {
-        DISABLE_AUTOUPDATER = "1";
-      };
-      hooks = {
-        Stop = [
-          {
-            hooks = [
-              {
-                type = "command";
-                command = "bun ~/.config/opencode/hooks/notifications/Stop.ts";
-              }
-            ];
-            matcher = "";
-          }
-        ];
-        Notification = [
-          {
-            hooks = [
-              {
-                type = "command";
-                command = "bun ~/.config/opencode/hooks/notifications/Notification.ts";
-              }
-            ];
-            matcher = "";
-          }
-        ];
-        PermissionRequest = [
-          {
-            hooks = [
-              {
-                type = "command";
-                command = "bun ~/.config/opencode/hooks/notifications/PermissionRequest.ts";
-              }
-            ];
-            matcher = "";
-          }
-        ];
-      };
-      includeCoAuthoredBy = false;
-      permissions = {
-        allow = [
-          "Bash(bun:*)"
-          "Bash(cargo:*)"
-          "Bash(fd:*)"
-          "Bash(git add:*)"
-          "Bash(git commit:*)"
-          "Bash(git diff:*)"
-          "Bash(go:*)"
-          "Bash(home-manager build:*)"
-          "Bash(home-manager switch:*)"
-          "Bash(just:*)"
-          "Bash(ls:*)"
-          "Bash(mkdir:*)"
-          "Bash(nix eval:*)"
-          "Bash(rg:*)"
-          "mcp__playwright__browser_evaluate:*"
-          "mcp__playwright__browser_navigate:*"
-          "mcp__playwright__browser_resize:*"
-          "mcp__playwright__browser_take_screenshot:*"
-        ];
-        deny = [
-          "Bash(rm:*)"
-          "Read(.env)"
-          "Read(credentials.json)"
-          "Write(.env)"
-          "Write(credentials.json)"
-          "Bash(find:*)"
-          "Bash(grep:*)"
-        ];
+      autoupdate = false;
+      # OpenCode's last matching rule wins.
+      permission = {
+        bash = {
+          "bun *" = "allow";
+          "cargo *" = "allow";
+          "fd *" = "allow";
+          "git add *" = "allow";
+          "git commit *" = "allow";
+          "git diff *" = "allow";
+          "go *" = "allow";
+          "home-manager build *" = "allow";
+          "home-manager switch *" = "allow";
+          "just *" = "allow";
+          "ls *" = "allow";
+          "mkdir *" = "allow";
+          "nix eval *" = "allow";
+          "rg *" = "allow";
+          "rm *" = "deny";
+          "find *" = "deny";
+          "grep *" = "deny";
+        };
+        read = {
+          ".env" = "deny";
+          "credentials.json" = "deny";
+        };
+        edit = {
+          ".env" = "deny";
+          "credentials.json" = "deny";
+        };
+        playwright_browser_evaluate = "allow";
+        playwright_browser_navigate = "allow";
+        playwright_browser_resize = "allow";
+        playwright_browser_take_screenshot = "allow";
       };
       plugin = [
         "superpowers@git+https://github.com/obra/superpowers.git"
       ];
     };
-  };
-
-  # hooks ディレクトリを home-manager で管理
-  home.file.".config/opencode/hooks" = {
-    source = ./ai/hooks;
-    recursive = true;
   };
 
   home.file.".config/opencode/plugins/herdr-agent-state.js".source = herdrIntegrations.opencodePlugin;

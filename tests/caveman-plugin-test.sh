@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-expected='{"claude":"caveman","claudeHook":true,"claudeSkill":true,"codex":"caveman","codexSkill":true,"version":"3.2.0"}'
+expected='{"claude":"caveman","claudeHook":true,"claudeSkill":true,"codex":"caveman","codexSkill":true,"version":"4.0.1"}'
 actual="$(nix eval --impure --raw --expr '
   let
     flake = builtins.getFlake (toString ./.);

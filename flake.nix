@@ -109,18 +109,6 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [
-          (_final: prev: {
-            _1password-cli = prev._1password-cli.overrideAttrs (_old: rec {
-              version = "2.33.0-beta.02";
-              # nix store prefetch-file --hash-type sha256 "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_apple_universal_v${version}.pkg"
-              src = prev.fetchurl {
-                url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_apple_universal_v${version}.pkg";
-                hash = "sha256-inHfXY1KlttPnTeSIH2kTfBIvslASyqkUDO1YHZXQ0U=";
-              };
-            });
-          })
-        ];
       };
     in
     {
@@ -132,6 +120,7 @@
         inherit (import ./lib/official-ai-installers.nix { inherit pkgs; })
           claude-code-installer
           codex-installer
+          muse-code-installer
           ;
         deadnix = pkgs.deadnix;
         # CI runs the justfile recipes rather than duplicating the commands.

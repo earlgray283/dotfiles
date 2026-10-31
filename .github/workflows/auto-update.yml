@@ -19,35 +19,6 @@ jobs:
 
       - uses: DeterminateSystems/magic-nix-cache-action@v14
 
-      - name: Get bin2nix HEAD SHA
-        id: bin2nix-sha
-        run: |
-          sha=$(gh api repos/earlgray283/bin2nix/commits/HEAD --jq '.sha')
-          echo "sha=$sha" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.DOTFILES_GITHUB_TOKEN }}
-
-      - name: Cache bin2nix binary
-        uses: actions/cache@v5
-        id: cache-bin2nix
-        with:
-          path: ~/.cargo/bin/bin2nix
-          key: bin2nix-${{ runner.os }}-${{ steps.bin2nix-sha.outputs.sha }}
-
-      - uses: dtolnay/rust-toolchain@stable
-        if: steps.cache-bin2nix.outputs.cache-hit != 'true'
-
-      - uses: Swatinem/rust-cache@v2
-        if: steps.cache-bin2nix.outputs.cache-hit != 'true'
-        with:
-          workspaces: "~/.cargo -> registry"
-
-      - name: Install bin2nix
-        if: steps.cache-bin2nix.outputs.cache-hit != 'true'
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.DOTFILES_GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          cargo install --git https://github.com/earlgray283/bin2nix
-
       - name: nix flake update
         id: flake-update
         run: |
@@ -59,26 +30,6 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: bin2nix update
-        id: bin2nix-update
-        run: |
-          bin2nix update --target aarch64-apple-darwin
-          diff=""
-          for f in packages/*.nix; do
-            old=$(git show HEAD:"$f" 2>/dev/null | grep -oP 'version = "\K[^"]+' || true)
-            new=$(grep -oP 'version = "\K[^"]+' "$f" || true)
-            if [ -n "$new" ] && [ "$old" != "$new" ]; then
-              diff="${diff}- \`$(basename "$f" .nix)\`: ${old:-none} → ${new}"$'\n'
-            fi
-          done
-          {
-            echo "diff<<EOF"
-            echo "$diff"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Get short SHA
         id: short-sha
         run: echo "sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
@@ -88,15 +39,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: chore/auto-update-${{ steps.short-sha.outputs.sha }}
-          commit-message: "chore: auto update nix flake and packages"
+          commit-message: "chore: auto update nix flake"
           title: "chore: weekly auto update"
           body: |
             Automated weekly update.
 
             **Flake inputs:**
             ${{ steps.flake-update.outputs.diff }}
-
-            **bin2nix packages:**
-            ${{ steps.bin2nix-update.outputs.diff }}
           labels: dependencies
           delete-branch: true

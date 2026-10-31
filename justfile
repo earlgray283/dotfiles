@@ -61,6 +61,10 @@ install-claude-code:
 install-codex:
     nix run .#codex-installer
 
+# Install or update Muse Code through Meta's official installer.
+install-muse-code:
+    nix run .#muse-code-installer
+
 # Install or update both AI CLIs through their official installers.
 install-ai: install-claude-code install-codex
 
@@ -109,10 +113,10 @@ upgrade: update switch-home-manager
 [script("bash")]
 verify-mise:
     set -uo pipefail
-    mise install --yes
-    mise reshim
+    {{mise}} install --yes
+    {{mise}} reshim
     fail=0
-    for b in $(mise bin-paths | xargs -I{} fd -t x -d 1 . {} -x echo '{/}' | sort -u); do
+    for b in $(MISE_IGNORED_CONFIG_PATHS= {{mise}} bin-paths | xargs -I{} fd -t x -d 1 . {} -x echo '{/}' | sort -u); do
       p=$(command -v "$b" || true)
       if [[ -z $p || $p == /nix/store/* ]]; then echo "BAD  $b -> ${p:-MISSING}"; fail=1; fi
     done

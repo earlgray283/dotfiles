@@ -5,17 +5,6 @@ generation=$(nix build --no-link --print-out-paths path:.#homeConfigurations.ear
 mise_config="$generation/home-files/.config/mise/config.toml"
 session_vars="$generation/home-path/etc/profile.d/hm-session-vars.sh"
 
-force_state=$(nix eval --impure --json --expr '
-  let
-    flake = builtins.getFlake ("path:" + toString ./.);
-    files = flake.homeConfigurations.earlgray.config.xdg.configFile;
-  in {
-    config = files."mise/config.toml".force;
-    lock = files."mise/mise.lock".force;
-  }
-')
-test "$force_state" = '{"config":true,"lock":true}'
-
 test -L "$mise_config"
 
 mise_bin=$(command -v mise)

@@ -8,6 +8,12 @@
       echo "pre-commit: gitleaks not found; run 'just install-mise'" >&2
       exit 1
     fi
-    exec gitleaks git --staged --redact --no-banner
+    gitleaks git --staged --redact --no-banner || exit $?
+
+    # core.hooksPath hides the repo's own hooks; --git-path would resolve to this directory again.
+    repo_hook="$(git rev-parse --git-common-dir)/hooks/pre-commit"
+    if [ -x "$repo_hook" ]; then
+      exec "$repo_hook" "$@"
+    fi
   '';
 }

@@ -7,7 +7,7 @@ macOS environment managed by nix-darwin, Home Manager and mise.
 - **nix-darwin**: macOS のシステム設定、Homebrew、ホスト全体に必要なものを管理する。
 - **Home Manager**: ユーザー環境と、Claude Code・Codex・OpenCodeの静的設定、プラグイン、skills、hooksを宣言的に管理する。
 - **lib**: Home Managerが利用する変換関数とartifact生成処理を管理する。
-- **mise**: 開発用 CLI とランタイムを `mise/mise.toml` と `mise/mise.lock` で管理する。OpenCode と `cloudflared` もここに含む。Nix が必要な `nixd`、`nixfmt`、`nixfmt-tree` と、mise で導入できない `cachix`、`luarocks`、`wget` は例外として Nix のままにする。gcloud は macOS 版に Python が同梱されないため、mise の `python` を `CLOUDSDK_PYTHON` で参照する。
+- **mise**: 開発用 CLI とランタイムを `mise/mise.toml` と `mise/mise.lock` で管理する。OpenCode と `cloudflared` もここに含む。Nix が必要な `nixd` と `nixfmt` は例外として Nix のままにする。gcloud は macOS 版に Python が同梱されないため、mise の `python` を `CLOUDSDK_PYTHON` で参照する。
 
 何が Nix 管理で何が管理外かは [ARCHITECTURE.md の「Nix管理の境界」](ARCHITECTURE.md#nix管理の境界) にまとめている。
 
