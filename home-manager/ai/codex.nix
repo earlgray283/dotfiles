@@ -4,9 +4,6 @@
   ...
 }:
 
-let
-  herdrIntegrations = import ../../lib/herdr-integrations.nix { inherit pkgs; };
-in
 {
   programs.codex = {
     enable = true;
@@ -57,5 +54,6 @@ in
     ];
   };
 
-  home.file.".codex/herdr-agent-state.sh".source = herdrIntegrations.codexHook;
+  home.file.".codex/herdr-agent-state.sh".source =
+    (import ../../lib/herdr-integrations.nix { inherit pkgs; }).codexHook;
 }

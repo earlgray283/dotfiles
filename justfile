@@ -4,13 +4,23 @@
 # Keep the comment above each recipe to one line: `just --list` shows only the
 # last line as its description.
 
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+mise := 'mise --cd "' + justfile_directory() / 'mise"'
+
+# The global config is a read-only store copy of mise/mise.toml; mise must not try to lock it.
+export MISE_IGNORED_CONFIG_PATHS := env_var("HOME") / ".config/mise/config.toml"
+ai_tests := "declarative-agent-configs editable-configs binary-sources codex-skills ponytail-plugin go-modern-guidelines-plugin caveman-plugin"
+
+_default:
+    @just --list
+
 # Report dead nix code.
-lint:
-    nix run .#deadnix -- --fail .
+lint *args="--fail":
+    nix run .#deadnix -- {{args}} .
 
 # Same lint, but rewrites the sources instead of only reporting.
-lint-fix:
-    nix run .#deadnix -- -e .
+lint-fix: (lint "-e")
 
 fmt:
     nix fmt
@@ -18,47 +28,30 @@ fmt:
 flake-check:
     nix flake check --print-build-logs
 
-build-home-manager:
-    nix build --print-build-logs --no-link .#homeConfigurations.earlgray.activationPackage
+_build attr:
+    nix build --print-build-logs --no-link .#{{attr}}
 
-build-darwin:
-    nix build --print-build-logs --no-link .#darwinConfigurations.makabeee-macbook-pro.system
+build-home-manager: (_build "homeConfigurations.earlgray.activationPackage")
+build-darwin: (_build "darwinConfigurations.makabeee-macbook-pro.system")
 
-test-declarative-agent-configs:
-    bash tests/declarative-agent-configs-test.sh
-
-test-home-manager-boundaries:
-    bash tests/home-manager-boundaries-test.sh
-
-test-mise:
-    bash tests/mise-config-test.sh
-
-test-binary-sources:
-    bash tests/binary-sources-test.sh
-
-test-codex-skills:
-    bash tests/codex-skills-test.sh
-
-test-ponytail-plugin:
-    bash tests/ponytail-plugin-test.sh
-
-test-go-modern-guidelines-plugin:
-    bash tests/go-modern-guidelines-plugin-test.sh
-
-test-caveman-plugin:
-    bash tests/caveman-plugin-test.sh
+# Run tests/<name>-test.sh for each name.
+test *names:
+    for t in {{names}}; do bash "tests/$t-test.sh"; done
 
 # Test Claude Code and Codex configuration, extensions, and installers.
-test-ai: test-declarative-agent-configs test-binary-sources test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin
+test-ai: (test ai_tests)
 
 # Everything CI runs (CI calls the recipes one by one, for per-step logs).
-check: flake-check lint test-declarative-agent-configs test-home-manager-boundaries test-mise test-binary-sources test-codex-skills test-ponytail-plugin test-go-modern-guidelines-plugin test-caveman-plugin build-home-manager build-darwin
+check: flake-check lint (test ai_tests "home-manager-boundaries mise-config") build-home-manager build-darwin
 
 switch-home-manager:
     home-manager switch --flake .#earlgray
 
-apply-dotfiles:
-    just switch-home-manager
+switch-darwin-rebuild:
+    sudo darwin-rebuild switch --flake .
+
+# Apply nix-darwin (Homebrew provides AeroSpace), then Home Manager.
+switch-all: switch-darwin-rebuild switch-home-manager
 
 # Install or update Claude Code through Anthropic's official latest-channel installer.
 install-claude-code:
@@ -82,43 +75,45 @@ update-codex:
 # Update both installed AI CLIs without rebuilding their static configuration.
 update-ai: update-claude-code update-codex
 
+# Install mise itself into ~/.local/bin through the official installer.
+install-mise-cli:
+    curl -fsSL https://mise.run | sh
+    ~/.local/bin/mise --version
+
 # Install every tool pinned by the tracked mise configuration.
 install-mise:
-    mise --cd "{{justfile_directory()}}/mise" install --locked --yes
+    {{mise}} install --locked --yes
 
 # Upgrade mise tool pins and refresh their lock metadata.
 update-mise:
-    mise --cd "{{justfile_directory()}}/mise" upgrade --bump --yes
-    mise --cd "{{justfile_directory()}}/mise" lock --platform macos-arm64 --yes
+    ~/.local/bin/mise self-update --yes
+    {{mise}} upgrade --bump --yes --exclude python
+    {{mise}} upgrade --yes python
+    {{mise}} lock --platform macos-arm64 --yes
 
-# Confirm every tool declared in home-manager/mise.nix resolves outside /nix.
+# Bump flake inputs. Apply with switch-home-manager.
+update-nix:
+    nix flake update
+
+# Bump flake inputs and update official-installer CLIs (Claude Code, Codex). Does not switch.
+update-all: update-nix update-ai
+
+# Upgrade everything: flake inputs, AI CLIs, mise tools. Does not switch.
+update: update-nix update-ai update-mise
+
+# Update everything, then apply it with switch-home-manager.
+upgrade: update switch-home-manager
+
+# Confirm every executable mise provides resolves outside /nix.
 # Run from an interactive zsh: this checks PATH, and `mise activate zsh` sets PATH.
+[script("bash")]
 verify-mise:
-    #!/usr/bin/env bash
     set -uo pipefail
     mise install --yes
     mise reshim
     fail=0
-    for b in actionlint atlas bat biome buf bun clang clang-format clangd cue delta docker-language-server \
-             dockerfmt dprint fd fzf gh gitleaks go goimports golangci-lint \
-             gopls hadolint hyperfine just lazygit lua-language-server \
-             markdown-oxide node op oxlint pre-commit prettier protolint \
-             rg rustfmt sqlfluff sqruff starship stylua tailwindcss-language-server taplo \
-             terraform terraform-ls tldr tree-sitter tv \
-             typescript-language-server uv vale vscode-css-language-server \
-             vscode-html-language-server wt xh yaml-language-server yamlfmt; do
+    for b in $(mise bin-paths | xargs -I{} fd -t x -d 1 . {} -x echo '{/}' | sort -u); do
       p=$(command -v "$b" || true)
-      if [[ -z $p ]]; then
-        echo "MISSING  $b"
-        fail=1
-      elif [[ $p == /nix/store/* ]]; then
-        echo "IN /nix  $b -> $p"
-        fail=1
-      else
-        printf '%-32s %s\n' "$b" "$p"
-      fi
+      if [[ -z $p || $p == /nix/store/* ]]; then echo "BAD  $b -> ${p:-MISSING}"; fail=1; fi
     done
     exit $fail
-
-switch-darwin-rebuild:
-    sudo darwin-rebuild switch --flake .

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-expected='{"claudeKept":[true,true,true,true,true,true,true,true,true],"claudeRemoved":[true,true,true,true],"claudeSkills":[true,true,true,true,true],"codexRemoved":[true,true,true,true],"codexSkills":[true,true,true,true,true,true,true,true,true,true,true,true],"filteredSource":true,"inputs":[true,true,true],"localOverrides":[true,true]}'
+expected='{"claudeKept":[true,true,true,true,true,true],"claudeRemoved":[true,true,true,true,true,true,true],"claudeSkills":[true,true,true,true,true],"codexRemoved":[true,true,true,true],"codexSkills":[true,true,true,true,true,true,true,true,true,true,true,true],"filteredSource":true,"inputs":[true,true,true],"localOverrides":[true,true]}'
 actual="$(nix eval --impure --raw --expr '
   let
     flake = builtins.getFlake (toString ./.);
@@ -49,17 +49,17 @@ actual="$(nix eval --impure --raw --expr '
       "security-best-practices"
     ];
     claudeKept = [
-      "claude-code-setup"
       "claude-md-management"
       "commit-commands"
       "gopls-lsp"
       "rust-analyzer-lsp"
-      "skill-creator"
       "superpowers"
-      "code-simplifier"
       "security-guidance"
     ];
     claudeRemoved = [
+      "claude-code-setup"
+      "skill-creator"
+      "code-simplifier"
       "code-review"
       "feature-dev"
       "ralph-loop"

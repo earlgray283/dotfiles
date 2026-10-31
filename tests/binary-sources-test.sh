@@ -1,23 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-expected='{"claudeExternal":true,"codexExternal":true,"gitMinimal":true,"numtideDisabled":true,"opencodeManaged":true,"opencodeRelease":true}'
+expected='{"claudeExternal":true,"codexExternal":true,"gitMinimal":true,"numtideDisabled":true,"opencodeExternal":true}'
 actual="$(nix eval --impure --json --expr '
   let
     flake = builtins.getFlake ("path:" + toString ./.);
     system = "aarch64-darwin";
     pkgs = flake.inputs.nixpkgs.legacyPackages.${system};
-    lib = flake.inputs.nixpkgs.lib;
     home = flake.homeConfigurations.earlgray.config;
     darwin = flake.darwinConfigurations.makabeee-macbook-pro.config;
-    opencode = flake.packages.${system}.opencode or null;
-    releaseUrl = package: builtins.head package.src.urls;
   in {
     claudeExternal = home.programs.claude-code.package == null;
     codexExternal = home.programs.codex.package == null;
     gitMinimal = home.programs.git.package.drvPath == pkgs.gitMinimal.drvPath;
-    opencodeManaged = opencode != null && home.programs.opencode.package.drvPath == opencode.drvPath;
-    opencodeRelease = lib.hasPrefix "https://github.com/anomalyco/opencode/releases/download/" (releaseUrl home.programs.opencode.package);
+    opencodeExternal = home.programs.opencode.package == null;
     numtideDisabled = !(builtins.elem "https://cache.numtide.com" darwin.nix.settings.trusted-substituters);
   }
 ')"

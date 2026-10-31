@@ -1,12 +1,9 @@
 {
   claudeWrappedPluginNames = [
     "frontend-design"
-    "code-simplifier"
-    "skill-creator"
     "claude-md-management"
     "security-guidance"
     "commit-commands"
-    "claude-code-setup"
     "gopls-lsp"
     "rust-analyzer-lsp"
   ];

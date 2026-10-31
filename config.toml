@@ -1,5 +1,0 @@
-[opencode]
-repo = "anomalyco/opencode"
-asset_prefix = "opencode-darwin-arm64"
-binary_name = "opencode"
-archive_binary = "opencode"

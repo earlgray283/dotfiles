@@ -7,7 +7,7 @@ in
   programs.opencode = {
     enable = true;
 
-    package = (import ../packages { inherit pkgs; }).opencode;
+    package = null;
 
     enableMcpIntegration = true;
 

@@ -4,13 +4,14 @@
   # AeroSpace window manager
   programs.aerospace = {
     enable = true;
-    launchd.enable = true;
+    # Installed by the Homebrew cask; the module's launchd agent needs a Nix package.
+    package = null;
+    launchd.enable = false;
     settings = {
       after-login-command = [ ];
       after-startup-command = [
         "exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0"
       ];
-      start-at-login = true;
 
       enable-normalization-flatten-containers = true;
       enable-normalization-opposite-orientation-for-nested-containers = true;
@@ -144,4 +145,19 @@
       };
     };
   };
+
+  launchd.agents.aerospace-app = {
+    enable = true;
+    config = {
+      Program = "/Applications/AeroSpace.app/Contents/MacOS/AeroSpace";
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "/tmp/aerospace.log";
+      StandardErrorPath = "/tmp/aerospace.err.log";
+    };
+  };
+
+  home.file.".aerospace.toml".onChange = ''
+    /opt/homebrew/bin/aerospace reload-config >/dev/null 2>&1 || true
+  '';
 }

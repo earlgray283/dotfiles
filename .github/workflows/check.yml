@@ -31,16 +31,19 @@ jobs:
         run: nix run .#just -- lint
 
       - name: Test declarative agent configurations
-        run: nix run .#just -- test-declarative-agent-configs
+        run: nix run .#just -- test declarative-agent-configs
+
+      - name: Test editable configs
+        run: nix run .#just -- test editable-configs
 
       - name: Test Home Manager boundaries
-        run: nix run .#just -- test-home-manager-boundaries
+        run: nix run .#just -- test home-manager-boundaries
 
       - name: Test AI CLI binary sources
-        run: nix run .#just -- test-binary-sources
+        run: nix run .#just -- test binary-sources
 
       - name: Test Codex skills
-        run: nix run .#just -- test-codex-skills
+        run: nix run .#just -- test codex-skills
 
       - name: Build home-manager configuration
         run: nix run .#just -- build-home-manager

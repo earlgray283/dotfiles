@@ -11,7 +11,7 @@ in
       onboarding = false;
 
       terminal = {
-        default_shell = "${pkgs.zsh}/bin/zsh";
+        default_shell = "/bin/zsh";
         shell_mode = "auto";
         new_cwd = "follow";
       };
@@ -69,8 +69,6 @@ in
         prefix = "ctrl+a";
         split_vertical = [
           "prefix+|"
-          "prefix+pipe"
-          "prefix+bar"
           "prefix+shift+backslash"
           "prefix+backslash"
           "prefix+v"

@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   programs.git = {
     enable = true;
-    package = pkgs.gitMinimal;
+    # Xcode Command Line Tools provides /usr/bin/git.
+    package = null;
     ignores = [
       "**/.claude/settings.local.json"
       ".claude"

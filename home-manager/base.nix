@@ -16,8 +16,10 @@
     ./herdr.nix
     ./ai
     ./opencode.nix
+    ./editable-configs.nix
     ./mise.nix
     ./direnv.nix
+    ./docker.nix
     ./neovim
   ];
 
@@ -37,14 +39,8 @@
   home.stateVersion = "25.11"; # Please read the comment before changing.
 
   home.packages = [
-    # Shell/Terminal Tools
-    pkgs.eza
-    pkgs.skim
-    pkgs.google-cloud-sdk
+    # Not installable via mise
     pkgs.cachix
-
-    # Lua
-    pkgs.lua
     pkgs.luarocks
 
     # nix

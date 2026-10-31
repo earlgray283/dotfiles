@@ -3,15 +3,24 @@
 set -euo pipefail
 
 generation=$(nix build --no-link --print-out-paths path:.#homeConfigurations.earlgray.activationPackage)
-claude_config="$generation/home-files/.claude/settings.json"
-codex_config="$generation/home-files/.codex/config.toml"
+editable_source() {
+  rg -o --replace '$1' "^deploy_editable $1 (\\S+) " "$generation/activate"
+}
+claude_config=$(editable_source claude-settings.json)
+codex_config=$(editable_source codex-config.toml)
+opencode_config=$(editable_source opencode.json)
 claude_mcp="$generation/home-files/.claude/skills/claude-code-home-manager/.mcp.json"
 claude_skills="$generation/home-files/.claude/skills"
 codex_skills="$generation/home-files/.codex/skills"
 codex_plugins="$generation/home-files/.codex/plugins/cache/home-manager"
 
-test -L "$claude_config"
-test -L "$codex_config"
+test -f "$claude_config"
+test -f "$codex_config"
+test -f "$opencode_config"
+test ! -e "$generation/home-files/.claude/settings.json"
+test ! -e "$generation/home-files/.codex/config.toml"
+test ! -e "$generation/home-files/.config/opencode/opencode.json"
+rg -qF 'editableConfigsCheck' "$generation/activate"
 
 jq -e '
   .model == "sonnet"

@@ -111,6 +111,7 @@
 
     taps = [
       "felixkratz/formulae" # for borders
+      "nikitabobko/tap" # for aerospace
     ];
 
     brews = [
@@ -120,7 +121,12 @@
 
     casks = [
       "1password"
+      "chatgpt"
+      "claude"
       "discord"
+      "firefox"
+      "google-chrome"
+      "ollama-app"
       "font-jetbrains-mono-nerd-font"
       "ghostty"
       "google-drive"

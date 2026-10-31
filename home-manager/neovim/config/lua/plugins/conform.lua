@@ -16,7 +16,7 @@ require("lz.n").load({
           nix = { "nixfmt" },
           proto = { "buf", "clang-format", stop_after_first = true },
           rust = { "rustfmt" },
-          sql = { "sqlfluff" },
+          sql = { "sqruff" },
           terraform = { "terraform_fmt" },
           toml = { "taplo" },
           typescript = { "biome", "prettier", stop_after_first = true },

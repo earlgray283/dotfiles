@@ -6,7 +6,10 @@
 }:
 
 {
-  home.packages = [ pkgs.zsh-completions ];
+  home.packages = [
+    pkgs.zsh-completions
+    (import ../lib/just-completion.nix { inherit pkgs; })
+  ];
 
   home.sessionPath = [
     "${config.home.homeDirectory}/.local/share/mise/shims"
@@ -32,6 +35,7 @@
 
   programs.zsh = {
     enable = true;
+    package = null;
     envExtra = "export NOSYSZSHRC=1";
 
     autosuggestion.enable = true;
@@ -66,6 +70,10 @@
           compinit -C
         fi
       }
+    '';
+
+    initContent = ''
+      [[ -x ${config.home.homeDirectory}/.local/bin/mise ]] && eval "$(${config.home.homeDirectory}/.local/bin/mise activate zsh)"
     '';
 
     # siteFunctions is auto-loaded via `autoload -Uz`

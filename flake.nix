@@ -80,6 +80,11 @@
       flake = false;
     };
 
+    cloudflare-skills = {
+      url = "github:cloudflare/skills";
+      flake = false;
+    };
+
     openai-plugins = {
       url = "github:openai/plugins";
       flake = false;
@@ -124,7 +129,6 @@
 
       # Pins the tools CI invokes to this flake's nixpkgs.
       packages.${system} = {
-        inherit (import ./packages { inherit pkgs; }) opencode;
         inherit (import ./lib/official-ai-installers.nix { inherit pkgs; })
           claude-code-installer
           codex-installer
@@ -187,6 +191,7 @@
           ponytail = inputs.ponytail;
           go-modern-guidelines = inputs.go-modern-guidelines;
           caveman = inputs.caveman;
+          cloudflare-skills = inputs.cloudflare-skills;
           openai-plugins = inputs.openai-plugins;
         };
       };

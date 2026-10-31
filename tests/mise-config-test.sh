@@ -18,7 +18,7 @@ test "$force_state" = '{"config":true,"lock":true}'
 
 test -L "$mise_config"
 
-mise_bin="$generation/home-path/bin/mise"
+mise_bin=$(command -v mise)
 mise_env=$(env -u GOBIN MISE_CONFIG_FILE="$mise_config" "$mise_bin" env --json)
 if jq -e 'has("GOBIN")' <<<"$mise_env" >/dev/null; then
   printf 'mise must not bind GOBIN to the selected Go version\n' >&2

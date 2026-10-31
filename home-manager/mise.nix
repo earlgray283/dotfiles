@@ -17,12 +17,6 @@ in
 {
   _module.args.mkMiseBin = mise.mkBin;
 
-  programs.mise = {
-    enable = true;
-    package = pkgs.mise;
-    enableZshIntegration = true;
-  };
-
   xdg.configFile."mise/config.toml".source = ../mise/mise.toml;
   xdg.configFile."mise/mise.lock".source = ../mise/mise.lock;
 }

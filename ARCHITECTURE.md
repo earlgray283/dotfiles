@@ -1,6 +1,6 @@
 # dotfiles アーキテクチャ
 
-このリポジトリは、再現性を優先する設定をNix、ホームディレクトリ配下へ置く開発ツールをmiseで管理する。
+このリポジトリは、設定ファイルをNixで生成し、バイナリはmise・公式installer・Homebrewで導入する。
 
 ## 判断基準と編集場所
 
@@ -12,15 +12,48 @@
 | Codexの最終設定・plugins・skills・hooks | Home Manager | `home-manager/ai/codex.nix`、`home-manager/ai/extensions.nix` |
 | Claude Code・CodexのCLI本体 | 公式installer | `lib/official-ai-installers.nix`、`justfile` |
 | Claude Code・Codexのruntime state | 各アプリ | dotfiles管理外 |
-| OpenCodeのpackage | bin2nix / Home Manager | `config.toml`、`packages/` |
+| OpenCodeのCLI本体 | mise | `mise/mise.toml`、`mise/mise.lock` |
 | OpenCodeの設定 | Home Manager | `home-manager/opencode.nix` |
 | 共有MCPサーバー | Home Manager | `home-manager/ai/mcp.nix` |
 | Home Manager向けの変換・生成ロジック | Nix library | `lib/` |
 | 開発用CLIとランタイム | mise | `mise/mise.toml`、`mise/mise.lock` |
-| mise本体とglobal config symlink | Home Manager | `home-manager/mise.nix` |
+| mise本体 | 公式installer | `justfile`（`install-mise-cli`、`update-mise`） |
+| miseのglobal config・lock | Home Manager | `home-manager/mise.nix` |
 | Nix固有のツール | Home Manager / Nix | `home-manager/base.nix` |
 
-Claude CodeとCodexの最終設定はNix storeへのsymlinkになる。CLI内で設定を書き換えられない、または書き換えても次回switchで失われる制約を受け入れ、単一の宣言的な正本を優先する。
+## Nix管理の境界
+
+Nixが「何を入れるか」を宣言していても、導入・更新は別の仕組みが行うものがある。どこにも宣言のないものは、新しいMacでは手作業で用意する。
+
+**宣言はNix、導入はNix以外**
+
+| 対象 | 宣言 | 導入・更新 | 実体の場所 |
+|---|---|---|---|
+| Homebrewのbrews・casks（AeroSpace、borders、openjdk、GUIアプリ） | `nix-darwin/configuration.nix` | `just switch-darwin-rebuild` | `/opt/homebrew`、`/Applications` |
+| miseのtool | `mise/mise.toml`、`mise/mise.lock` | `just install-mise`、`just update-mise` | `~/.local/share/mise` |
+| Claude Code・Codex本体 | `lib/official-ai-installers.nix` | `just install-ai`、`just update-ai` | `~/.local/bin` |
+
+**Nixが生成し、実ファイルは編集可能**
+
+| 対象 | 正本 | 備考 |
+|---|---|---|
+| `~/.claude/settings.json`、`~/.codex/config.toml`、`~/.config/opencode/opencode.json` | `home-manager/ai/claude.nix`、`home-manager/ai/codex.nix`、`home-manager/opencode.nix` | switch時にdriftを検知して中止 |
+
+**宣言なし（dotfiles管理外）**
+
+| 対象 | 用意する方法・所有者 |
+|---|---|
+| Nix、Homebrew本体 | 各公式installerで手動導入 |
+| Xcode Command Line Tools（`/usr/bin/git`） | `xcode-select --install` |
+| zsh本体とlogin shell | macOS標準の`/bin/zsh` |
+| Claude Code・Codexの認証・履歴・session | 各アプリ |
+| `~/.config/opencode`の`node_modules`、`package.json`、`opencode.jsonc` | OpenCode |
+| `~/.zsh_history` | zsh |
+| uvのPython（`~/.local/share/uv`） | uv |
+| drift検知の記録（`~/.local/state/home-manager/editable-configs`） | `lib/editable-configs.nix`のactivation |
+| アクセシビリティ等のmacOS権限（AeroSpace、Karabiner等） | システム設定で手動許可 |
+
+Claude Code・Codex・OpenCodeの最終設定は、Nix storeへのsymlinkではなく編集可能な実ファイルとして配置する。CLI内からの設定変更を許しつつ、正本はNix moduleに置く。switch時に実ファイルが前回配置した内容とNixの生成内容のどちらとも異なればdriftとしてdiffを表示し、ファイルを書き換える前にswitchを中止する。`HM_EDITABLE_FORCE=1`を付けた場合だけ上書きする。
 
 CLI本体は公式installerが`~/.local/bin`へ配置し、Nix storeには置かない。認証、履歴、session、DB、cacheなどのruntime stateは各アプリに書き込みを許可し、Nixには取り込まない。
 
@@ -62,10 +95,12 @@ Nix moduleを編集
         ↓ just switch-home-manager
 Home Managerが新しい最終設定を生成
         ↓
-~/.claude/settings.json / ~/.codex/config.toml のsymlinkを更新
+drift検知（実ファイルが外部で変更されていればdiffを表示して中止）
+        ↓
+~/.claude/settings.json / ~/.codex/config.toml / ~/.config/opencode/opencode.json へコピー
 ```
 
-CLIが設定変更を要求した場合は、その変更内容を対応するNix moduleへ移してswitchする。Git conflictの解消や3-way mergeは発生しない。
+CLIで設定を変更した場合は、その変更内容を対応するNix moduleへ移してswitchする。Git conflictの解消や3-way mergeは行わない。
 
 ## pluginsとskills
 
@@ -102,10 +137,9 @@ AI CLIの初回導入・復旧 -> just install-ai
 AI CLIの通常更新       -> just update-ai
 ```
 
-初回・Nix管理からの移行時は両installerを実行してから`just switch-home-manager`する。以後の静的設定変更はswitchだけでよい。`just apply-dotfiles`は互換用aliasである。
-
+初回・Nix管理からの移行時は両installerを実行してから`just switch-home-manager`する。以後の静的設定変更はswitchだけでよい。
 ## AI CLIの供給元
 
-OpenCodeは`bin2nix`が公式GitHub ReleaseのURLとhashを`packages/`へ生成し、Home Managerがそのパッケージを配置する。
+OpenCodeはmiseが導入する。Home Manager moduleは`package = null`として、静的設定だけを生成する。
 
 Claude CodeとCodexは`nix run`を明示したときに公式installerを取得・起動する。installerが配置したCLI本体とnative updaterは各vendorが所有する。Home Manager moduleは`package = null`として、静的設定だけを生成する。

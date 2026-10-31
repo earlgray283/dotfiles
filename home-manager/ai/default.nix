@@ -9,6 +9,7 @@
   ponytail,
   go-modern-guidelines,
   caveman,
+  cloudflare-skills,
   openai-plugins,
   ...
 }:
@@ -25,6 +26,7 @@ let
       githubSkills = github-skills;
       shadcnUi = shadcn-ui;
       inherit ponytail caveman;
+      cloudflareSkills = cloudflare-skills;
       goModernGuidelines = go-modern-guidelines;
       openaiPlugins = openai-plugins;
       localSkills = ./skills;
