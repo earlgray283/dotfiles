@@ -19,6 +19,7 @@
     ./muse.nix
     ./editable-configs.nix
     ./mise.nix
+    ./television.nix
     ./direnv.nix
     ./docker.nix
     ./neovim

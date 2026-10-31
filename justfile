@@ -85,11 +85,51 @@ install-mise-cli:
     ~/.local/bin/mise --version
 
 # Install every tool pinned by the tracked mise configuration.
-install-mise:
+install-mise: && install-completions
     {{mise}} install --locked --yes
 
+# Generate zsh completions from each CLI itself into ~/.local/share/zsh/site-functions.
+[script("bash")]
+install-completions:
+    set -uo pipefail
+    # Shims resolve tools through the global config that this justfile tells mise to ignore.
+    unset MISE_IGNORED_CONFIG_PATHS
+    export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+    dir="$HOME/.local/share/zsh/site-functions"
+    mkdir -p "$dir"
+    # name|command that prints the zsh completion; just's comes from nix (home-manager/zsh.nix).
+    while IFS='|' read -r name cmd; do
+      if out=$(bash -c "$cmd" 2>/dev/null) && [[ -n $out ]]; then
+        printf '%s\n' "$out" > "$dir/_$name"
+      else
+        echo "SKIP $name: '$cmd' failed" >&2
+      fi
+    done <<'EOF'
+    bat|bat --completion zsh
+    buf|buf completion zsh
+    bun|bun completions zsh
+    colima|colima completion zsh
+    delta|delta --generate-completion zsh
+    docker|docker completion zsh
+    dprint|dprint completions zsh
+    fd|fd --gen-completions zsh
+    gh|gh completion -s zsh
+    gitleaks|gitleaks completion zsh
+    golangci-lint|golangci-lint completion zsh
+    herdr|herdr completion zsh
+    lazygit|lazygit completion zsh
+    limactl|limactl completion zsh
+    mise|mise completion zsh
+    op|op completion zsh
+    rg|rg --generate complete-zsh
+    starship|starship completions zsh
+    taplo|taplo completions zsh
+    uv|uv generate-shell-completion zsh
+    wt|wt config shell completions zsh
+    EOF
+
 # Upgrade mise tool pins and refresh their lock metadata.
-update-mise:
+update-mise: && install-completions
     ~/.local/bin/mise self-update --yes
     {{mise}} upgrade --bump --yes --exclude python
     {{mise}} upgrade --yes python

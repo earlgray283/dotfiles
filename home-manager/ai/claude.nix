@@ -73,10 +73,7 @@ let
       defaultMode = "auto";
     };
     hooks = {
-      Notification = hook "" "bun ~/.claude/hooks/notifications/Notification.ts" { };
-      PermissionRequest = hook "" "bun ~/.claude/hooks/notifications/PermissionRequest.ts" { };
       SessionStart = hook "*" "bash ~/.claude/hooks/herdr-agent-state.sh session" { timeout = 10; };
-      Stop = hook "" "bun ~/.claude/hooks/notifications/Stop.ts" { };
     };
     sandbox = {
       enabled = false;
@@ -137,8 +134,6 @@ in
     plugins = aiExtensions.claudePlugins;
 
     skills = aiExtensions.claudeSkills;
-
-    hooksDir = ./hooks;
   };
 
   home.file.".claude/hooks/herdr-agent-state.sh".source =

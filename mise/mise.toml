@@ -65,6 +65,7 @@ terraform = "latest"
 terraform-ls = "latest"
 tree-sitter = "latest"
 uv = "latest"
+usage = "latest"        # mise completions call it at tab time
 vale = "latest"
 worktrunk = "latest"
 yamlfmt = "latest"

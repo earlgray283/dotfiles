@@ -58,7 +58,7 @@
     };
 
     completionInit = ''
-      fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+      fpath=(/opt/homebrew/share/zsh/site-functions ${config.xdg.dataHome}/zsh/site-functions $fpath)
       autoload -Uz compinit
       () {
         emulate -L zsh

@@ -117,6 +117,9 @@
     brews = [
       "felixkratz/formulae/borders"
       "openjdk"
+      # openjdk's dependencies went missing once; brew doctor flags them until installed.
+      "brotli"
+      "icu4c@79"
     ];
 
     casks = [
@@ -142,6 +145,9 @@
       autoUpdate = true;
       upgrade = true;
       cleanup = "zap";
+      # The shell sets XDG_CONFIG_HOME, so brew reads trust.json from ~/.config; activation runs
+      # without it and would otherwise record trust in ~/.homebrew where the shell never looks.
+      extraEnv.XDG_CONFIG_HOME = "/Users/earlgray/.config";
     };
   };
 

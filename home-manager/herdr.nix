@@ -53,13 +53,11 @@ in
           ]
         ];
 
-        # In-app toasts rather than "system": the Claude Code and opencode
-        # notification hooks already own the macOS notification centre, and
-        # herdr suppresses toasts for the focused tab anyway.
+        # herdr already tracks every agent's done/blocked state, so it replaces
+        # per-agent notification hooks and covers Codex and opencode too.
         toast = {
-          delivery = "herdr";
+          delivery = "system";
           delay_seconds = 1;
-          herdr.position = "bottom-right";
         };
 
         sound.done_path = "${silentSound}";
