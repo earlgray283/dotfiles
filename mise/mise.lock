@@ -549,15 +549,6 @@ checksum = "sha256:c400a2f8c8ab7e99478a7f4dd1a466b57bf33888e520d85c55780a5464c4b
 url = "https://github.com/anomalyco/opencode/releases/download/v1.19.4/opencode-darwin-arm64.zip"
 url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/665836811"
 
-[[tools.pre-commit]]
-version = "4.7.0"
-backend = "aqua:pre-commit/pre-commit"
-
-[tools.pre-commit."platforms.macos-arm64"]
-checksum = "sha256:393488513aed286d7a5a978a1fe79b2f5a8802927242a2d241ff10c1a8e8c885"
-url = "https://github.com/pre-commit/pre-commit/releases/download/v4.7.0/pre-commit-4.7.0.pyz"
-url_api = "https://api.github.com/repos/pre-commit/pre-commit/releases/assets/637459099"
-
 [[tools.protolint]]
 version = "0.58.0"
 backend = "aqua:yoheimuta/protolint"

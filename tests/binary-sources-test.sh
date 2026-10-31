@@ -12,7 +12,7 @@ actual="$(nix eval --impure --json --expr '
     codexExternal = home.programs.codex.package == null;
     gitExternal = home.programs.git.package == null;
     opencodeExternal = home.programs.opencode.package == null;
-    numtideDisabled = !(builtins.elem "https://cache.numtide.com" darwin.nix.settings.trusted-substituters);
+    numtideDisabled = !(flake.inputs.nixpkgs.lib.hasInfix "numtide" darwin.environment.etc."nix/nix.custom.conf".text);
   }
 ')"
 

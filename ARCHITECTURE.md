@@ -43,7 +43,8 @@ Nixが「何を入れるか」を宣言していても、導入・更新は別�
 
 | 対象 | 用意する方法・所有者 |
 |---|---|
-| Nix、Homebrew本体 | 各公式installerで手動導入 |
+| Nix本体・daemon・`/etc/nix/nix.conf` | [NixOS/nix-installer](https://github.com/NixOS/nix-installer)（`nix.enable = false`でnix-darwinに管理させない） |
+| Homebrew本体 | 公式installerで手動導入 |
 | Xcode Command Line Tools（`/usr/bin/git`） | `xcode-select --install` |
 | zsh本体とlogin shell | macOS標準の`/bin/zsh` |
 | Claude Code・Codexの認証・履歴・session | 各アプリ |
@@ -124,7 +125,7 @@ pin済みsource
 
 ## mise
 
-`mise/mise.toml`がtool selectorとmise設定、`mise/mise.lock`が解決済みURLとchecksumの正本である。Home Managerは`pkgs.mise`を導入し、これらをglobal configへlinkするだけで、activation中にtoolをinstallしない。`just install-mise`がlock済みtoolを導入し、`just update-mise`がpinとlock metadataを更新する。Goの`GOBIN`はmiseに設定させず、`~/go/bin`をstableなinstall先として使う。
+`mise/mise.toml`がtool selectorとmise設定、`mise/mise.lock`が解決済みURLとchecksumの正本である。mise本体は公式installerが`~/.local/bin`へ導入する。Home Managerはこれらをglobal configへlinkするだけで、activation中にtoolをinstallしない。`just install-mise`がlock済みtoolを導入し、`just update-mise`がpinとlock metadataを更新する。Goの`GOBIN`はmiseに設定させず、`~/go/bin`をstableなinstall先として使う。
 
 ## 適用フロー
 
@@ -138,6 +139,21 @@ AI CLIの通常更新       -> just update-ai
 ```
 
 初回・Nix管理からの移行時は両installerを実行してから`just switch-home-manager`する。以後の静的設定変更はswitchだけでよい。
+
+## 新しいマシンへの導入
+
+```text
+1. xcode-select --install
+2. curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install
+3. sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .
+4. just switch-home-manager
+5. just install-mise-cli && just install-mise
+6. just install-ai
+```
+
+Nixの導入にはNixOS/nix-installerを使う。DeterminateのinstallerはNixの構成が異なるため使わない。installerが`nix.conf`（`nix-command flakes`を有効化し`nix.custom.conf`を`!include`する）とdaemonを所有する。このリポジトリは`nix.custom.conf`の内容（`trusted-users`、`trusted-substituters`など）と、週次の`nix-gc`だけを`nix-darwin/configuration.nix`で宣言する。
+
+nix-darwinがNixを管理していた環境から移行するときは、`/etc/nix/nix.conf`が消え、`*.before-nix-darwin`へ退避される。installer標準の`nix.conf`を`/etc/nix/nix.conf`へ置き直してから`just switch-home-manager`する。新しいマシンでは不要。
 ## AI CLIの供給元
 
 OpenCodeはmiseが導入する。Home Manager moduleは`package = null`として、静的設定だけを生成する。

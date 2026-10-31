@@ -137,23 +137,8 @@
         modules = [
           ./nix-darwin/configuration.nix
           {
-            # Necessary for using flakes on this system.
-            nix.settings.experimental-features = "nix-command flakes";
-
-            nix.settings.accept-flake-config = true;
-
-            nix.settings.trusted-users = [
-              "root"
-              "earlgray"
-            ];
-            nix.settings.trusted-substituters = [
-              "https://earlgray.cachix.org"
-              "https://nix-community.cachix.org"
-            ];
-            nix.settings.trusted-public-keys = [
-              "earlgray.cachix.org-1:nPH/5e9Boe2TqskXQkrRLmRVJIsVIhQkPhxOghlm0v4="
-              "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-            ];
+            # NixOS/nix-installer owns nix, its daemon and /etc/nix/nix.conf.
+            nix.enable = false;
 
             # Set Git commit hash for darwin-version.
             system.configurationRevision = self.rev or self.dirtyRev or null;

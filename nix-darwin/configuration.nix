@@ -151,13 +151,26 @@
     };
   };
 
-  nix.gc = {
-    automatic = true;
-    interval = {
-      Hour = 3;
-      Weekday = 0;
+  # The installer's nix.conf includes this file; nix.settings is unavailable with nix.enable = false.
+  environment.etc."nix/nix.custom.conf".text = ''
+    accept-flake-config = true
+    trusted-users = root earlgray
+    trusted-substituters = https://earlgray.cachix.org https://nix-community.cachix.org
+    extra-trusted-public-keys = earlgray.cachix.org-1:nPH/5e9Boe2TqskXQkrRLmRVJIsVIhQkPhxOghlm0v4= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+  '';
+
+  # nix.gc needs nix.enable, so schedule the collection directly.
+  launchd.daemons.nix-gc = {
+    command = "/nix/var/nix/profiles/default/bin/nix-collect-garbage --delete-older-than 7d";
+    serviceConfig = {
+      RunAtLoad = false;
+      StartCalendarInterval = [
+        {
+          Hour = 3;
+          Weekday = 0;
+        }
+      ];
     };
-    options = "--delete-older-than 7d";
   };
 
   # Enable alternative shell support in nix-darwin.

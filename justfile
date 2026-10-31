@@ -41,7 +41,7 @@ test *names:
 # Test Claude Code and Codex configuration, extensions, and installers.
 test-ai: (test ai_tests)
 
-# Everything CI runs (CI calls the recipes one by one, for per-step logs).
+# CI plus mise-config, which needs a mise install (CI calls the recipes one by one, for per-step logs).
 check: flake-check lint (test ai_tests "home-manager-boundaries mise-config") build-home-manager build-darwin
 
 switch-home-manager:
@@ -134,6 +134,7 @@ update-mise: && install-completions
     {{mise}} upgrade --bump --yes --exclude python
     {{mise}} upgrade --yes python
     {{mise}} lock --platform macos-arm64 --yes
+    {{mise}} prune --yes
 
 # Bump flake inputs. Apply with switch-home-manager.
 update-nix:

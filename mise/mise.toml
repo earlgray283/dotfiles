@@ -51,7 +51,6 @@ node = "latest"
 "npm:yaml-language-server" = "latest"
 opencode = "latest"
 "github:ouch-org/ouch" = "latest"
-pre-commit = "latest"
 protolint = "latest"
 # Capped by gcloud's MAX_SUPPORTED_PY3_VERSION; update-mise excludes it from --bump.
 python = "3.15"
