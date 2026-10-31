@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, config, ... }:
 
 {
   programs.git = {
@@ -16,6 +16,12 @@
       ".vscode"
       ".DS_Store"
     ];
+    hooks = (
+      import ../lib/git-hooks.nix {
+        inherit pkgs;
+        shimsDir = "${config.home.homeDirectory}/.local/share/mise/shims";
+      }
+    );
     settings = {
       user = {
         name = "earlgray";
